@@ -1,0 +1,100 @@
+{
+    "app_name":"قوود فوود"  ,
+    "login":"دخول" ,
+    "login_failed":"خطأ في كلمة المرور او رقم الهاتف" , 
+    "password":"كلمة المرور" ,
+    "phone":"رقم الهاتف"  , 
+"email":"البريد الالكتروني",
+"password_required":"كلمة المرور مطلوبة",
+"password_short":"كلمة المرور قصيرة",
+"email_required":"البريد الالكتروني مطلوب" ,
+"email_invalid":"ادخل بريد إلكتروني صالح",
+
+
+    
+    "orders":"الطلبات" ,
+    "employees":"الموظفين" ,
+    "machines":"الماكينات" ,
+    "branches":"الفروع" ,
+    "branch_assets":"اصول الفرع" ,
+    "num_of_emp":"عدد الموظفين" ,
+    "report":"تقرير" ,
+    "reports":"التقارير" ,
+    "notifications":"الاشعارات" ,
+    "documents":"مستندات الادارة" ,
+    "assets":"الاصول" ,
+    "message":"رسالة" ,
+    "chat":"المراسلات" ,
+    "change_lang":"تغيير اللغة" ,
+    "please_select_lang":"الرجاء اختيار لغة؟", 
+    "ar":"العربية",
+    "en":"English",
+    "lang":"اللغة"  ,
+    "sure_logout":"هل ترغب في تسجيل الخروج؟",
+    "logout":"خروج" ,
+
+    "done":"تم" ,
+    "cancel":"إلغاء" ,
+    "attachments":"المرفقات"  ,
+    "note":"المهمة"  ,
+    "order":"طلب" ,
+    "new_order":"طلب جديد" ,
+    "done_order":"تم التنفيذ" ,
+    "cancelled":"تم الالغاء"  ,
+
+    "select_emp":"اختار موظف"
+
+
+    ,
+    "camera":"الكاميرا" ,
+    "gallery":"المعرض",
+    "type_a_message":"قم بكتابة الرسالة ",
+    "delete":"حذف",
+    "edit":"تعديل",
+    "sure_delete_msg":"هل تريد حذف الرسالة؟",
+    "ok":"تأكيد",
+    "edit_msg":"تعديل الرسالة" ,
+"save_edit":"حفظ",
+"date":"التاريخ",
+"status":"الحالة" ,
+"task":"المهمة" ,
+"maintenance":"الصيانات"
+,
+"closing":"اغلاق",
+"type_a_comment":"قم بكتابة تعليق"
+
+,
+"details":"التفاصيل" ,
+"comments":"التعليقات"
+
+,
+
+"no_files":"لا توجد مرفقات"
+
+ ,
+
+"from":"من",
+"to":"إلى",
+"confirm":"تأكيد" ,
+
+"view":"عرض"
+,
+
+"manage_documents":"مستندات الادارة"  ,
+"manage_orders":"طلبات الادارة" 
+,
+"replay":"رد",
+"cars":"سيارات"
+
+
+,
+"maintains":"Maintenance",
+"other_assests":"الاصول الاخرى" ,
+"skins":"مساكن",
+"no_machines":"لا توجد معدات" ,
+"no_cars":"لا توجد سيارات" ,
+"no_docs":"لا توجد مستندات" ,
+"no_branches":"لا توجد فروع" ,
+"no_maintain_orders":"لا توجد طلبات صيانة"  ,
+"no_notifications":"لا توجد اشعارات"
+}

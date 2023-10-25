@@ -1,0 +1,98 @@
+{
+    "app_name":"GoodFoods" ,
+    "login":"Login" ,
+    "login_failed":"Wrong phone/password"  , 
+    "password":"Password" ,
+    "phone":"Phone Number" ,
+    "email":"Email",
+"password_required":"Password is required",
+"password_short":"Too short password",
+"email_required":"Email required" ,
+"email_invalid":"Invalid email",
+    "orders":"Orders" ,
+    "employees":"Employees" ,
+    "machines":"Machines" ,
+    "branches":"Branches" ,
+    "num_of_emp":"Employees" ,
+    "report":"Report" ,
+    "notifications":"Notifications" ,
+    "documents":"Documents" ,
+    "assets":"Assets" ,
+    "message":"Message" ,
+    "chat":"Chat" ,
+    "reports":"Reports" ,
+
+    "change_lang":"Change Language" ,
+
+    "please_select_lang":"Please selct a language:", 
+    "ar":"Arabic",
+    "en":"English",
+    "lang":"Language"  ,
+    "sure_logout":"Are you sure to logout?",
+    
+    "logout":"Signout"
+ ,
+
+    "done":"Done" ,
+    "cancel":"Cancel",
+
+    "attachments":"Attachments" ,
+    "note":"Task"     ,
+    "order":"Order"  ,
+    "new_order":"New order" ,
+    "done_order":"Done" ,
+    "cancelled":"Cancelled" ,
+    "select_emp":"Select Employee"
+
+,
+"camera":"Camera" ,
+"gallery":"Gallery",
+"type_a_message":"Type a message",
+"delete":"Delete",
+"edit":"Edit",
+"sure_delete_msg":"Are you sure to delete message?",
+"ok":"Yes"
+,
+"edit_msg":"Edit Message" ,
+"save_edit":"Save"
+
+ ,
+
+"date":"Date",
+"status":"Status",
+"task":"Task" ,
+"maintenance":"Maintenance"
+,
+"closing":"Close",
+"type_a_comment":"type a comment",
+"details":"Details" ,
+"comments":"Comments" ,
+"no_files":"No Files" ,
+
+
+"from":"from",
+"to":"to" ,
+"confirm":"Confirm",
+"view":"View",
+"manage_documents":"Mangagment Documents" ,
+"manage_orders":"Managment Orders"
+,
+"replay":"Reply" ,
+"cars":"Cars" ,
+"branch_assets":"Branch Assets" 
+
+ ,
+ "maintains":"Maintainance"
+,
+ "other_assests":"Other Assets" ,
+ "skins":"Housing",
+
+ "no_machines":"No Machines",
+ "no_cars":"No cars",
+ "no_docs":"No Documents"
+  ,
+  "no_branches":"No Brnahces" ,
+  "no_maintain_orders":"No Maintainance Orders" ,
+  "no_notifications":"No Notifications"
+
+}
