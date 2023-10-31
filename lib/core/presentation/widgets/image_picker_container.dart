@@ -4,22 +4,44 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:goodfoods/core/presentation/widgets/upload_btn.dart';
+import 'package:goodfoods/core/presentation/widgets/upload_buttton_rounded.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
+import 'package:goodfoods/core/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class ImagePickerContainer extends StatelessWidget {
   final bool? showFiles;
-  final Function(File?)? onSelect;
+  final bool? showRounded;
+  final Function(File? , bool?)? onSelect;
   const ImagePickerContainer({ Key? key, 
   
   this.showFiles=true,
-  this.onSelect }) : super(key: key);
+  this.onSelect, this.showRounded=false }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
          var locale = AppLocalizations.of(context);
-    return Container(
+    return 
+    
+    Center(
+      child: 
+    showRounded!?
+    UploadButtonRounded(
+      onTap: (){
+    _settingModalBottomSheet(context);
+},
+    ):  
+      
+      UploadButton(
+onTap: (){
+    _settingModalBottomSheet(context);
+},
+      ),
+    );
+    
+    Container(
       //  padding: const EdgeInsets.all(20), //padding of outer Container
            child: DottedBorder(
               color: Theme.of(context).primaryColor,//color of dotted/dash line
@@ -73,7 +95,7 @@ if (result != null) {
   //convert file to base 64
 
   //add to files
-onSelect!(file);
+onSelect!(file , false);
 Navigator.pop(context);
 
 } else {
@@ -94,7 +116,7 @@ if(file!=null){
 
   File fileToUpload = File(file.path);
   //convert file to base 64
-onSelect!(fileToUpload);
+onSelect!(fileToUpload , true);
 Navigator.pop(context);
   //add to files
 
@@ -119,7 +141,7 @@ if(file!=null){
     File fileToUpload = File(file.path);
   //convert file to base 64
  //convert file to base 64
-onSelect!(fileToUpload);
+onSelect!(fileToUpload ,  true);
 Navigator.pop(context);
   //add to files
   //add to files
@@ -181,7 +203,10 @@ Container(
         color: Theme.of(context).primaryColor,
         ),
         const SizedBox(height: 5,),
-  const Text("Pick Image")
+   Text(
+    
+    currentLang(context)=="ar"?"المعرض":
+    "Pick Image")
       ],
     ),
   ),
@@ -225,7 +250,10 @@ Container(
         color: Theme.of(context).primaryColor,
         ),
         const SizedBox(height: 5,),
-  const Text("Open camera")
+   Text(
+    
+    currentLang(context)=="ar"?"الكاميرا":
+    "Open camera")
       ],
     ),
   ),
@@ -273,7 +301,9 @@ Container(
         color: Theme.of(context).primaryColor,
         ),
         const SizedBox(height: 5,),
-  const Text("Select file")
+   Text(
+    currentLang(context)=="ar"?"اختر ملف":
+    "Select file")
       ],
     ),
   ),

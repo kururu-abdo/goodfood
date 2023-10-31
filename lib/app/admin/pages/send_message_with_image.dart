@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:goodfoods/core/colors.dart';
 import 'package:goodfoods/core/controllers/chat_controller.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
+import 'package:goodfoods/core/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -244,7 +245,10 @@ Container(
                                     onPressed: ()async {
                                       if (!widget.isEdit!) {
                                                                      chatController.sendMessage(chatController.chatUser,
- _controller.text, chatController.getBase64(widget.selectedImage!.path)).then((value) {
+ _controller.text, chatController.getBase64(widget.selectedImage!.path),
+ 
+ getFileExtenstion(widget.selectedImage!.path)
+ ).then((value) {
 
 
    Navigator.pop(context);

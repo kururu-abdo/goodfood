@@ -8,15 +8,19 @@ import 'package:goodfoods/app/order/model/order_data.dart';
 import 'package:goodfoods/app/success/view/pages/success.dart';
 import 'package:goodfoods/core/controllers/app_state.dart';
 import 'package:goodfoods/core/data/models/branch_asset.dart';
+import 'package:goodfoods/core/data/models/branch_model.dart';
 import 'package:goodfoods/core/data/models/car_model.dart';
+import 'package:goodfoods/core/data/models/city_model.dart';
 import 'package:goodfoods/core/data/models/department.dart';
 import 'package:goodfoods/core/data/models/file_model.dart';
 import 'package:goodfoods/core/data/models/mainenance_order_model.dart';
 import 'package:goodfoods/core/data/models/maintain_model.dart';
 import 'package:goodfoods/core/data/models/other_asset_model.dart';
 import 'package:goodfoods/core/data/models/record_model.dart';
+import 'package:goodfoods/core/data/models/region_model.dart';
 import 'package:goodfoods/core/data/models/skin_model.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
+import 'package:goodfoods/core/data/network/apis/common_apis.dart';
 import 'package:goodfoods/core/data/network/apis/maintenance_apis.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:goodfoods/core/utils/utils.dart';
@@ -29,6 +33,9 @@ extends AppState
 
  {
 
+  bool isEmediate=false;
+ApiResponse<List<RegionModel>>?  regions = ApiResponse.completed([]);
+
 
 ApiResponse<List<CarModel>>?  cars = ApiResponse.completed([]);
 
@@ -39,17 +46,35 @@ ApiResponse<List<BranchAsset>>?  branchAssets = ApiResponse.completed([]);
 
 ApiResponse<List<MaintainModel>>?  maintenanceEmployees = ApiResponse.completed([]);
 ApiResponse<void>?  newOrder = ApiResponse.completed({});
+ApiResponse<void>?  updateOrder = ApiResponse.completed({});
 
 ApiResponse<List<RecordModel>>?  orderRecorders = 
 ApiResponse.completed([]);
 
+ApiResponse<List<BranchModel>>?  branches = ApiResponse.completed([]);
+
+ApiResponse<List<CityModel>>?  cities = ApiResponse.completed([]);
 
 
-ApiResponse<List<MaintainenanceOrderModel>>?  maintainOrders = ApiResponse.completed([]);
+ApiResponse<MaintainenanceOrderModel>?  maintainOrders = ApiResponse.completed(null);
+List<AdminOrderData2> adminOrders=[];
+
+
+ApiResponse<MaintainenanceOrderModel>?  maintainOrdersPaginate = 
+ApiResponse.completed(null);
 
 
 ApiResponse<OrderData>?  userOrders = 
 ApiResponse.completed(null);
+
+
+ApiResponse<OrderData>?  userOrderPaginate = 
+ApiResponse.completed(null);
+List<UserOrder> userOrdersData = [];
+// List<Space> spaces = [];
+
+
+
 ApiResponse<OrderDetailMapper>?  orderDetailsMapper = 
 ApiResponse.completed(null);
 
@@ -65,7 +90,10 @@ String? modelType;
 MaintainModel? maintainModel;
 String? task;
 
-
+setEmdeiate(bool value){
+  isEmediate=value;
+  notifyListeners();
+}
 setModelId(String id){
   modelId=id;
   notifyListeners();
@@ -92,7 +120,24 @@ removeFile(String path){
   notifyListeners();
 }
 
-
+filterUserRoders(int status){
+  //  spaceSearch = [];
+  //   if(startingPrice > 0 && endingPrice > startingPrice) {
+  //     spaceSearch.addAll( spaces.where((product) =>
+  //    double.parse( product.price!.toString()) > startingPrice && double.parse( product.price!.toString()) < endingPrice).toList());
+  //   }else {
+  //     spaceSearch.addAll(spaces);
+  //   }
+}
+filterAdminRoders(int status){
+  //  spaceSearch = [];
+  //   if(startingPrice > 0 && endingPrice > startingPrice) {
+  //     spaceSearch.addAll( spaces.where((product) =>
+  //    double.parse( product.price!.toString()) > startingPrice && double.parse( product.price!.toString()) < endingPrice).toList());
+  //   }else {
+  //     spaceSearch.addAll(spaces);
+  //   }
+}
 
 
 Future<void> getCars(BuildContext context)async{
@@ -116,6 +161,71 @@ notifyListeners();
 }
 
 
+
+
+Future<void> getRegions(BuildContext context)async{
+   regions = ApiResponse.loading('loading');
+
+isBusy= true;
+
+  try {
+    var  response = await CommmomApis().getRegions();
+
+
+
+    regions=ApiResponse.completed(response);
+  } catch (e) {
+       regions = ApiResponse.error('$e');
+notifyListeners();
+
+  }finally{
+      isBusy= false; 
+  }
+}
+
+
+
+Future<void> getRegionCities(BuildContext context , regionId)async{
+   cities = ApiResponse.loading('loading');
+
+isBusy= true;
+
+  try {
+    var  response = await CommmomApis().getCitiesByRegion(regionId);
+
+
+
+    cities=ApiResponse.completed(response);
+  } catch (e) {
+       cities = ApiResponse.error('$e');
+notifyListeners();
+
+  }finally{
+      isBusy= false; 
+  }
+}
+
+
+
+Future<void> getCityBranches(BuildContext context , city)async{
+   branches = ApiResponse.loading('loading');
+
+isBusy= true;
+
+  try {
+    var  response = await CommmomApis().getBranchesByCity(city);
+
+
+
+    branches=ApiResponse.completed(response);
+  } catch (e) {
+       branches = ApiResponse.error('$e');
+notifyListeners();
+
+  }finally{
+      isBusy= false; 
+  }
+}
 
 Future<void> getDepartments(BuildContext context)async{
    departments = ApiResponse.loading('loading');
@@ -193,8 +303,8 @@ addOrder(BuildContext context)async{
      log(task.toString());
 var response = await MaintenanceApis().addOrder(
   maintainModel!.id.toString(), modelType, modelId, task, getFiles(
-  newOrderFiles
-));
+  newOrderFiles , 
+) ,  isEmediate);
   newOrder =ApiResponse.completed({});
   notifyListeners();
     const Success().launch(context , isNewTask: true);
@@ -285,13 +395,12 @@ notifyListeners();
 
 
 
-
 Future<void> getMaintainOrders(BuildContext context ,
 
 
 )async{
    maintainOrders = ApiResponse.loading('loading');
-
+adminOrders=[];
 notifyListeners();
   try {
     var  response = await MaintenanceApis().getMaintainOrder();
@@ -299,7 +408,9 @@ notifyListeners();
 
 
     maintainOrders=ApiResponse.completed(response);
-    // notifyListeners();
+    adminOrders.addAll(maintainOrders!.data!.data!.data!);
+    log('DOTAT');
+    notifyListeners();
   } catch (e) {
        maintainOrders = ApiResponse.error('$e');
 notifyListeners();
@@ -313,27 +424,57 @@ notifyListeners();
 
 
 
+Future<void> getMaintainOrdersPaginate(BuildContext context ,
+String nextUrl
+
+)async{
+   maintainOrdersPaginate = ApiResponse.loading('loading');
+
+notifyListeners();
+  try {
+    var  response = await MaintenanceApis().getMaintainOrder(
+      nextUrl, true
+    );
+
+
+    maintainOrdersPaginate=ApiResponse.completed(response);
+    maintainOrders=maintainOrdersPaginate;
+    adminOrders.addAll(maintainOrders!.data!.data!.data!);
+    notifyListeners();
+  } catch (e) {
+       maintainOrdersPaginate = ApiResponse.error('$e');
+notifyListeners();
+log("/////////////////////////   $e");
+  }finally{
+      isBusy= false; 
+
+      notifyListeners();
+  }
+}
+
 
 
 
 
 Future<void> getUserOrders(BuildContext context ,
-[
-  String? nexUrl
-]
+
 
 )async{
    userOrders = ApiResponse.loading('loading');
-
+userOrdersData=[];
 notifyListeners();
   try {
     var  response = await 
     
-    MaintenanceApis().getUserOrders();
+    MaintenanceApis().getUserOrders(
+      
+      
+      );
 
 
 
-    userOrders=ApiResponse.completed(response);
+    userOrders=ApiResponse.completed(response , );
+    userOrdersData.addAll(userOrders!.data!.data!);
     // notifyListeners();
   } catch (e) {
        userOrders = ApiResponse.error('$e');
@@ -345,6 +486,47 @@ showToast(e.toString(), true);
       notifyListeners();
   }
 }
+
+
+
+
+
+
+Future<void> getUserOrdersPaginate(BuildContext context ,
+
+String nextUrl
+)async{
+   userOrderPaginate = ApiResponse.loading('loading');
+notifyListeners();
+  try {
+    var  response = await 
+    
+    MaintenanceApis().getUserOrders(
+      nextUrl,
+      true);
+
+
+
+    userOrderPaginate=ApiResponse.completed(response , );
+    userOrders =userOrderPaginate;
+    userOrdersData.addAll(userOrderPaginate!.data!.data!);
+    // notifyListeners();
+  } catch (e) {
+       userOrderPaginate = ApiResponse.error('$e');
+notifyListeners();
+showToast(e.toString(), true);
+  }finally{
+      isBusy= false; 
+
+      notifyListeners();
+  }
+}
+
+
+
+
+
+
 
 Future<void> getOrderRecord(
   BuildContext context ,
@@ -421,7 +603,12 @@ notifyListeners();
     
     MaintenanceApis().confrimOrder(orderId);
 
-showToast('Order Confimed Successfully', false);
+showToast(
+  
+  currentLang(context)=="ar"?
+  "تم تأكيد الطلب":
+  
+  'Order Confimed Successfully', false);
 
     // notifyListeners();
   } catch (e) {
@@ -437,6 +624,43 @@ showToast(e.toString(), true);
 
 
 
+
+
+
+Future<void> updateOrderStatus(
+  BuildContext context ,
+String orderId ,
+
+String? reason,
+String? status
+)async{
+updateOrder = ApiResponse.loading('ladong');
+notifyListeners();
+  try {
+    var  response = await 
+    
+    MaintenanceApis().updateOrderStatus(orderId, reason ,status);
+updateOrder = ApiResponse.completed(response);
+
+showToast(
+  
+  currentLang(context)=="ar"?
+  "تم تحديث الطلب":
+  
+  'Order Updated', false);
+
+    // notifyListeners();
+  } catch (e) {
+notifyListeners();
+showToast(e.toString(), true);
+updateOrder = ApiResponse.error(e.toString());
+
+  }finally{
+      isBusy= false; 
+
+      notifyListeners();
+  }
+}
 
 
 
@@ -456,7 +680,10 @@ notifyListeners();
     
     MaintenanceApis().changeOrderStatus(orderId, status);
 
-showToast('Status changed successfully', false);
+showToast(
+  
+  currentLang(context)=="ar"?"تم تغيير حالة الطلب":
+  'Status changed successfully', false);
 
     // notifyListeners();
   } catch (e) {

@@ -98,10 +98,16 @@ class OrderWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
     SizedBox(
-    child: Text(orderTitle!.toString() ,
+    child: Text(
+      currentLang(context)=="ar"?
+      "طلب #$orderId":
+      "Order #${orderId!}" ,
     
     maxLines: 2, overflow: TextOverflow.ellipsis,
-    
+
+    style: const TextStyle(
+      fontWeight: FontWeight.bold
+    ),
     ), 
     
     

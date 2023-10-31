@@ -9,15 +9,17 @@ class ChatSelectionModel {
     if (json['data'] != null) {
       regions = <RegionData>[];
       json['data'].forEach((v) {
-        regions!.add(RegionData.fromJson(v));
+        regions!.add(new RegionData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['code'] = code;
-    
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    if (this.regions != null) {
+      data['data'] = this.regions!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -47,20 +49,20 @@ class RegionData {
     if (json['cities'] != null) {
       cities = <Cities>[];
       json['cities'].forEach((v) {
-        cities!.add(Cities.fromJson(v));
+        cities!.add(new Cities.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name_ar'] = nameAr;
-    data['name_en'] = nameEn;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    if (cities != null) {
-      data['cities'] = cities!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name_ar'] = this.nameAr;
+    data['name_en'] = this.nameEn;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    if (this.cities != null) {
+      data['cities'] = this.cities!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -74,6 +76,7 @@ class Cities {
   String? createdAt;
   String? updatedAt;
   List<Branchs>? branchs;
+  List<Departments>? departments;
 
   Cities(
       {this.id,
@@ -82,7 +85,8 @@ class Cities {
       this.regionId,
       this.createdAt,
       this.updatedAt,
-      this.branchs});
+      this.branchs,
+      this.departments});
 
   Cities.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -94,21 +98,30 @@ class Cities {
     if (json['branchs'] != null) {
       branchs = <Branchs>[];
       json['branchs'].forEach((v) {
-        branchs!.add(Branchs.fromJson(v));
+        branchs!.add(new Branchs.fromJson(v));
+      });
+    }
+    if (json['departments'] != null) {
+      departments = <Departments>[];
+      json['departments'].forEach((v) {
+        departments!.add(new Departments.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name_ar'] = nameAr;
-    data['name_en'] = nameEn;
-    data['region_id'] = regionId;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    if (branchs != null) {
-      data['branchs'] = branchs!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name_ar'] = this.nameAr;
+    data['name_en'] = this.nameEn;
+    data['region_id'] = this.regionId;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    if (this.branchs != null) {
+      data['branchs'] = this.branchs!.map((v) => v.toJson()).toList();
+    }
+    if (this.departments != null) {
+      data['departments'] = this.departments!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -154,25 +167,25 @@ class Branchs {
     if (json['emp'] != null) {
       emp = <Emp>[];
       json['emp'].forEach((v) {
-        emp!.add(Emp.fromJson(v));
+        emp!.add(new Emp.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name_ar'] = nameAr;
-    data['name_en'] = nameEn;
-    data['city_id'] = cityId;
-    data['brand_id'] = brandId;
-    data['manegers'] = manegers;
-    data['files'] = files;
-    data['admins'] = admins;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    if (emp != null) {
-      data['emp'] = emp!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name_ar'] = this.nameAr;
+    data['name_en'] = this.nameEn;
+    data['city_id'] = this.cityId;
+    data['brand_id'] = this.brandId;
+    data['manegers'] = this.manegers;
+    data['files'] = this.files;
+    data['admins'] = this.admins;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    if (this.emp != null) {
+      data['emp'] = this.emp!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -184,7 +197,7 @@ class Emp {
   String? email;
   String? phone;
   int? regionId;
- dynamic fcmToken;
+  String? fcmToken;
   bool? active;
   String? createdAt;
   String? updatedAt;
@@ -213,16 +226,69 @@ class Emp {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['email'] = email;
-    data['phone'] = phone;
-    data['region_id'] = regionId;
-    data['fcm_token'] = fcmToken;
-    data['active'] = active;
-    data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['email'] = this.email;
+    data['phone'] = this.phone;
+    data['region_id'] = this.regionId;
+    data['fcm_token'] = this.fcmToken;
+    data['active'] = this.active;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
     return data;
   }
 }
+
+class Departments {
+  int? id;
+  String? nameAr;
+  String? nameEn;
+  int? cityId;
+  String? admins;
+  String? createdAt;
+  String? updatedAt;
+  List<Emp>? emp;
+
+  Departments(
+      {this.id,
+      this.nameAr,
+      this.nameEn,
+      this.cityId,
+      this.admins,
+      this.createdAt,
+      this.updatedAt,
+      this.emp});
+
+  Departments.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    nameAr = json['name_ar'];
+    nameEn = json['name_en'];
+    cityId = json['city_id'];
+    admins = json['admins'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    if (json['emp'] != null) {
+      emp = <Emp>[];
+      json['emp'].forEach((v) {
+        emp!.add(new Emp.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name_ar'] = this.nameAr;
+    data['name_en'] = this.nameEn;
+    data['city_id'] = this.cityId;
+    data['admins'] = this.admins;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    if (this.emp != null) {
+      data['emp'] = this.emp!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+

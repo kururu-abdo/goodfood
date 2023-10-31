@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:goodfoods/app/documents/views/pages/open_document_page.dart';
 import 'package:goodfoods/app/maintenance/model/details_mapper.dart';
+import 'package:goodfoods/app/order/view/pages/reject_page.dart';
 import 'package:goodfoods/app/order/view/widgets/order_records.dart';
 import 'package:goodfoods/core/box_text.dart';
 import 'package:goodfoods/core/colors.dart';
@@ -9,6 +9,7 @@ import 'package:goodfoods/core/data/network/api_response.dart';
 import 'package:goodfoods/core/presentation/widgets/no_items.dart';
 import 'package:goodfoods/core/presentation/widgets/progress.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
+import 'package:goodfoods/core/services/document_service.dart';
 import 'package:goodfoods/core/utils/utils.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
@@ -74,18 +75,18 @@ return Scaffold(
      appBar:   AppBar(
           elevation: 0,
           actions:  [
-       !widget.isAdmin!?
-TextButton(onPressed: (){
-controller.confirmOrder(context, widget.orderId!).then((value) {
+//        !widget.isAdmin!?
+// TextButton(onPressed: (){
+// controller.confirmOrder(context, widget.orderId!).then((value) {
 
 
-  _confirmed=1;
-  setState(() {
+//   _confirmed=1;
+//   setState(() {
     
-  });
-});
-}, child: Text(translation!.translate("confirm")!)).visible(_confirmed==0)
-:const SizedBox.shrink(),
+//   });
+// });
+// }, child: Text(translation!.translate("confirm")!)).visible(_confirmed==0)
+// :const SizedBox.shrink(),
       
 
 
@@ -577,29 +578,73 @@ controller.changeOrderStatus(context, widget.orderId!, 2.toString());
         })
         
         :
-            Container(
+
+        
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+
+
+
+                Container(
         width: 120 ,height: 30,
         margin: const EdgeInsets.symmetric(horizontal: 6),
         decoration: BoxDecoration(
           color: Colors.green, borderRadius: BorderRadius.circular(50)
         ),
         child: Center(
-          child: Text(translation!.translate("closing")! ,
+          child: Text(translation!.translate("accept")! ,
           style: const TextStyle(
-            color: Colors.white
+                color: Colors.white
           ),
           
           
           ),
         ),
-        ).visible(widget.status==0.toString())
+        )
         .onTap((){
           ///TODO: change order status
 
 //make it clsoing   = 1
 
-controller.changeOrderStatus(context, widget.orderId!, 1.toString());
-        })
+// controller.changeOrderStatus(context, widget.orderId!, 1.toString());
+  controller.updateOrderStatus(context, widget.orderId!, null, 1.toString());
+        }),
+
+
+
+                
+                Container(
+        width: 120 ,height: 30,
+        margin: const EdgeInsets.symmetric(horizontal: 6),
+        decoration: BoxDecoration(
+          color: Colors.red, borderRadius: BorderRadius.circular(50)
+        ),
+        child: Center(
+          child: Text(translation.translate("reject")! ,
+          style: const TextStyle(
+                color: Colors.white
+          ),
+          
+          
+          ),
+        ),
+        )
+        .onTap((){
+          ///TODO: change order status
+
+//make it clsoing   = 1
+
+// controller.changeOrderStatus(context, widget.orderId!, 1.toString());
+
+RejectPage(orderId: widget.orderId,).launch(context);
+        }),
+
+
+              ],
+            ).visible(widget.status==0.toString())
+        
+        
         ,
    
    
@@ -614,18 +659,18 @@ else {
      appBar:   AppBar(
           elevation: 0,
           actions:  [
-       !widget.isAdmin!?
-TextButton(onPressed: (){
-controller.confirmOrder(context, widget.orderId!).then((value) {
+      //  !widget.isAdmin!?
+// TextButton(onPressed: (){
+// controller.confirmOrder(context, widget.orderId!).then((value) {
 
 
-  _confirmed=1;
-  setState(() {
+//   _confirmed=1;
+//   setState(() {
     
-  });
-});
-}, child: Text(translation!.translate("confirm")!)).visible(_confirmed==0)
-:const SizedBox.shrink(),
+//   });
+// });
+// }, child: Text(translation!.translate("confirm")!)).visible(_confirmed==0)
+// :const SizedBox.shrink(),
           Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -1014,29 +1059,76 @@ controller.changeOrderStatus(context, widget.orderId!, 2.toString());
         })
         
         :
-            Container(
+
+
+
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+
+
+
+                Container(
         width: 120 ,height: 30,
         margin: const EdgeInsets.symmetric(horizontal: 6),
         decoration: BoxDecoration(
           color: Colors.green, borderRadius: BorderRadius.circular(50)
         ),
         child: Center(
-          child: Text(translation.translate("closing")! ,
+          child: Text(translation.translate("accept")! ,
           style: const TextStyle(
-            color: Colors.white
+                color: Colors.white
           ),
           
           
           ),
         ),
-        ).visible(widget.status==0.toString())
+        )
         .onTap((){
           ///TODO: change order status
 
 //make it clsoing   = 1
 
-controller.changeOrderStatus(context, widget.orderId!, 1.toString());
-        })
+  controller.updateOrderStatus(context, widget.orderId!, null, 2.toString());
+        //  controller.updateOrderStatus(context, widget.orderId!, null, 2.toString());
+
+        }),
+
+
+
+                
+                Container(
+        width: 120 ,height: 30,
+        margin: const EdgeInsets.symmetric(horizontal: 6),
+        decoration: BoxDecoration(
+          color: Colors.red, borderRadius: BorderRadius.circular(50)
+        ),
+        child: Center(
+          child: Text(translation.translate("reject")! ,
+          style: const TextStyle(
+                color: Colors.white
+          ),
+          
+          
+          ),
+        ),
+        )
+        .onTap((){
+          ///TODO: change order status
+
+//make it clsoing   = 1
+
+// controller.changeOrderStatus(context, widget.orderId!, 1.toString());
+
+RejectPage(orderId: widget.orderId,).launch(context);
+        }),
+
+
+              ],
+            ).visible(widget.status==0.toString())
+        
+        
+        
         ,
    
    
@@ -1152,20 +1244,30 @@ Builder(
                 ),
         
       ).onTap((){
-        OpenDocumentPage(needLoadfromUrl: false,url: e,);
+        // OpenDocumentPage(needLoadfromUrl: false,url: e,);
+
+        DocumentService().initPlatformState(e);
+
       });
     }else {
         return Container(
         child: Image.asset(
         
-          "assets/icons/pdf.png"
+         getFileIocn(e)
           ,
                   width: 300,
                   height: 300,
         ),
         ).onTap((){
-        OpenDocumentPage(needLoadfromUrl: false,url: e,);
-      });;
+
+        // OpenDocumentPage(needLoadfromUrl: false,url: e,);
+//download file 
+DocumentService().initPlatformState(e);
+//open file
+
+
+
+      });
     }
     
     
@@ -1304,17 +1406,21 @@ Builder(
                   height: 300,
                 ),
         
-      );
+      ).onTap(()async{
+       await DocumentService().initPlatformState(e);
+      });
     }else {
         return Container(
         child: Image.asset(
         
-          "assets/icons/pdf.png"
+        getFileIocn(e)
           ,
                   width: 300,
                   height: 300,
         ),
-        );
+        ).onTap(()async{
+        await   DocumentService().initPlatformState(e);
+        });
     }
     
     

@@ -28,6 +28,7 @@ class _MachineListMeintanceState extends State<MachineListMeintance> {
   void initState() {
     // TODO: implement initState
     super.initState();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
     context.read<MaintenanceController>().
     getBranchAssets(context, 
     widget.branchId.toString()
@@ -35,6 +36,7 @@ class _MachineListMeintanceState extends State<MachineListMeintance> {
     // 1.toString()
     // 
     );
+      });
   }
 
   @override

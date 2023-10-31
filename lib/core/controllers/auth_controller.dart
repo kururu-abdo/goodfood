@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/admin_dashboard.dart';
-import 'package:goodfoods/app/admin/pages/home.dart';
 import 'package:goodfoods/core/data/models/user_model.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
 import 'package:goodfoods/core/data/network/apis/auth_api.dart';
@@ -15,6 +14,24 @@ String err = '';
 ApiResponse<UserModel>?  user = ApiResponse.completed(null);
 AuthController(){
   loadUserType();
+
+}
+
+logout(
+  BuildContext context ,
+
+
+)async{
+try {
+  
+ await AuthApi().logout();
+
+ 
+
+
+} catch (e) {
+}
+
 
 }
 loginUser(
@@ -40,6 +57,7 @@ if (user!.data!= null) {
   isError=false;
 sharedPrefs.isLoggedIn= true;
 sharedPrefs.isAdmin= user!.data!.user!.maintain_emp!;   
+sharedPrefs.isMaintain = user!.data!.user!.maintain_emp!;
 //getAuth
   List<String> auth = [];
 if (user!.data!.permisions!.showBranchs!) {

@@ -51,7 +51,7 @@ try {
 
  notifications=ApiResponse.completed(response);
 
-  
+notifications!.data!.sort((a, b) => a.id!.compareTo(b.id!));  
   
 } catch (e) {
 
@@ -59,7 +59,7 @@ try {
 
  
 } finally{
-
+notifyListeners();
 }
 
   }

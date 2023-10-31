@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:goodfoods/core/data/models/chat_selection_model.dart';
 import 'package:goodfoods/core/data/models/message_model.dart';
@@ -9,7 +10,7 @@ class ChatApis {
 
 
   Future<MessageModel> sendMessage(
-     String uid , String? msg ,String? image
+     String uid , String? msg ,dynamic image ,dynamic ext
    ) async {
     final response = await _helper.post("msg/send_msg" ,
   
@@ -22,7 +23,8 @@ class ChatApis {
     
       "uploaded_file":
       
-      image
+      image ,
+      "extensions": ext
 
     }
    )
@@ -31,6 +33,8 @@ class ChatApis {
       "msg":msg.toString() 
     })
     );
+
+    log(response.toString());
     return MessageModel.fromJson(response);
   }
 
@@ -43,12 +47,13 @@ class ChatApis {
   Future<MessageModel> fetchMessages(
      String uid ,
      [
-       String? limit='10'
+       String? limit='10' , String? pageURl , bool? isPaginati
      ]
    ) async {
      //
     final response = await _helper.get("msg/get_admin_msg?admin_id=$uid&limit=$limit" ,
-   
+
+   isPaginate: isPaginati ,pageUrl: pageURl
     
     );
     return MessageModel.fromJson(response);

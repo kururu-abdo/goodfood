@@ -119,7 +119,7 @@ assets = I.map((e) => OtherAsset.fromJson(e)).toList();
 
 
 Future<void> addOrder(
-empId ,modelType,modelId, task, files
+empId ,modelType,modelId, task, files , bool immedatly
    ) async {
      //
  
@@ -129,9 +129,10 @@ empId ,modelType,modelId, task, files
 	
 	"model_type" : modelType,
  "model_id"   : modelId,
-  "task"      : task.toString()
+  "task"      : task.toString() 
 ,
-"files" : files
+"files" : files ,
+'immedatly':immedatly
 })
     
     );
@@ -146,19 +147,24 @@ empId ,modelType,modelId, task, files
 
 
 
-  Future<List<MaintainenanceOrderModel>> getMaintainOrder(
-  
+  Future<MaintainenanceOrderModel> getMaintainOrder(
+   [
+    String? nextUrl,
+    bool? isPaginate=false
+  ]
    ) async {
+     log('////////////////$nextUrl $isPaginate');
      //
     final response = await _helper.get("maintain/get_submitted_orders" ,
-   
+      pageUrl: nextUrl,
+   isPaginate:  isPaginate
     
     );
-    List<MaintainenanceOrderModel> orders=[];
-    Iterable I = response['data'];
+    // List<MaintainenanceOrderModel> orders=[];
+    // Iterable I = response['data'];
 
-orders = I.map((e) => MaintainenanceOrderModel.fromJson(e)).toList();
-    return orders;
+
+    return  MaintainenanceOrderModel.fromJson(response) ;
   }
 
 
@@ -166,14 +172,16 @@ orders = I.map((e) => MaintainenanceOrderModel.fromJson(e)).toList();
 
 Future<OrderData> getUserOrders(
   [
-    String? nextUrl
+    String? nextUrl,
+    bool? isPaginate=false
   ]
    ) async {
      //
     final response = await _helper.get(
-      
+     
       "maintain/get_order" ,
-   
+   pageUrl: nextUrl,
+   isPaginate:  isPaginate
     
     );
    
@@ -261,6 +269,37 @@ Future<dynamic> confrimOrder(
   }
 
 
+
+
+Future<dynamic> updateOrderStatus(
+    String? order ,
+    String? reason,
+    String? status
+  
+   ) async {
+     //
+    final response = await _helper.post(
+      
+      "maintain/confirm_order/$order" ,
+reason != null?
+     jsonEncode({
+    'reject_resion':reason ,
+
+    'status':status
+     })
+   :
+    jsonEncode({
+    
+
+    'status':status
+     })
+    
+    );
+   
+
+   
+    return response;
+  }
 
 
 

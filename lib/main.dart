@@ -1,8 +1,6 @@
-import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -12,6 +10,7 @@ import 'package:goodfoods/core/initializer.dart';
 import 'package:goodfoods/core/presentation/app_theme.dart';
 import 'package:goodfoods/core/presentation/splash_screen.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
+import 'package:goodfoods/core/services/document_service.dart';
 import 'package:goodfoods/core/services/notification_plugin.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +60,7 @@ var  _notification = FlutterLocalNotificationsPlugin();
  try {
     await sharedPrefs.init();
   await di.init();
-
+DocumentService().initCheckPermission();
      Firebase.initializeApp();
      NotificationApi.createNorifiacationChannel();
     NotificationApi.init();
@@ -121,9 +120,11 @@ class MyApp extends StatelessWidget {
               supportedLocales: locale.langs.map((e) => Locale(e.languageCode!)).toList(),
                localizationsDelegates: const [
               // CountryLocalizations.delegate,
-              
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
+                 AppLocalizations.delegate,
+            
+                GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            
               GlobalWidgetsLocalizations.delegate,
             ],
             //  localeResolutionCallback: (locale, supportedLocales) => 

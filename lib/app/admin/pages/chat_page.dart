@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/send_message_with_image.dart';
+import 'package:goodfoods/app/chat/view/widgets/load_more_btn.dart';
 import 'package:goodfoods/core/colors.dart';
 import 'package:goodfoods/core/controllers/chat_controller.dart';
 import 'package:goodfoods/core/data/models/message.dart';
@@ -10,9 +11,11 @@ import 'package:goodfoods/core/presentation/widgets/message_ui.dart';
 import 'package:goodfoods/core/presentation/widgets/progress.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
+import 'package:goodfoods/core/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class ChagePage extends StatefulWidget {
   final bool?  fromNotificatios;
@@ -28,7 +31,7 @@ class _ChagePageState extends State<ChagePage> {
 
 
 
-
+ChatController? chatController;
 
 TextEditingController messageController =TextEditingController();
 
@@ -39,21 +42,24 @@ TextEditingController messageController =TextEditingController();
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
+
+
 @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _scrollController.addListener(() {
-    if (_scrollController.position.atEdge) {
-      bool isTop = _scrollController.position.pixels == 0;
-      if (isTop) {
-        context.read<ChatController>().getMessages();
-      } else {
-        print('At the bottom');
-      }
-    }
-  });
-
+    chatController = Provider.of<ChatController>(context ,listen: false);
+    chatController!.init();
+  //   _scrollController.addListener(() {
+  //   if (_scrollController.position.atEdge) {
+  //     bool isTop = _scrollController.position.pixels == 0;
+  //     if (isTop) {
+  //       // context.read<ChatController>().getMessages();
+  //     } else {
+  //       print('At the bottom');
+  //     }
+  //   }
+  // });
 
  WidgetsBinding.instance.addPostFrameCallback((_) {
   if (widget.fromNotificatios!) {
@@ -61,13 +67,19 @@ TextEditingController messageController =TextEditingController();
 
     //load messages
     context.read<ChatController>().loadChatUser(widget.userId!);
+ context.read<ChatController>().scrollToBottom();
+  }else {
+    //  context.read<ChatController>().getMessageData(
+    //   "https://goodfoodsa.co/api/msg/get_admin_msg?admin_id=${widget.userId!}&page=1"
+      
+    //  );
 
-
-        scrolltoBottom();
   }
 
  });
+// context.read<ChatController>().scrollOffsetListener.changes.listen((event) => {
 
+// });
   }
 
 File? selectedImage;
@@ -127,15 +139,15 @@ getImage(BuildContext context) async {
 @override
   void dispose() {
     messageController.dispose();
-
-
-
+log('DISOPOSE CHAT PAGE');
+// context.read<ChatController>().clearChat();
+chatController2.clearChat();
     super.dispose();
 
   }
 
 
-
+ var chatController2 ;
 scrolltoBottom(){
  Future.doWhile(() {
       if (_scrollController.position.extentAfter == 0) {
@@ -151,21 +163,68 @@ scrolltoBottom(){
 
   @override
   Widget build(BuildContext context) {
+    chatController2 = Provider.of<ChatController>(context);
       var chatController = Provider.of<ChatController>(context);
  var appLocale = AppLocalizations.of(context);
     return 
       Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           elevation: 0,
 
           title: 
-           Column(
+           chatController.chatUser!=null?
+
+Row(
+  crossAxisAlignment: CrossAxisAlignment.center,
+  children: [
+Column(
+  mainAxisSize: MainAxisSize.min,
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+     Text(
+                     
+                          chatController.chatUser!.name!
+                       ,style: const TextStyle( fontSize: 16 ,fontWeight: FontWeight.w600),),
+
+                        const SizedBox(height: 3,),
+                      Text(
+                    
+                        chatController.chatUser!.email!
+                        
+                        ,style: TextStyle(color: Colors.grey.shade600, fontSize: 13),),
+  ],
+),
+   const SizedBox(height: 5,),
+
+IconButton(onPressed: (){
+
+                     SelectEmployee(
+
+                      onSelect: (user){
+                        
+                        chatController.selectChatUser(user);
+
+        // scrolltoBottom();
+
+                      },
+                    ).launch(context);
+                 
+}, icon: Icon(Icons.change_circle_outlined ,color: Theme.of(context).primaryColor,))
+
+
+  ],
+)
+
+
+           :          Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                        Text(
                         chatController.chatUser==null?
-                        'Select chat':
+                        currentLang(context)=="ar"?"اختار موظف":
+                        'Select  Employee':
                           chatController.chatUser!.name!
                        ,style: const TextStyle( fontSize: 16 ,fontWeight: FontWeight.w600),),
                       const SizedBox(height: 6,),
@@ -178,17 +237,24 @@ scrolltoBottom(){
                         ,style: TextStyle(color: Colors.grey.shade600, fontSize: 13),),
                     ],
                   ).onTap((){
+
+                    
                      SelectEmployee(
 
                       onSelect: (user){
+                        
                         chatController.selectChatUser(user);
 
-        scrolltoBottom();
+        // scrolltoBottom();
 
                       },
                     ).launch(context);
+                 
+                 
+                 
                   }),
         ),
+       
       body:
       Builder(builder: 
 (_){
@@ -235,7 +301,7 @@ return
 
                       onSelect: (user){
                         chatController.selectChatUser(user);
-
+ context.read<ChatController>().scrollToBottom();
                       },
                     ).launch(context);
   }),
@@ -245,262 +311,399 @@ return
 }    
 
 else{
-  return Column(
-    children: [
-
-     
-
-          Expanded(
-            // height: MediaQuery.of(context).size.height,
-            child: NotificationListener<ScrollNotification>(
-              onNotification: (scrollEnd) {
-                 final metrics = scrollEnd.metrics;
-    if (metrics.atEdge) {
-      bool isTop = metrics.pixels == 0;
-      if (isTop) {
-              
-
-      } else {
-      }
-    }
-    // if (scrollInfo.metrics.pixels ==
-    //     scrollInfo.metrics.minScrollExtent) {
-     
-    // }
-return
-
-    true;
-  },
-              child: 
-              chatController.messageModel==null?
-              const SizedBox():
-              
-              
-              ListView.builder(
-                controller: _scrollController,
-              itemCount: chatController.messageModel!.data!.length,
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(top: 10,bottom: 10),
-              physics: const ScrollPhysics(),
-              itemBuilder: (context, index){
-              var data  =  chatController.messageModel!.data![index];
-                      
-                      
-                return Container(
-                  padding: const EdgeInsets.only(left: 14,right: 14,top: 10,bottom: 10),
-                  child: Align(
-                    alignment: 
-                    (
-              
-              // messages[index].messageType == "receiver"?
-                    data.senderId.toString() ==sharedPrefs.user_id?
-                    
-                    Alignment.topLeft:Alignment.topRight),
-                    child:
-                    data.mediaUrl!=null?
-                    MediaMessage(messsage: data):
-                    MessageWithoutMedia(messsage: data)
-                    
-                      //          Container(
-                      //   decoration: BoxDecoration(
-                      //     borderRadius: BorderRadius.circular(20),
-                      //     color: (
-                      //       data.senderId.toString() ==sharedPrefs.user_id?
-                      //       // messages[index].messageType  == "receiver"?
-                
-                      //      Colors.blue:
-                      //     Colors.grey.shade300
-                
-              
-                
-                
-                      //     ),
-                      //   ),
-                      //   padding: const EdgeInsets.all(16),
-                      //   child: Builder(
-                      //     builder: (context) {
-                      // if (data.mediaUrl!= null) {
-                      //   return 
-              
-                      //   Column(
-                      //     crossAxisAlignment: CrossAxisAlignment.center,
-                      //     children: [
-                      // Image.network(
-                      //   "https://goodfoodsa.co${data.mediaUrl!}" , height: 120,) ,
-                      // const SizedBox(height: 8,),
-                      // Text("${data.msg}", style:  TextStyle(
-                      //         color:
-                      //         data.senderId.toString() ==sharedPrefs.user_id?
-                      //         // messages[index].messageType  == "receiver"
-                      //         //  ?
-                     
-                  
-                    
-                      //        Colors.white:   Colors.black,
-                      
-                      
-                      //         fontSize: 15),)
-                      
-                      //     ],
-                      //   );
-                      
-                      
-                      
-                      // }
-                      
-                      
-                      //     else {
-                      //   return Text("${data.msg}", style:  TextStyle(
-                      //         color:
-                      //         data.senderId.toString() ==sharedPrefs.user_id?
-                      //         // messages[index].messageType  == "receiver"
-                      //         //  ?
-                      //      Colors.white:   Colors.black,
-                      
-                      //         fontSize: 15),);
-                      // }
-                      //     }
-                      //   ),
-                      //         ),
-               
-               
-               
-                  ),
-                );
-              },
-                      ),
-            ),
-          ),
-
-
+  return SizedBox.expand(
+    child: Column(
+      children: [
   
-       Visibility(
-        //  visible: chatController.chatUser != null,
-         child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                         margin: const EdgeInsets.only(top: 10),
-                        // height: 70,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-
-                            
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width - 60,
-                                  child: Card(
-                                    margin: const EdgeInsets.only(
-                                        left: 2, right: 2, bottom: 8),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                    child
-                                    : 
-                                    
-                                    TextFormField(
-                                      controller: _controller,
-                                      focusNode: focusNode,
-                                      textAlignVertical: TextAlignVertical.center,
-                                      keyboardType: TextInputType.multiline,
-                                      maxLines: 5,
-                                      minLines: 1,
-                                      onChanged: (value) {
-                                        if (value.isNotEmpty) {
-                                          setState(() {
-                                            // sendButton = true; 
-                                          });
-                                        } else {
-                                          setState(() {
-                                            // sendButton = false;
-                                          });
-                                        }
-                                      },
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                      
-                                        hintText:  appLocale!.translate("type_a_message")!,
-                                        hintStyle: const TextStyle(color: Colors.grey),
-                                       
-                                        suffixIcon: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            // IconButton(
-                                            //   icon: const Icon(Icons.attach_file),
-                                            //   onPressed: () {
-                                            //     showModalBottomSheet(
-                                            //         backgroundColor:
-                                            //             Colors.transparent,
-                                            //         context: context,
-                                            //         builder: (builder) =>
-                                            //             bottomSheet());
-                                            //   },
-                                            // ),
-                                            IconButton(
-                                              icon: const Icon(Icons.camera_alt),
-                                              onPressed: ()async {
        
-                                                  await        getImage(context);
-                                                // Navigator.push(
-                                                //     context,
-                                                //     MaterialPageRoute(
-                                                //         builder: (builder) =>
-                                                //             CameraApp()));
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                        contentPadding: const EdgeInsets.symmetric(
-                                          horizontal: 10 ,vertical: 5
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    bottom: 8,
-                                    right: 2,
-                                    left: 2,
-                                  ),
-                                  child: CircleAvatar(
-                                    radius: 25,
-                                    backgroundColor: kcPrimaryColor,
-                                    child: IconButton(
-                                      icon: const Icon(
-                                        Icons.send ,
-                                        color: Colors.white,
-                                      ),
-                                      onPressed: ()async {
-                             chatController.sendMessage(chatController.chatUser,
-        _controller.text, null).then((value) => {
-        _controller.clear(),
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent)
-        }
-        );
-
-        scrolltoBottom();
-                                        }
-                                      
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                           
-                          ],
-                        ),
-                      ),
-         
-         ),
-       )
+  
+            Expanded(
+              // height: MediaQuery.of(context).size.height,
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (scrollEnd) {
+                   final metrics = scrollEnd.metrics;
+  
+          // if (chatController.loadMore) {
+  //           context.read<ChatController>().getMessages(chatController.messageModel!.data!.nextPageUrl ,
             
+  // chatController.chatUser==null? widget.userId:chatController.chatUser!.id.toString()
+  //           );
+          // }
+                
+                
+        
+      
+      // if (scrollInfo.metrics.pixels ==
+      //     scrollInfo.metrics.minScrollExtent) {
        
+      // }
+  return
   
+      true;
+    },
+                child: 
+                chatController.messages==null?
+                const SizedBox():
+                
+                
+  
+  
+  // FutureBuilder(
+  //   future: chatController.messagesData,
+  //   builder: (BuildContext context, AsyncSnapshot snapshot) {
+  //     if (!snapshot.hasData) {
+        
+  //     return 
+  //     Center(child: mProgress(context,fromPage: true),);
+       
+              
+  //                         } else {
+          
+          
+  //                           if (
+  //                           chatController.messageList!.isEmpty) {
+  //                               log('DATA ${snapshot.data}');
+  //                      return        Column(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           crossAxisAlignment: CrossAxisAlignment.center,
+  //           children: [
+  //             Container(
+  //               padding: const EdgeInsets.all(40),
+  //               margin: const EdgeInsets.all(10),
+  //               decoration: const BoxDecoration(
+  //                 color: Colors.white,
+  //                 shape: BoxShape.circle
+  //               ),
+  //               child: Center(
+  //                 child: Icon(Icons.notifications ,
+  //                 color: Theme.of(context).primaryColor,
+  //                 ),
+  //               ),
+  //             ),
+  
+  //             const Text('لا توجد اشعاارات بعد' ,
+              
+  //             style: TextStyle(color: Colors.black,fontSize: 20 ,fontWeight: FontWeight.bold),
+  //             )
+  //           ],
+  //         );
+          
+  //                           }
+  //                           //if (snapshot.connectionState == ConnectionState.done) {
+  //                  else {
+  //                             return 
+                             
+  //         ListView(
+  //           // controller: chatController.scrollController,
+  //           children:   chatController.messageList!   .map((e) => 
+  //           // var data  =  chatController.messageModel!.data![index];
+                        
+                        
+  //                  Container(
+  //                   padding: const EdgeInsets.only(left: 14,right: 14,top: 10,bottom: 10),
+  //                   child: Align(
+  //                     alignment: 
+  //                     (
+                
+  //               // messages[index].messageType == "receiver"?
+  //                     e.senderId.toString() ==sharedPrefs.user_id?
+                      
+  //                     Alignment.topLeft:Alignment.topRight),
+  //                     child:
+  //                     e.mediaUrl!=null?
+  //                     MediaMessage(messsage: e):
+  //                     MessageWithoutMedia(messsage: e)
+  //                   )
+                  
+  //         )
+  //           ).toList()
+  //           );
+  
+  
+  //                           }
+       
+       
+                          
+                          
+  //                         }
+  //   },
+  // ),
+  
+  
+                
+                chatController.messages!.isEmpty?
+                 Center(
+                  child: Text(currentLang(context)=="ar"?"ارسل رسالة":"Send a Message"),
+                ):
+              ScrollablePositionedList.builder(
+                  // controller: _scrollController,
+  
+   itemScrollController: chatController.itemScrollController,
+    scrollOffsetController:chatController. scrollOffsetController,
+    itemPositionsListener:chatController. itemPositionsListener,
+    scrollOffsetListener: chatController.scrollOffsetListener,
+  initialScrollIndex:chatController.messages!.length,
+
+                itemCount:   chatController.messages!.length+1,
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(top: 10,bottom: 10),
+                physics: const ScrollPhysics(),
+                itemBuilder: (context, index){
+             
+                        
+                        if (index==0) {
+                          return Padding(padding: const EdgeInsets.all(15) , 
+                          
+                          child: LoadMore(onLoad: (){
+  if (chatController.messageModel!.data!.nextPageUrl!=null) {
+       context.read<ChatController>().getMessages(chatController.messageModel!.data!.nextPageUrl ,
+            
+  chatController.chatUser==null? widget.userId:chatController.chatUser!.id.toString()
+            );
+  }
+                            //get next page
+                          },),
+                          ).visible(chatController.messages!.length>=20&& chatController.messageModel!.data!.nextPageUrl!=null);
+                        }
+                        else {
+                             var data  =  chatController.messages![index-1];
+                          return Container(
+                    padding: const EdgeInsets.only(left: 14,right: 14,top: 10,bottom: 10),
+                    child: Align(
+                      alignment: 
+                      (
+                
+                // messages[index].messageType == "receiver"?
+                      data.senderId.toString() ==sharedPrefs.user_id?
+                      
+                      Alignment.topLeft:Alignment.topRight),
+                      child:
+                      data.mediaUrl!=null?
+                      MediaMessage(messsage: data):
+                      MessageWithoutMedia(messsage: data)
+                      
+                        //          Container(
+                        //   decoration: BoxDecoration(
+                        //     borderRadius: BorderRadius.circular(20),
+                        //     color: (
+                        //       data.senderId.toString() ==sharedPrefs.user_id?
+                        //       // messages[index].messageType  == "receiver"?
+                  
+                        //      Colors.blue:
+                        //     Colors.grey.shade300
+                  
+                
+                  
+                  
+                        //     ),
+                        //   ),
+                        //   padding: const EdgeInsets.all(16),
+                        //   child: Builder(
+                        //     builder: (context) {
+                        // if (data.mediaUrl!= null) {
+                        //   return 
+                
+                        //   Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.center,
+                        //     children: [
+                        // Image.network(
+                        //   "https://goodfoodsa.co${data.mediaUrl!}" , height: 120,) ,
+                        // const SizedBox(height: 8,),
+                        // Text("${data.msg}", style:  TextStyle(
+                        //         color:
+                        //         data.senderId.toString() ==sharedPrefs.user_id?
+                        //         // messages[index].messageType  == "receiver"
+                        //         //  ?
+                       
+                    
+                      
+                        //        Colors.white:   Colors.black,
+                        
+                        
+                        //         fontSize: 15),)
+                        
+                        //     ],
+                        //   );
+                        
+                        
+                        
+                        // }
+                        
+                        
+                        //     else {
+                        //   return Text("${data.msg}", style:  TextStyle(
+                        //         color:
+                        //         data.senderId.toString() ==sharedPrefs.user_id?
+                        //         // messages[index].messageType  == "receiver"
+                        //         //  ?
+                        //      Colors.white:   Colors.black,
+                        
+                        //         fontSize: 15),);
+                        // }
+                        //     }
+                        //   ),
+                        //         ),
+                 
+                 
+                 
+                    ),
+                  );
+                        }
+                },
+                        ),
+             
+             
+             
+             
+             
+             
+              ),
+            ),
+  
+  
+    
 
 
-    ],
+
+  //        Visibility(
+  //         //  visible: chatController.chatUser != null,
+  //          child: Align(
+  //                       alignment: Alignment.bottomCenter,
+  //                       child: Container(
+  //                          margin: const EdgeInsets.only(top: 10),
+  //                         // height: 70,
+  //                         child: Column(
+  //                           mainAxisAlignment: MainAxisAlignment.end,
+  //                           children: [
+  
+                              
+  //                             Row(
+  //                               children: [
+  //                                 SizedBox(
+  //                                   width: MediaQuery.of(context).size.width - 60,
+  //                                   child: Card(
+  //                                     margin: const EdgeInsets.only(
+  //                                         left: 2, right: 2, bottom: 8),
+  //                                     shape: RoundedRectangleBorder(
+  //                                       borderRadius: BorderRadius.circular(25),
+  //                                     ),
+  //                                     child
+  //                                     : 
+                                      
+  //                                     TextFormField(
+  //                                       controller: _controller,
+  //                                       focusNode: focusNode,
+  //                                       textAlignVertical: TextAlignVertical.center,
+  //                                       keyboardType: TextInputType.multiline,
+  //                                       maxLines: 5,
+  //                                       minLines: 1,
+  //                                       onChanged: (value) {
+  //                                         if (value.isNotEmpty) {
+  //                                           setState(() {
+  //                                             // sendButton = true; 
+  //                                           });
+  //                                         } else {
+  //                                           setState(() {
+  //                                             // sendButton = false;
+  //                                           });
+  //                                         }
+  //                                       },
+  //                                       decoration: InputDecoration(
+  //                                         border: InputBorder.none,
+                                        
+  //                                         hintText:  appLocale!.translate("type_a_message")!,
+  //                                         hintStyle: const TextStyle(color: Colors.grey),
+                                         
+  //                                         suffixIcon: Row(
+  //                                           mainAxisSize: MainAxisSize.min,
+  //                                           children: [
+  //                                             // IconButton(
+  //                                             //   icon: const Icon(Icons.attach_file),
+  //                                             //   onPressed: () {
+  //                                             //     showModalBottomSheet(
+  //                                             //         backgroundColor:
+  //                                             //             Colors.transparent,
+  //                                             //         context: context,
+  //                                             //         builder: (builder) =>
+  //                                             //             bottomSheet());
+  //                                             //   },
+  //                                             // ),
+  //                                             IconButton(
+  //                                               icon: const Icon(Icons.camera_alt),
+  //                                               onPressed: ()async {
+         
+  //                                                   await        getImage(context);
+  //                                                 // Navigator.push(
+  //                                                 //     context,
+  //                                                 //     MaterialPageRoute(
+  //                                                 //         builder: (builder) =>
+  //                                                 //             CameraApp()));
+  //                                               },
+  //                                             ),
+  //                                           ],
+  //                                         ),
+  //                                         contentPadding: const EdgeInsets.symmetric(
+  //                                           horizontal: 10 ,vertical: 5
+  //                                         ),
+  //                                       ),
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                                 Padding(
+  //                                   padding: const EdgeInsets.only(
+  //                                     bottom: 8,
+  //                                     right: 2,
+  //                                     left: 2,
+  //                                   ),
+  //                                   child: CircleAvatar(
+  //                                     radius: 25,
+  //                                     backgroundColor: kcPrimaryColor,
+  //                                     child: IconButton(
+  //                                       icon: const Icon(
+  //                                         Icons.send ,
+  //                                         color: Colors.white,
+  //                                       ),
+  //                                       onPressed: ()async {
+  //                              chatController.sendMessage(chatController.chatUser , _controller.text, 
+  //                              null,
+                               
+  //                              null
+  //                              ).then((value) {
+  
+  // _controller.clear();
+  
+  //                              }
+                               
+                  
+  //                 );
+  //         // _controller.text, null).then((value) => {
+  //         // _controller.clear(),
+  //         // _scrollController.jumpTo(_scrollController.position.maxScrollExtent)
+  //         // }
+  //         // );
+  
+  //         // scrolltoBottom();
+  //                                         }
+                                        
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                               ],
+  //                             ),
+                             
+  //                           ],
+  //                         ),
+  //                       ),
+           
+  //          ),
+  //        )
+              
+         
+    
+  
+  
+      ],
+    ),
   );
 }
 
@@ -660,8 +863,158 @@ return
     
     
     
-    
-    
+    ,
+     bottomNavigationBar:  Padding(
+   padding: EdgeInsets.only(
+     
+                               bottom: MediaQuery.of(context).viewInsets.bottom
+                             ),
+       child: SizedBox(
+          
+            height: 70,
+            child:
+            
+            
+     
+         
+           Visibility(
+             visible: chatController.chatUser != null,
+             child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                             margin: const EdgeInsets.only(top: 10),
+                          
+                            // height: 70,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+       
+                                
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width - 60,
+                                      child: Card(
+                                        margin: const EdgeInsets.only(
+                                            left: 2, right: 2, bottom: 8),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(25),
+                                        ),
+                                        child
+                                        : 
+                                        
+                                        TextFormField(
+                                          controller: _controller,
+                                          focusNode: focusNode,
+                                          textAlignVertical: TextAlignVertical.center,
+                                          keyboardType: TextInputType.multiline,
+                                          maxLines: 5,
+                                          minLines: 1,
+                                          onChanged: (value) {
+                                            if (value.isNotEmpty) {
+                                              setState(() {
+                                                // sendButton = true; 
+                                              });
+                                            } else {
+                                              setState(() {
+                                                // sendButton = false;
+                                              });
+                                            }
+                                          },
+                                          decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                          
+                                            hintText:  appLocale!.translate("type_a_message")!,
+                                            hintStyle: const TextStyle(color: Colors.grey),
+                                           
+                                            suffixIcon: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                // IconButton(
+                                                //   icon: const Icon(Icons.attach_file),
+                                                //   onPressed: () {
+                                                //     showModalBottomSheet(
+                                                //         backgroundColor:
+                                                //             Colors.transparent,
+                                                //         context: context,
+                                                //         builder: (builder) =>
+                                                //             bottomSheet());
+                                                //   },
+                                                // ),
+                                                IconButton(
+                                                  icon: const Icon(Icons.camera_alt),
+                                                  onPressed: ()async {
+           
+                                                      await        getImage(context);
+                                                    // Navigator.push(
+                                                    //     context,
+                                                    //     MaterialPageRoute(
+                                                    //         builder: (builder) =>
+                                                    //             CameraApp()));
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                            contentPadding: const EdgeInsets.symmetric(
+                                              horizontal: 10 ,vertical: 5
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 8,
+                                        right: 2,
+                                        left: 2,
+                                      ),
+                                      child: CircleAvatar(
+                                        radius: 25,
+                                        backgroundColor: kcPrimaryColor,
+                                        child: IconButton(
+                                          icon: const Icon(
+                                            Icons.send ,
+                                            color: Colors.white,
+                                          ),
+                                          onPressed: ()async {
+                                 chatController.sendMessage(chatController.chatUser , _controller.text, 
+                                 null,
+                                 
+                                 null
+                                 ).then((value) {
+       
+       _controller.clear();
+       
+                                 }
+                                 
+                    
+                    );
+            // _controller.text, null).then((value) => {
+            // _controller.clear(),
+            // _scrollController.jumpTo(_scrollController.position.maxScrollExtent)
+            // }
+            // );
+       
+            // scrolltoBottom();
+                                            }
+                                          
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                               
+                              ],
+                            ),
+                          ),
+             
+             ),
+           )
+                
+           
+            
+            ),
+     ),
     );
   }
 

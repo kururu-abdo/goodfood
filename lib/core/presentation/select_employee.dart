@@ -5,6 +5,7 @@ import 'package:goodfoods/core/controllers/chat_controller.dart';
 import 'package:goodfoods/core/data/models/chat_selection_model.dart';
 import 'package:goodfoods/core/presentation/widgets/progress.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
+import 'package:goodfoods/core/utils/utils.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +30,11 @@ void initState() {
       context.read<ChatController>().getChatSelectionModel();
    });
 }
+
+// List options =['Departments' , 'Branches'];
+
+
+
    var data   = [
      {
        "area":"القصيم" , 
@@ -116,13 +122,22 @@ void initState() {
        ]
      },
    ]; 
-    int selected = 0; //attention
-   int selectedBranch = 0; //attention
-      int selectedEmp = 0; //attention
-         int selectedCity = 0; //attention
+    int selected = -1; //attention
+   int selectedBranch = -1; //attention
+      int selectedEmp = -1; //attention
+         int selectedCity = -1; //attention
+int selectedDept=-1;
+int selectedOptions=-1;
 
   @override
   Widget build(BuildContext context) {
+    List options2 =[{
+  "title":
+  currentLang(context)=="ar"?"الافسام":
+  'Departments' ,  "key":"departments"   } ,{
+  "title":
+   currentLang(context)=="ar"?"الفروع":
+  'Branches' ,  "key":"branchs"   }];
       var appLocale = AppLocalizations.of(context);
       var provider = Provider.of<ChatController>(context);
     return Scaffold(
@@ -237,6 +252,7 @@ provider.getChatSelectionModel();
                             setState(() {
                               const Duration(seconds: 20000);
                               selected = index;
+                              selectedCity=-1;
                             });
                           } else {
                             setState(() {
@@ -252,6 +268,7 @@ provider.getChatSelectionModel();
                         
                         .map(
                           (cityIndex, city)
+
                            =>
                           MapEntry(cityIndex, 
 
@@ -261,6 +278,7 @@ provider.getChatSelectionModel();
           color: scaffoldLightColor
     ),
     child: ExpansionTile(
+      
                           key: Key("city $selectedCity"), //attention
                           initiallyExpanded: cityIndex == selectedCity, //attention
   
@@ -282,9 +300,9 @@ city.nameAr.toString():city.nameEn.toString()
                           subtitle:  Text(
                             appLocale.locale.languageCode=="ar"?
 
-                            "${city.branchs!.length}    فرع"
+                            "${city.branchs!.length}    فرع     ${city.departments!.length}    قسم" 
                             :
-                            "${city.branchs!.length}    branches"
+                            "${city.branchs!.length}    branches      ${city.departments!.length}    departments"
 
                           // (branch['employees'] as List ).length.toString()
                           ,
@@ -298,6 +316,7 @@ city.nameAr.toString():city.nameEn.toString()
                               setState(() {
                                 const Duration(seconds: 20000);
                                 selectedCity = cityIndex;
+                                selectedOptions=-1;
                               });
                             } else {
                               setState(() {
@@ -308,9 +327,81 @@ city.nameAr.toString():city.nameEn.toString()
 
 
                    
+
+
                      children: 
-                    
-                    
+                    options2.asMap().map((opetionIndex, option) =>   MapEntry(opetionIndex,
+                      Container(
+    padding: const EdgeInsets.symmetric(horizontal: 15 ),
+    decoration: const BoxDecoration(
+          color: scaffoldLightColor
+    ),
+    child: ExpansionTile(
+                          key: Key("option $selectedBranch"), //attention
+                          initiallyExpanded: opetionIndex == selectedOptions, //attention
+  
+                          leading: const Icon(
+                            Icons.person,
+                            size: 50.0,
+                            color: Colors.black,
+                          ),
+                          title: Text(
+                            
+                            
+//                             appLocale.locale.languageCode=="ar"?
+// branch.nameAr.toString():branch.nameEn.toString()
+option['title']
+                            ,
+                              style: const TextStyle(
+                                  color: Color(0xFF09216B),
+                                  fontSize: 17.0,
+                                  fontWeight: FontWeight.bold)),
+                          subtitle:  const Text(
+                            ""
+                            // appLocale.locale.languageCode=="ar"?
+
+                            // "${branch.emp!.length}    موظف"
+                            // :
+                            // "${branch.emp!.length}    Employees"
+
+                          // (branch['employees'] as List ).length.toString()
+                          ,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          onExpansionChanged: ((newState) {
+                            if (newState) {
+                              setState(() {
+                                const Duration(seconds: 20000);
+                                selectedOptions = opetionIndex;
+                                selectedDept=-1;
+                                selectedBranch=-1;
+                              });
+                            } else {
+                              setState(() {
+                                selectedOptions = -1;
+                              });
+                            }
+                          }),
+
+
+children: 
+
+opetionIndex==1?
+
+
+
+//  city.branchs!
+
+// :
+
+
+
+
+
+
                      city.branchs!
                         .asMap()
                         
@@ -391,16 +482,121 @@ Navigator.pop(context);
 
 
     ))
-)).values.toList()
+)).values.toList()          
                         
+                      :  
+
+
+                      
+
+                     city.departments!
+                        .asMap()
                         
-                        
-                        
-                        
-                        
-                        
-                        
-                
+                        .map(
+                          (deptIndex, dept) =>
+                          MapEntry(deptIndex, 
+
+  Container(
+    padding: const EdgeInsets.symmetric(horizontal: 15 ),
+    decoration: const BoxDecoration(
+          color: scaffoldLightColor
+    ),
+    child: ExpansionTile(
+                          key: Key("dept $selectedDept"), //attention
+                          initiallyExpanded: deptIndex == selectedDept, //attention
+  
+                          leading: const Icon(
+                            Icons.person,
+                            size: 50.0,
+                            color: Colors.black,
+                          ),
+                          title: Text(
+                            
+                            
+                            appLocale.locale.languageCode=="ar"?
+dept.nameAr.toString():dept.nameEn.toString()
+                            ,
+                              style: const TextStyle(
+                                  color: Color(0xFF09216B),
+                                  fontSize: 17.0,
+                                  fontWeight: FontWeight.bold)),
+                          subtitle:  Text(
+                            appLocale.locale.languageCode=="ar"?
+
+                            "${dept.emp!.length}    موظف"
+                            :
+                            "${dept.emp!.length}    Employees"
+
+                          // (branch['employees'] as List ).length.toString()
+                          ,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 13.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          onExpansionChanged: ((newState) {
+                            if (newState) {
+                              setState(() {
+                                const Duration(seconds: 20000);
+                                selectedDept = deptIndex;
+                              });
+                            } else {
+                              setState(() {
+                                selectedDept = -1;
+                              });
+                            }
+                          }),
+children:  dept.emp!.map((emp){
+  
+                          return 
+                          
+                          Card(
+                            child: ListTile(
+                              onTap: (){
+widget.onSelect!(emp);
+Navigator.pop(context);
+                              },
+                              title: Text(
+                              emp.name!.toString()),
+
+                                subtitle:Text(emp.email!.toString()) ,
+                            ),
+                          );
+                          
+                          
+                          
+                        }).toList()
+
+
+    ))
+)).values.toList()          
+                            
+                          
+
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          )
+
+
+
+
+                          )
+                    
+                    
+                     )
+                     
+                     
+                     ).values.toList()
+      
 
   
     )))

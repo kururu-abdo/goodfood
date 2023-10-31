@@ -24,7 +24,7 @@
     "documents":"مستندات الادارة" ,
     "assets":"الاصول" ,
     "message":"رسالة" ,
-    "chat":"المراسلات" ,
+    "chat":"المراسلات الادارية" ,
     "change_lang":"تغيير اللغة" ,
     "please_select_lang":"الرجاء اختيار لغة؟", 
     "ar":"العربية",
@@ -88,7 +88,7 @@
 
 
 ,
-"maintains":"Maintenance",
+"maintains":"طلبات الصيانة",
 "other_assests":"الاصول الاخرى" ,
 "skins":"مساكن",
 "no_machines":"لا توجد معدات" ,
@@ -96,5 +96,19 @@
 "no_docs":"لا توجد مستندات" ,
 "no_branches":"لا توجد فروع" ,
 "no_maintain_orders":"لا توجد طلبات صيانة"  ,
-"no_notifications":"لا توجد اشعارات"
+"no_notifications":"لا توجد اشعارات" ,
+
+"successfull":"نجاح",
+"status_changed":"تم تغيير حالة الطلب",
+"faild":"فشل"
+  , 
+  "accept":"قبول",
+  "reject":"رفض",
+  "reason":"سبب الرفض"
+  
+
+
+
+
+
 }

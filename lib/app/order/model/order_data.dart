@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class OrderData {
   int? currentPage;
-  List<Data>? data;
+  List<UserOrder>? data;
   String? firstPageUrl;
   int? from;
   int? lastPage;
@@ -33,9 +33,9 @@ class OrderData {
   OrderData.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <UserOrder>[];
       json['data'].forEach((v) {
-        data!.add(Data.fromJson(v));
+        data!.add(UserOrder.fromJson(v));
       });
     }
     firstPageUrl = json['first_page_url'];
@@ -79,7 +79,7 @@ class OrderData {
   }
 }
 
-class Data {
+class UserOrder {
   int? id;
   int? maintainId;
   int? adminId;
@@ -88,7 +88,7 @@ class Data {
   String? updatedAt;
   MaintainOrder? maintainOrder;
 
-  Data(
+  UserOrder(
       {this.id,
       this.maintainId,
       this.adminId,
@@ -97,7 +97,7 @@ class Data {
       this.updatedAt,
       this.maintainOrder});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  UserOrder.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     maintainId = json['maintain_id'];
     adminId = json['admin_id'];

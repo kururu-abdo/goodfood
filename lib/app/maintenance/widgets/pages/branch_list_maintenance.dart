@@ -98,7 +98,40 @@ Center(child: NoContent(translate(context, "no_branches")),)
         var files = 
         branchData.files!=null?
         jsonDecode(branchData.files!) as List:[];
-        return   Container(
+        return  
+        
+        
+        
+                  
+Card(
+  child:   ListTile(
+  
+    onTap: (){
+        // BrnachMachines(cityId: branchData.id.toString(),).launch(context);
+         BranchMeaintenancePage(
+            branchId: branchData.id,
+          ).launch(context);
+    },
+  title: 
+  // const Text("data")
+  Text(currentLang(context)=="ar"?branchData.nameAr!.toString():branchData.nameEn!.toString())
+  
+  ,
+  
+  
+  trailing: IconButton(onPressed: (){
+  // BrnachMachines(cityId: branchData.id.toString(),).launch(context);
+   BranchMeaintenancePage(
+            branchId: branchData.id,
+          ).launch(context);
+  }, icon: Icon(Icons.arrow_forward , color: Theme.of(context).primaryColor,)),
+  ),
+);
+
+        
+        
+        
+         Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height/8,
 
@@ -149,7 +182,8 @@ Expanded(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
               Text(
-           branchData.nameAr! ,
+                currentLang(context)=="ar"?
+           branchData.nameAr! :      branchData.nameEn! ,
             style: const TextStyle(
               // color: Colors.white ,
               fontSize: 20 ,

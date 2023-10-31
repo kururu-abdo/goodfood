@@ -1,18 +1,23 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:goodfoods/app/admin/pages/admin_dashboard.dart';
 import 'package:goodfoods/app/admin/pages/chat_page.dart';
-import 'package:goodfoods/app/documents/views/pages/open_document_page.dart';
 import 'package:goodfoods/app/managment_orders/views/pages/order_reply.dart';
 import 'package:goodfoods/core/presentation/order_details.dart';
+import 'package:goodfoods/core/services/document_service.dart';
 import 'package:goodfoods/core/services/navigation_service.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
+import 'package:goodfoods/core/utils/utils.dart';
 import 'package:goodfoods/main.dart';
+import 'package:goodfoods/main.dart' as main;
+// import 'package:goodfoods/main.dart';
+import 'package:nb_utils/nb_utils.dart';
+// import 'package:nb_utils/nb_utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 final NavigationService navService = NavigationService();
 class NotificationApi{
@@ -244,7 +249,7 @@ static selectNotification(String payload) async {
 
  if (model.contains("order")) {
    // go to order
-  Navigator.of(navigatorKey.currentContext!).push(
+  Navigator.of(main.navigatorKey.currentContext!).push(
     MaterialPageRoute(builder: (_)=> OrderDetails(
       orderId: id,
       isAdmin: !sharedPrefs.isAdmin ,
@@ -255,7 +260,7 @@ static selectNotification(String payload) async {
 
  if (model.contains("chat") ||  model.contains("message")) {
    // go to order
-   Navigator.of(navigatorKey.currentContext!).push(
+   Navigator.of(main.navigatorKey.currentContext!).push(
     MaterialPageRoute(builder: (_)=> ChagePage(
       userId: id,
       // isAdmin: !sharedPrefs.isAdmin ,
@@ -266,21 +271,38 @@ static selectNotification(String payload) async {
 
 if (model.contains("doc") ) {
    // go to doc
-  
- Navigator.of(navigatorKey.currentContext!).push(
-    MaterialPageRoute(builder: (_)=> OpenDocumentPage(
-      docID: id,
-      // isAdmin: !sharedPrefs.isAdmin ,
-      fromNotitications: true,
-    ))
-  );
+   getDocument(id).then((value) {
+
+    if (value!.files!.isNotEmpty) {
+      DocumentService().initPlatformState(value.files!.first);
+
+    }
+
+  }).onError((error, stackTrace) {
+const Dashboard().launch(main.navigatorKey.currentContext!);
+
+  }).catchError((e){
+const Dashboard().launch(main.navigatorKey.currentContext!);
+
+
+  })
+
+
+;
+//  Navigator.of(main.navigatorKey.currentContext!).push(
+//     MaterialPageRoute(builder: (_)=> OpenDocumentPage(
+//       docID: id,
+//       // isAdmin: !sharedPrefs.isAdmin ,
+//       fromNotitications: true,
+//     ))
+//   );
  }
 
 if (model.contains("request") ) {
    // go to doc
   
     
- Navigator.of(navigatorKey.currentContext!).push(
+ Navigator.of(main.navigatorKey.currentContext!).push(
     MaterialPageRoute(builder: (_)=> OrderReply(
       orderId: id,
       // isAdmin: !sharedPrefs.isAdmin ,

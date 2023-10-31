@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:goodfoods/app/admin/pages/new_maintance_order.dart';
 import 'package:goodfoods/app/maintenance/widgets/pages/machine_list_maintenanc.dart';
 import 'package:goodfoods/app/maintenance/widgets/pages/skins_list_maintenance.dart';
 import 'package:goodfoods/core/presentation/widgets/app_bar.dart';
+import 'package:goodfoods/core/utils/utils.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class BranchMeaintenancePage extends StatefulWidget {
@@ -52,7 +54,11 @@ children: [
          
          ),
 const SizedBox(height: 10,),
-         const Text("المعدات" ,style: TextStyle(
+          Text(
+           
+           currentLang(context)=="ar"?
+           
+           "المعدات":"Machines",style: const TextStyle(
            color: Colors.white
          ),)
       ],
@@ -89,7 +95,10 @@ MachineListMeintance(
          
          ),
 const SizedBox(height: 10,),
-         const Text("السكنات" ,style: TextStyle(
+          Text(
+           currentLang(context)=="ar"?
+           
+           "السكنات":"Houses" ,style: const TextStyle(
            color: Colors.white
          ),)
       ],
@@ -121,14 +130,22 @@ const SizedBox(height: 10,),
          
          ),
 const SizedBox(height: 10,),
-         const Text("صيانات اخرى" ,style: TextStyle(
+          Text(
+           
+           currentLang(context)=="ar"?
+           "صيانات اخرى" :"Others",style: const TextStyle(
            color: Colors.white
          ),)
       ],
     ),
   ),
   // child: ,
-  ),
+  ).onTap((){
+    MaintenanceOrder(
+      modelId: widget.branchId!.toString(),
+      modelType: 'Branch',
+    ).launch(context);
+  }),
 
 
 

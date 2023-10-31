@@ -1,27 +1,28 @@
-class RegionModel  {
+class RegionModel {
+  int? id;
+  String? nameAr;
+  String? nameEn;
+  String? createdAt;
+  String? updatedAt;
 
-int? id;
-String?  name;
-
-
-/// {@macro new_user}
-   RegionModel({
-
-    this.id,this.name
-  });
-
+  RegionModel(
+      {this.id, this.nameAr, this.nameEn, this.createdAt, this.updatedAt});
 
   RegionModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
-
+    nameAr = json['name_ar'];
+    nameEn = json['name_en'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name_ar'] = nameAr;
+    data['name_en'] = nameEn;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
     return data;
   }
 }

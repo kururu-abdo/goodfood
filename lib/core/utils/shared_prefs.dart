@@ -15,6 +15,8 @@ class SharedPrefs {
 
   bool get isAdmin => _sharedPrefs!.getBool(ISADMIN) ?? false;
 
+  bool get isMaintain => _sharedPrefs!.getBool(ISMAINTAIN) ?? false;
+
   String get user_name => _sharedPrefs!.getString(USER_NAME) ?? "";
   String get user_id => _sharedPrefs!.getString(USER_ID) ?? "";
   String get   user_pos => _sharedPrefs!.getString(USER_POS) ?? "";
@@ -24,6 +26,11 @@ class SharedPrefs {
  set isAdmin(bool value){
  _sharedPrefs!.setBool(ISADMIN, value);
  }
+
+ set isMaintain(bool value){
+ _sharedPrefs!.setBool(ISMAINTAIN, value);
+ }
+
   set userType(String value) {
     _sharedPrefs!.setString(USER_TYPE, value);
   }

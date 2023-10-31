@@ -51,37 +51,37 @@ body: SizedBox.expand(
       childAspectRatio: 6/5,
       children: [
       
-           if(sharedPrefs.authList.contains("branch"))
-       Container(    padding: const EdgeInsets.all(10),
+//            if(sharedPrefs.authList.contains("branch"))
+//        Container(    padding: const EdgeInsets.all(10),
 
-        height: 150, 
-        width: 200,
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(.10)  ,
+//         height: 150, 
+//         width: 200,
+//       decoration: BoxDecoration(
+//         color: Colors.white.withOpacity(.10)  ,
         
-      ),
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset("assets/icons/office.png"
-             ,color: Colors.white,
+//       ),
+//       child: Center(
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.center,
+//           children: [
+//             Image.asset("assets/icons/office.png"
+//              ,color: Colors.white,
              
-             height: 80,width: 80,
+//              height: 80,width: 80,
              
-             ),
-const SizedBox(height: 10,),
-              Text(translate(context, "branches"),style: const TextStyle(
-               color: Colors.white
-             ),)
-          ],
-        ),
-      ),
-      // child: ,
-      ),
+//              ),
+// const SizedBox(height: 10,),
+//               Text(translate(context, "branches"),style: const TextStyle(
+//                color: Colors.white
+//              ),)
+//           ],
+//         ),
+//       ),
+//       // child: ,
+//       ),
       
       
-      
+       if(sharedPrefs.authList.contains("branch") || sharedPrefs.isMaintain)
        Container(    padding: const EdgeInsets.all(10)
        
        
@@ -230,36 +230,37 @@ const SizedBox(height: 10,),
       // child: ,
       ).onTap((){
       const ChagePage().launch(context);
+      // ChatPage2().launch(context);
       })
       ,
       
-         Container(
-        height: 150, 
-        width: 200,
-        padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(.10)  ,
+//          Container(
+//         height: 150, 
+//         width: 200,
+//         padding: const EdgeInsets.all(10),
+//       decoration: BoxDecoration(
+//         color: Colors.white.withOpacity(.10)  ,
         
-      ),
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset("assets/images/الطلبات-removebg-preview.png"
-             ,color: Colors.white,
+//       ),
+//       child: Center(
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.center,
+//           children: [
+//             Image.asset("assets/images/الطلبات-removebg-preview.png"
+//              ,color: Colors.white,
              
-             height: 80,width: 80,
+//              height: 80,width: 80,
              
-             ),
-const SizedBox(height: 10,),
-              Text(translate(context, "orders") ,style: const TextStyle(
-               color: Colors.white
-             ),)
-          ],
-        ),
-      ),
-      // child: ,
-      ) ,
+//              ),
+// const SizedBox(height: 10,),
+//               Text(translate(context, "orders") ,style: const TextStyle(
+//                color: Colors.white
+//              ),)
+//           ],
+//         ),
+//       ),
+//       // child: ,
+//       ) ,
       
       
 

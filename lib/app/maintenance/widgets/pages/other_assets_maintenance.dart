@@ -93,6 +93,7 @@ Center(child: NoContent(currentLang(context)=="ar"?
 
 "لا توجد اصول":"No Assets"
 ),):
+
 ListView.builder(
   itemCount: controller.otherAssets!.data!.length,
   itemBuilder: (BuildContext context, int index) {
@@ -134,27 +135,33 @@ color: Colors.white,
 files.isNotEmpty?
 Image.network('https://goodfoodsa.co${files.first}' ,
 // color: Colors.white,
-width: 100,
+width: 50,
 
 ):
 
 
-      Image.asset('assets/icons/machine.png'  ,
+      Center(
+        child: Image.asset('assets/icons/machine.png'  ,
+      height: 50,
+        // ,color:
+        //  Colors.white,
+      width: 50,
+      color: Theme.of(context).primaryColor,
+      
+      ),
+      ),
 
-      // ,color:
-      //  Colors.white,
-width: 100,
-
-),
-
-const SizedBox(width: 8,),
+const SizedBox(width: 10,),
 Expanded(
   child:   Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          
               Text(
-           assetData.nameAr! ,
+
+                currentLang(context)=="ar"?
+           assetData.nameAr! :  assetData.nameEn! ,maxLines: 1,overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               // color: Colors.white ,
               fontSize: 20 ,
@@ -162,17 +169,30 @@ Expanded(
             ), 
              ),
 const SizedBox(height: 8,),
-              Text(
-            "${assetData.desAr}"  ,
+              Text(   currentLang(context)=="ar"?
+            "${assetData.desAr}" :   "${assetData.desEn}" ,
+maxLines: 2,
+overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               // color: Colors.white ,
-              fontSize: 15 ,fontWeight: FontWeight.w500
+              fontSize: 15 ,fontWeight: FontWeight.w400 ,color: Colors.grey
             ), 
              ),
         ],
   ),
 )
+ , const SizedBox(width: 10,),
 
+
+TextButton(onPressed: (){
+MaintenanceOrder(
+  modelType: 'OtherAsset',
+  modelId: assetData.id.toString(),
+).launch(context);
+}, child: Text(
+  currentLang(context)=="ar"? "طلب صيانة":"Add order"
+
+))
 
           ],
         ),
@@ -190,6 +210,7 @@ MaintenanceOrder(
 
 },
 );
+
 
 
 }
@@ -210,5 +231,7 @@ MaintenanceOrder(
     ),
     
     );
+  
+  
   }
 }

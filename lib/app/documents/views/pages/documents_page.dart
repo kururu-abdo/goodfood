@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:goodfoods/app/admin/pages/admin_dashboard.dart';
 import 'package:goodfoods/app/documents/controllers/document_controller.dart';
-import 'package:goodfoods/app/documents/views/pages/open_document_page.dart';
 import 'package:goodfoods/app/documents/views/widgets/doucment_widget.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
 import 'package:goodfoods/core/presentation/widgets/app_bar.dart';
 import 'package:goodfoods/core/presentation/widgets/no_items.dart';
 import 'package:goodfoods/core/presentation/widgets/progress.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
+import 'package:goodfoods/core/services/document_service.dart';
 import 'package:goodfoods/core/utils/utils.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
@@ -103,15 +104,37 @@ id: documentData.id.toString(),
 docTitle: documentData.nameAr,
 
 documentDate: documentData.createdAt,
-icon: "assets/icons/document.png",
+icon: 
+documentData.files!.isNotEmpty?
+getFileIocn(documentData.files!.first)
+:
+"assets/icons/document.png",
 onView: (id){
 
 
   //go to view document page
 
+// DocumentService().initPlatformState()
+documentData.files!.isNotEmpty?
+DocumentService().initPlatformState(documentData.files!.first):
+ getDocument(id).then((value) {
+
+    if (value!.files!.isNotEmpty) {
+      DocumentService().initPlatformState(value.files!.first);
+
+    }
+
+  }).onError((error, stackTrace) {
+const Dashboard().launch(context);
+
+  }).catchError((e){
+const Dashboard().launch(context);
 
 
-OpenDocumentPage(docID: id,).launch(context);
+  })
+
+
+;
 },
 
 );
@@ -127,6 +150,9 @@ OpenDocumentPage(docID: id,).launch(context);
           
           
             }),
+         
+         
+         
           ),
         ),
     

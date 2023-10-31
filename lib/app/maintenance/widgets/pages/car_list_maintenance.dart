@@ -1,13 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:goodfoods/app/admin/pages/new_maintance_order.dart';
 import 'package:goodfoods/core/controllers/maintenance_controller.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
 import 'package:goodfoods/core/presentation/widgets/app_bar.dart';
-import 'package:goodfoods/core/presentation/widgets/bottom_nav.dart';
 import 'package:goodfoods/core/presentation/widgets/no_items.dart';
 import 'package:goodfoods/core/presentation/widgets/progress.dart';
 import 'package:goodfoods/core/utils/utils.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class CartListMeintance extends StatefulWidget {
@@ -100,7 +101,9 @@ Center(child: NoContent(translate(context, "no_cars")),):
   itemBuilder: (BuildContext context, int index) {
     var carData = controller.cars!.data![index];
     var files = jsonDecode(carData.files!) as List;
-    return   Container(
+    return
+    
+       Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height/8,
 
@@ -129,19 +132,19 @@ color: Colors.white,
 
 
 Transform.rotate(
-  angle: 50,
+  angle: 0,
   child: 
   !files.isNotEmpty?
   Image.network('https://goodfoodsa.co${files.first}' ,
   // color: Colors.white,
-  width: 100,
+  width: 50,
 
   ):
   
   
     Image.asset('assets/icons/car.png' ,
     // color: Colors.white,
-  width: 100,
+  width: 50,
 
   ),
 ),
@@ -153,26 +156,56 @@ Expanded(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
               Text(
-            carData.carType!  ,
+          currentLang(context)=="ar"?
+              "نوع السيارة:  ${carData.carType! }"  :
+              "Car type:  ${carData.carType! }"  
+            ,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               // color: Colors.white ,
-              fontSize: 20
+              fontSize: 15
             ), 
              ),
 const SizedBox(height: 8,),
               Text(
+                currentLang(context)=="ar"?   
+                    "رقم الهيكل:  ${carData.bordNumber!}"  :
             "Board Number:  ${carData.bordNumber!}"  ,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-              // color: Colors.white
+               fontSize: 12
             ), 
+            
              ),
     ],
   ),
 )
+,const SizedBox(width: 8,),
 
+TextButton(onPressed: (){
+ MaintenanceOrder(
+          modelId: carData.id.toString(),
+          modelType: 'Car',
+        ).launch(context);
+}, child: Text(
+  currentLang(context)=="ar"? "طلب صيانة":"Add order"
 
+))
           ],
     ),
+    ).onTap(
+      
+
+      (){
+
+
+        MaintenanceOrder(
+          modelId: carData.id.toString(),
+          modelType: 'Car',
+        ).launch(context);
+      }
     );
   },
 );
@@ -192,5 +225,7 @@ const SizedBox(height: 8,),
      ),
     
     );
+ 
+ 
   }
 }

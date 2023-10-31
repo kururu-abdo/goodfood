@@ -143,35 +143,35 @@ const SizedBox(height: 10,),
         const OtherAssetsListMeintance().launch(context);
   }),
   
-       Container(    padding: const EdgeInsets.all(10),
+//        Container(    padding: const EdgeInsets.all(10),
 
-        height: 150, 
-        width: 200,
-  decoration: BoxDecoration(
-        color: Colors.white.withOpacity(.10)  ,
+//         height: 150, 
+//         width: 200,
+//   decoration: BoxDecoration(
+//         color: Colors.white.withOpacity(.10)  ,
         
-  ),
-  child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset("assets/icons/instant-messaging.png"
-             ,color: Colors.white,
+//   ),
+//   child: Center(
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.center,
+//           children: [
+//             Image.asset("assets/icons/instant-messaging.png"
+//              ,color: Colors.white,
              
-             height: 80,width: 80,
+//              height: 80,width: 80,
              
-             ),
-const SizedBox(height: 10,),
-              Text(
-               currentLang(context)=="ar"?
-               "صيانة فورية" :"Urgent Maintanance",style: const TextStyle(
-               color: Colors.white
-             ),)
-          ],
-        ),
-  ),
-  // child: ,
-  ),
+//              ),
+// const SizedBox(height: 10,),
+//               Text(
+//                currentLang(context)=="ar"?
+//                "صيانة فورية" :"Urgent Maintanance",style: const TextStyle(
+//                color: Colors.white
+//              ),)
+//           ],
+//         ),
+//   ),
+//   // child: ,
+//   ),
 
 
 

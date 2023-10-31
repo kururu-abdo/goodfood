@@ -8,3 +8,4 @@ const String USER_POS="user_pos";
 const String TOKEN="user_token";
 
 const String ISADMIN = 'is_admin';
+const String ISMAINTAIN = 'is_admin';

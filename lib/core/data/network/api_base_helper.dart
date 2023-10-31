@@ -21,12 +21,18 @@ requestHeaders = {
      };
    }
    
-  Future<dynamic> get(String url) async {
+  Future<dynamic> get(String url ,{String? pageUrl ,bool? isPaginate=false}) async {
     print('Api Get, url $url');
      log(requestHeaders.toString());
     var responseJson;
     try {
-      final response = await http.get(Uri.parse(_baseUrl + url),
+      final response = await http.get(
+        
+        
+        Uri.parse(
+          
+          isPaginate!?pageUrl!:
+          _baseUrl + url),
       
       headers: requestHeaders??{}
       );

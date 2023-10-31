@@ -10,7 +10,7 @@ import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:provider/provider.dart';
 
 class MessageWithoutMedia extends StatefulWidget {
-  final MessageData messsage;
+  final Message? messsage;
   const MessageWithoutMedia({ Key? key, required this.messsage }) : super(key: key);
 
   @override
@@ -34,9 +34,9 @@ TextEditingController controller = TextEditingController();
                      onLongPress: (){
 
 if (
-  widget.messsage.senderId.toString()==sharedPrefs.user_id &&
+  widget.messsage!.senderId.toString()==sharedPrefs.user_id &&
   
-  chatController.getDateDiff(widget.messsage.createdAt)) {
+  chatController.getDateDiff(widget.messsage!.createdAt)) {
   
     showMenu(
       context: context,
@@ -68,7 +68,7 @@ if (
             IconsButton(
               onPressed: ()async {
 
- chatController.deleteMessage(widget.messsage.reciverId!.toString(), widget.messsage.id.toString());
+ chatController.deleteMessage(widget.messsage!.reciverId!.toString(), widget.messsage!.id.toString());
  
               },
               text:appLocale.translate("delete")!,
@@ -79,21 +79,21 @@ if (
             ),
           ]);
                         },
-                        value:  widget.messsage.id,
+                        value:  widget.messsage!.id,
                         child:  Row(                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                           children: <Widget>[
 
-    Text(appLocale!.translate("edit")!),   SizedBox(width: 10,),
+    Text(appLocale!.translate("edit")!),   const SizedBox(width: 10,),
 
 
-                            Icon(Icons.delete , color: Colors.red,)
+                            const Icon(Icons.delete , color: Colors.red,)
                           ],
                         ),
                       ) ,
                        PopupMenuItem(
                          onTap: (){
-                           controller.text= widget.messsage.msg.toString();
+                           controller.text= widget.messsage!.msg.toString();
                            AlertDialog dialog = AlertDialog(
   content: Container(
     width: 260.0,
@@ -117,7 +117,7 @@ if (
                 ),
                 child:  Text(
                   appLocale.translate("edit_msg")!,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 18.0,
                   ),
@@ -155,8 +155,8 @@ maxLines: 999,
         Expanded(
           child: GestureDetector(
             onTap: (){
-                   chatController.editMessage(widget.messsage.reciverId!.toString(),
-                    widget.messsage.id!.toString(),
+                   chatController.editMessage(widget.messsage!.reciverId!.toString(),
+                    widget.messsage!.id!.toString(),
                      controller.text, null)
         .then((value) => {
    Navigator.pop(context)
@@ -170,7 +170,7 @@ maxLines: 999,
               ),
               child:  Text(
               appLocale.translate("save_edit")!,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18.0,
                 ),
@@ -186,7 +186,7 @@ maxLines: 999,
 
 showDialog(context: context, builder:(_)=> dialog);
                          },
-                        value:  widget.messsage.id,
+                        value:  widget.messsage!.id,
                         child: const Row(                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                           children: <Widget>[
@@ -211,7 +211,7 @@ showDialog(context: context, builder:(_)=> dialog);
                                decoration: BoxDecoration(
                                  borderRadius: BorderRadius.circular(20),
                                  color: (
-                                   widget.messsage.senderId.toString() ==sharedPrefs.user_id?
+                                   widget.messsage!.senderId.toString() ==sharedPrefs.user_id?
                                    // messages[index].messageType  == "receiver"?
                                  
                                   Colors.blue:
@@ -224,9 +224,9 @@ showDialog(context: context, builder:(_)=> dialog);
                    
                                ),
                                padding: const EdgeInsets.all(16),
-                         child: Text("${widget.messsage.msg}", style:  TextStyle(
+                         child: Text("${widget.messsage!.msg}", style:  TextStyle(
                                      color:
-                                     widget.messsage.senderId.toString() ==sharedPrefs.user_id?
+                                     widget.messsage!.senderId.toString() ==sharedPrefs.user_id?
                                      // messages[index].messageType  == "receiver"
                                      //  ?
                                   Colors.white:   Colors.black,
@@ -237,7 +237,7 @@ showDialog(context: context, builder:(_)=> dialog);
   }
 }
 class MediaMessage extends StatefulWidget {
-    final MessageData messsage;
+    final Message? messsage;
 
   const MediaMessage({ Key? key, required this.messsage }) : super(key: key);
 
@@ -254,9 +254,9 @@ class _MediaMessageState extends State<MediaMessage> {
     return   GestureDetector(
       onLongPress: (){
         if (
-  widget.messsage.senderId.toString()==sharedPrefs.user_id &&
+  widget.messsage!.senderId.toString()==sharedPrefs.user_id &&
   
-  chatController.getDateDiff(widget.messsage.createdAt)) {
+  chatController.getDateDiff(widget.messsage!.createdAt)) {
   
     showMenu(
       context: context,
@@ -298,12 +298,12 @@ class _MediaMessageState extends State<MediaMessage> {
             ),
           ]);
                         },
-                        value:  widget.messsage.id,
+                        value:  widget.messsage!.id,
                         child:  Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                              Text(appLocale!.translate("delete")!),   SizedBox(width: 10,),
-                            Icon(Icons.delete , color: Colors.red,),
+                              Text(appLocale!.translate("delete")!),   const SizedBox(width: 10,),
+                            const Icon(Icons.delete , color: Colors.red,),
                             
                           ],
                         ),
@@ -316,21 +316,21 @@ class _MediaMessageState extends State<MediaMessage> {
                             
                             SendImageMessage(
                               isEdit: true, 
-                              messageId: widget.messsage.id,
-                              messageImage: widget.messsage.mediaUrl,
-                              messageText: widget.messsage.msg,
+                              messageId: widget.messsage!.id,
+                              messageImage: widget.messsage!.mediaUrl,
+                              messageText: widget.messsage!.msg,
                             )
 
                             
                             )
                           );
                          },
-                        value:  widget.messsage.id,
+                        value:  widget.messsage!.id,
                         child:  Row(                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
                           children: <Widget>[
-                              Text(appLocale!.translate("edit")!),   SizedBox(width: 10,),
-                            Icon(Icons.edit_square ,color: Colors.green,),
+                              Text(appLocale.translate("edit")!),   const SizedBox(width: 10,),
+                            const Icon(Icons.edit_square ,color: Colors.green,),
                           
                           ],
                         ),
@@ -347,7 +347,7 @@ class _MediaMessageState extends State<MediaMessage> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: (
-                  widget.messsage.senderId.toString() ==sharedPrefs.user_id?
+                  widget.messsage!.senderId.toString() ==sharedPrefs.user_id?
                   // messages[index].messageType  == "receiver"?
                 
                  Colors.blue:
@@ -365,11 +365,11 @@ class _MediaMessageState extends State<MediaMessage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
             Image.network(
-              "https://goodfoodsa.co${widget.messsage.mediaUrl!}" , height: 120,) ,
+              "https://goodfoodsa.co${widget.messsage!.mediaUrl!}" , height: 120,) ,
             const SizedBox(height: 8,),
-            Text("${widget.messsage.msg}", style:  TextStyle(
+            Text("${widget.messsage!.msg}", style:  TextStyle(
                     color:
-                    widget.messsage.senderId.toString() ==sharedPrefs.user_id?
+                    widget.messsage!.senderId.toString() ==sharedPrefs.user_id?
                     // messages[index].messageType  == "receiver"
                     //  ?
                      

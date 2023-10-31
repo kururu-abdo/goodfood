@@ -19,7 +19,7 @@
     "documents":"Documents" ,
     "assets":"Assets" ,
     "message":"Message" ,
-    "chat":"Chat" ,
+    "chat":"Management Chats" ,
     "reports":"Reports" ,
 
     "change_lang":"Change Language" ,
@@ -93,6 +93,15 @@
   ,
   "no_branches":"No Brnahces" ,
   "no_maintain_orders":"No Maintainance Orders" ,
-  "no_notifications":"No Notifications"
+  "no_notifications":"No Notifications",
+  "successfull":"Success",
+  "status_changed":"Order status changed",
+  "faild":"Failed" ,
+
+
+  "accept":"Accept",
+  "reject":"Reject",
+  "reason":"Reject Reason"
+  
 
 }

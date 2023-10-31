@@ -155,9 +155,12 @@ child: Form(
   ,10.height,
    controller.imageFile ==null?
   ImagePickerContainer(
-    showFiles: false,
-    onSelect: (file){
-  controller.setImage(file!.path);
+    showFiles: true,
+    onSelect: (file , isImage){
+      if (isImage!) {
+          controller.setImage(file!.path);
+      }
+
     },
   ): 
   Center(
@@ -276,7 +279,8 @@ child: Form(
                               widget.tasks , 
                               
                            controller. branch!.id.toString() ,
-                              controller.branch!.cityId.toString()
+                              controller.branch!.cityId.toString() ,
+                              getFileExtenstion(controller.imageFile!.path)
                               
                               );
                          }

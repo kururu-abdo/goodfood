@@ -44,15 +44,16 @@ requests = I.map((e) => ManagementOrderModel.fromJson(e)).toList();
 
 
 
-    return  ManagementOrderModel.fromJson(response['data']);
+    return  ManagementOrderModel.fromJson(response['data'].first);
   }
 
 
 
 Future<dynamic> addReuestReply(
     String? order  ,
-    String reply
-  
+    String reply,
+  String? image,
+String extension
    ) async {
      //
     final response = await _helper.post(
@@ -60,7 +61,9 @@ Future<dynamic> addReuestReply(
       "request/add_replay/$order" ,
      jsonEncode({
     
-	"replay":reply
+	"replay":reply ,
+  "file" :image ,
+"extention" : extension
 
      })
    

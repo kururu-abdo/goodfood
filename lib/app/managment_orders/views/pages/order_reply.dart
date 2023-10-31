@@ -5,9 +5,11 @@ import 'package:goodfoods/app/managment_orders/models/management_order.dart';
 import 'package:goodfoods/core/box_text.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
 import 'package:goodfoods/core/presentation/widgets/app_bar.dart';
+import 'package:goodfoods/core/presentation/widgets/image_picker_container.dart';
 import 'package:goodfoods/core/presentation/widgets/input_field.dart';
 import 'package:goodfoods/core/presentation/widgets/no_items.dart';
 import 'package:goodfoods/core/presentation/widgets/progress.dart';
+import 'package:goodfoods/core/services/document_service.dart';
 import 'package:goodfoods/core/utils/utils.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
@@ -182,7 +184,7 @@ var orderData = controller.order!.data;
                                     
                                     8.width,
                                     Text(getMaintenanceFormattedDate(
-                      widget.order!.createdAt!
+                      orderData!.createdAt!
                                     ))
                                     
                                     
@@ -210,10 +212,10 @@ var orderData = controller.order!.data;
                                     8.width,
                                     
                                     Text(currentLang(context)=="ar"?
-                      widget.order!.taskAr!
+                     orderData.taskAr!
                                     
                                     : 
-                      widget.order!.taskEn!
+                     orderData.taskEn!
                                     )
                                     
                                     
@@ -250,7 +252,7 @@ var orderData = controller.order!.data;
                           , 
                         10.height ,
                         
-                           widget.order!.files!.isEmpty
+                          orderData.files!.isEmpty
                            ?
                          Center(child: NoContent(
                         
@@ -263,9 +265,9 @@ var orderData = controller.order!.data;
                           crossAxisCount:3,
                           childAspectRatio: 1,
                            children:
-                           widget.order!.files ==null?
+                        orderData.files ==null?
                             []:
-                           widget.order!.files!.map((e) {
+                         orderData.files!.map((e) {
                         if (e.toString().contains("png")|| 
                         
                         e.toString().contains("jpeg")|| 
@@ -365,6 +367,112 @@ var orderData = controller.order!.data;
                        placeholder: translate(context, "type_a_comment"),
                       ),
                                 
+                                      10.height,
+
+
+   controller.imageFile ==null
+   && controller.fileDoc ==null
+   
+   ?
+  ImagePickerContainer(
+    showFiles: true,
+    onSelect: (file, isImage){
+
+      if (isImage!) {
+         controller.setImage(file!.path);
+      }else {
+        controller.setFile(file!.path);
+      }
+ 
+    },
+  ): 
+  Center(
+
+    child:
+    
+
+    controller.imageFile !=null?
+    
+      Container(
+         width: 220,
+                  height: 220,
+      padding: EdgeInsets.zero,
+            // clipBehavior: Clip.antiAlias,
+            child: Stack(
+              children: <Widget>[
+               SizedBox(
+                  width: 200,
+                    height: 200,
+                 child: Image.file(
+                 controller.imageFile!,
+                    width: 200,
+                    height: 200,
+                    
+                  ),
+               ),
+                Positioned(
+                  right: 10,
+                  top: 0,
+                  child: InkWell(
+                    child: const Icon(
+                      Icons.remove_circle,
+                      size: 20,
+                      color: Colors.red,
+                    ),
+                    onTap: () {
+                      controller.removeImage();
+                    },
+                  ),
+                ),
+              ],
+            ))
+     
+     
+     
+     
+     :
+
+      Container(
+         width: 220,
+                  height: 220,
+      padding: EdgeInsets.zero,
+            // clipBehavior: Clip.antiAlias,
+            child: Stack(
+              children: <Widget>[
+               SizedBox(
+                  width: 200,
+                    height: 200,
+                 child: Image.asset(
+                getFileIocn(controller.filePath!),
+                    width: 200,
+                    height: 200,
+                    
+                  ),
+               ),
+                Positioned(
+                  right: 10,
+                  top: 0,
+                  child: InkWell(
+                    child: const Icon(
+                      Icons.remove_circle,
+                      size: 20,
+                      color: Colors.red,
+                    ),
+                    onTap: () {
+                      controller.removeFile();
+                    },
+                  ),
+                ),
+              ],
+            ))
+     
+     
+     
+     
+     ,
+  ),
+  
+                      // const Spacer() ,
                                 
                       // const Spacer() ,
                                 
@@ -375,21 +483,37 @@ var orderData = controller.order!.data;
                                 minimumSize: const Size.fromHeight(50)),
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
-                               
-                              
-                               
+                       
                              
                   
                                  //submit
-                  
-                                  controller.addReplyument(context,
+                              
+                  if (controller.imageFile!=null) {
+                     controller.addReplyument(context,
                                   
-                                   widget.order!.id.toString(), commentController.text);
-                               
+                                   widget.order!.id.toString(), commentController.text ,
+                                   getBase64(controller.imagePath!),
+                                   getFileExtenstion(controller.imagePath!)
+                                   
+                                   );
+                  }
+                  
+                  if (controller.fileDoc!=null) {
+                     controller.addReplyument(context,
+                                  
+                                   widget.order!.id.toString(), commentController.text ,
+                                   getBase64(controller.filePath!),
+                                   getFileExtenstion(controller.filePath!)
+                                   
+                                   );
+                  }
+                  else {
+                    showToast(currentLang(context)=="ar"?"الرجاء اختيار  ملف":"Please upload file", true);
+                    
                                 //The form has some validation errors.
                                 //Do Something...
-                              }
-                            },
+                               }
+                            }},
                             child:  
                             
                             controller.addReply!.status==Status.LOADING?
@@ -577,16 +701,23 @@ var orderData = controller.order!.data;
                           height: 300,
                         ),
                            
-                          );
+                          ).onTap(()async{
+                              await DocumentService().initPlatformState(e);
+                          });
                         }else {
                            return Container(
                            child: Image.asset(
-                           
-                             "assets/icons/pdf.png"
+                           getFileIocn(e)
+                            //  "assets/icons/pdf.png"
                              ,
                           width: 300,
                           height: 300,
                            ),
+                           ).onTap(
+                             
+                             ()async{
+                                 await DocumentService().initPlatformState(e);
+                             }
                            );
                         }
                         
@@ -659,9 +790,115 @@ var orderData = controller.order!.data;
                        placeholder: translate(context, "type_a_comment"),
                       ),
                                 
-                                
+                                10.height,
+
+
+   controller.imageFile ==null
+   && controller.fileDoc ==null
+   
+   ?
+  ImagePickerContainer(
+    showFiles: true,
+    onSelect: (file, isImage){
+
+      if (isImage!) {
+         controller.setImage(file!.path);
+      }else {
+        controller.setFile(file!.path);
+      }
+ 
+    },
+  ): 
+  Center(
+
+    child:
+    
+
+    controller.imageFile !=null?
+    
+      Container(
+         width: 220,
+                  height: 220,
+      padding: EdgeInsets.zero,
+            // clipBehavior: Clip.antiAlias,
+            child: Stack(
+              children: <Widget>[
+               SizedBox(
+                  width: 200,
+                    height: 200,
+                 child: Image.file(
+                 controller.imageFile!,
+                    width: 200,
+                    height: 200,
+                    
+                  ),
+               ),
+                Positioned(
+                  right: 10,
+                  top: 0,
+                  child: InkWell(
+                    child: const Icon(
+                      Icons.remove_circle,
+                      size: 20,
+                      color: Colors.red,
+                    ),
+                    onTap: () {
+                      controller.removeImage();
+                    },
+                  ),
+                ),
+              ],
+            ))
+     
+     
+     
+     
+     :
+
+      Container(
+         width: 220,
+                  height: 220,
+      padding: EdgeInsets.zero,
+            // clipBehavior: Clip.antiAlias,
+            child: Stack(
+              children: <Widget>[
+               SizedBox(
+                  width: 200,
+                    height: 200,
+                 child: Image.asset(
+                getFileIocn(controller.filePath!),
+                    width: 200,
+                    height: 200,
+                    
+                  ),
+               ),
+                Positioned(
+                  right: 10,
+                  top: 0,
+                  child: InkWell(
+                    child: const Icon(
+                      Icons.remove_circle,
+                      size: 20,
+                      color: Colors.red,
+                    ),
+                    onTap: () {
+                      controller.removeFile();
+                    },
+                  ),
+                ),
+              ],
+            ))
+     
+     
+     
+     
+     ,
+  ),
+  
                       // const Spacer() ,
                                 
+
+                                10.height,
                                       
                         ElevatedButton(
                             style: ElevatedButton.styleFrom(
@@ -673,12 +910,39 @@ var orderData = controller.order!.data;
                               
                                
                              
+                  if (controller.imageFile!=null) {
+                     controller.addReplyument(context,
+                                  
+                                   widget.order!.id.toString(), commentController.text ,
+                                   getBase64(controller.imagePath!),
+                                   getFileExtenstion(controller.imagePath!)
+                                   
+                                   );
+                  }
+                   if (controller.fileDoc!=null) {
+                     controller.addReplyument(context,
+                                  
+                                   widget.order!.id.toString(), commentController.text ,
+                                   getBase64(controller.filePath!),
+                                   getFileExtenstion(controller.filePath!)
+                                   
+                                   );
+                  }
                   
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  else {
+                    showToast(currentLang(context)=="ar"?"الرجاء اختيار ملف":"Please upload file", true);
+                    
+                  }
                                  //submit
                   
-                                  controller.addReplyument(context,
-                                  
-                                   widget.order!.id.toString(), commentController.text);
+                                 
                                
                                 //The form has some validation errors.
                                 //Do Something...

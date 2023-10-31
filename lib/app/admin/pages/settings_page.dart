@@ -1,10 +1,10 @@
-import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/assets_page.dart';
 import 'package:goodfoods/app/admin/pages/chat_page.dart';
+import 'package:goodfoods/app/documents/views/pages/documents_page.dart';
 import 'package:goodfoods/common/controllers/langauage_controller.dart';
 import 'package:goodfoods/common/pages/order_page.dart';
-import 'package:goodfoods/core/presentation/documents_page.dart';
+import 'package:goodfoods/core/controllers/auth_controller.dart';
 import 'package:goodfoods/core/presentation/notifications_page.dart';
 import 'package:goodfoods/core/presentation/splash_screen.dart';
 import 'package:goodfoods/core/presentation/widgets/change_language_bottomsheet.dart';
@@ -30,7 +30,10 @@ class _AdminSettingsState extends State<AdminSettings> {
   Widget build(BuildContext context) {
 var appLocale = AppLocalizations.of(context);
 
-var  langController  = Provider.of<LanguageProvier>(context);    
+var  langController  = Provider.of<LanguageProvier>(context);   
+var  authController  = Provider.of<AuthController>(context);   
+
+
      Widget mSideMenu(var text, var icon, Function onTap) {
       return SettingItemWidget(
         title: text,
@@ -176,19 +179,19 @@ body: SingleChildScrollView(
                        'assets/icons/tools.png',
                       () async {
                    const OdersPage().launch(context);
-                  }).visible(true),  
+                  }).visible(false),  
   Divider(height: 4, thickness: 2, color: context.dividerColor)
                       .paddingOnly(top: 16, bottom: 8)
-                      .visible(true),
+                      .visible(false),
                   mSideMenu(
                         appLocale.translate("assets"),
                        'assets/icons/financial.png',
                       () async {
                    const AssetsPage().launch(context);
-                  }).visible(true),  
+                  }).visible(!sharedPrefs.isAdmin),  
    Divider(height: 4, thickness: 2, color: context.dividerColor)
                       .paddingOnly(top: 16, bottom: 8)
-                      .visible(true),
+                      .visible(!sharedPrefs.isAdmin),
                   mSideMenu(
                       appLocale.translate("documents"),
                        'assets/icons/document.png',
@@ -212,7 +215,7 @@ body: SingleChildScrollView(
           top: Radius.circular(20)
         )
       ),
-      builder: (_)=>ChangeLanguageBottomSheet() );
+      builder: (_)=>const ChangeLanguageBottomSheet() );
 
 
 
@@ -299,7 +302,7 @@ body: SingleChildScrollView(
               onPressed: () {
 
 sharedPrefs.clear();
-
+authController.logout(context);
 const SplashScreen().launch(context);
 
               },

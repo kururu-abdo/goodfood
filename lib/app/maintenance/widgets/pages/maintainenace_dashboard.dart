@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/maintenance/widgets/pages/maintance_page.dart';
+import 'package:goodfoods/app/order/view/widgets/next_pg_btn.dart';
 import 'package:goodfoods/core/controllers/maintenance_controller.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
 import 'package:goodfoods/core/presentation/widgets/app_bar.dart';
@@ -290,17 +291,35 @@ var controller = Provider.of<MaintenanceController>(context);
          else {
          
          return 
-         controller.maintainOrders!.data!.isEmpty?
+         controller.adminOrders.isEmpty?
          Center(child: NoContent(translate(context, "no_maintain_orders")),):
          
          ListView.builder(
-           itemCount: controller.maintainOrders!.data!.length,
+           itemCount: controller.adminOrders.length+1, //logical
            itemBuilder: (BuildContext context, int index) {
-             var orderData = controller.maintainOrders!.data![index];
+         var orderData = controller.adminOrders[2];  //logical
              // var files = jsonDecode(carData.files!) as List;
-             return 
              
-             OrderWidget(to: const ['Samani' ,'Husam']  , 
+             
+              if (index==controller.adminOrders.length
+             
+             && controller.maintainOrders!.data!.data!.nextPageUrl !=null
+             ) {
+               return NextPageButton(
+                 isLaoding: controller.maintainOrdersPaginate!.status==Status.LOADING,
+                 onTap: (){
+// log(controller.maintainOrders!.data!.data!.nextPageUrl!);
+controller.getMaintainOrdersPaginate(context, controller.maintainOrders!.data!.data!.nextPageUrl!);
+
+
+                 },
+               );
+             }
+             
+        
+                  
+                  
+              return  OrderWidget(to: const ['Samani' ,'Husam']  , 
                  
                  from:sharedPrefs.user_name,
                  to2: orderData.forwardTo!.admin!.name,
@@ -322,6 +341,11 @@ var controller = Provider.of<MaintenanceController>(context);
                  status: orderData.status,
                  confirmed: orderData.forwardTo!.confirmed,
                  );
+             
+             
+             
+              
+             
            
            },
          );

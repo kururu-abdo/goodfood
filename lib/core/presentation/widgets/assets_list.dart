@@ -9,7 +9,7 @@ class AssetsList extends StatelessWidget {
     return ListView(
       children: const [
         OtherAssetWidget(
-          assetName: 'Asset name',
+          assetName: 'sdf name',
           branch: 'Qasim',
           buyDate: '12/12/2023',
           fileLink: 'a.com',

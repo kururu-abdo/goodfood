@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:goodfoods/app/order/view/widgets/next_pg_btn.dart';
 import 'package:goodfoods/core/controllers/maintenance_controller.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
 import 'package:goodfoods/core/presentation/widgets/app_bar.dart';
+import 'package:goodfoods/core/presentation/widgets/no_items.dart';
 import 'package:goodfoods/core/presentation/widgets/order_widget.dart';
 import 'package:goodfoods/core/presentation/widgets/progress.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
@@ -98,11 +100,34 @@ var controller = Provider.of<MaintenanceController>(context);
          }
          else {
          
-         return ListView.builder(
-           itemCount: controller.userOrders!.data!.data!.length,
+         return 
+         
+         controller.userOrdersData.isEmpty?
+         Center(child: NoContent(currentLang(context)=="ar"?
+         "لا توجد طلبات"
+         :"No Orders"
+         ),) :
+         ListView.builder(
+           itemCount: controller.userOrdersData.length+1,
            itemBuilder: (BuildContext context, int index) {
-             var orderData = controller.userOrders!.data!.data![index];
+             var orderData = controller.userOrdersData[index-1];
              // var files = jsonDecode(carData.files!) as List;
+
+
+             if (index==controller.userOrdersData.length
+             
+             && controller.userOrders!.data!.nextPageUrl!=null
+             ) {
+               return NextPageButton(
+                 isLaoding: controller.userOrderPaginate!.status==Status.LOADING,
+                 onTap: (){
+
+controller.getUserOrdersPaginate(context, controller.userOrders!.data!.nextPageUrl);
+
+
+                 },
+               );
+             }
              return 
              
              OrderWidget(to: const ['Samani' ,'Husam']  , 

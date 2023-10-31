@@ -23,7 +23,24 @@ class AuthApi {
     );
     return UserModel.fromJson(response);
   }
+ Future<void> logout(
+    
+   ) async {
+    final response = await _helper.post("auth/logout" ,
+   jsonEncode(
+      {
+    //   "email":email ,
+    //   "password":password
 
+    }
+   
+    
+    ));
+    return ;
+  }
 
 
 }
+// https://goodfoodsa.co/api/auth/logout
+// maintain_emp
+// }

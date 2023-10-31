@@ -23,7 +23,7 @@ String? base64Image;
  final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
 File? imageFile;
-
+String? imagePath;
 setBranch(Branchs b){
   branch= b;
   notifyListeners();
@@ -32,6 +32,7 @@ setBranch(Branchs b){
 setImage(String data){
   imageFile= File(data);
   base64Image= getBase64(data);
+  imagePath =data;
   notifyListeners();
 }
 removeImage(){
@@ -102,7 +103,8 @@ String? image ,
 String? comment ,
 Tasks? tasks ,
 String branchId,
-String region
+String region ,
+String? extenstion
 )async{
    respondToTask = ApiResponse.loading('loading');
 
@@ -121,7 +123,10 @@ notifyListeners();
 
    clear();
 
-   showToast('Successfully', false);
+   showToast(
+     currentLang(context)=="ar"?"تم الرد":
+     
+     'Response added', false);
 
   } catch (e) {
     log(e.toString());

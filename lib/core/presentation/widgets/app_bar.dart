@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/chat_page.dart';
-import 'package:goodfoods/core/presentation/splash_screen.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
-import 'package:goodfoods/core/utils/shared_prefs.dart';
-import 'package:material_dialogs/dialogs.dart';
-import 'package:material_dialogs/widgets/buttons/icon_button.dart';
-import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 AppBar  mAppBar(
@@ -47,47 +42,47 @@ return
 
 
 
- IconButton(onPressed: (){
+//  IconButton(onPressed: (){
 
                         
-                   Dialogs.materialDialog(
-          msg:   appLocale!.translate("sure_logout")!,
-          title: appLocale.translate("logout")!,
-          color: Colors.white,
-          context: context,
-          actions: [
-            IconsOutlineButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              text: appLocale.translate("cancel")!,
-              iconData: Icons.cancel_outlined,
-              textStyle: const TextStyle(color: Colors.grey),
-              iconColor: Colors.grey,
-            ),
-            IconsButton(
-              onPressed: () {
+//                    Dialogs.materialDialog(
+//           msg:   appLocale!.translate("sure_logout")!,
+//           title: appLocale.translate("logout")!,
+//           color: Colors.white,
+//           context: context,
+//           actions: [
+//             IconsOutlineButton(
+//               onPressed: () {
+//                 Navigator.pop(context);
+//               },
+//               text: appLocale.translate("cancel")!,
+//               iconData: Icons.cancel_outlined,
+//               textStyle: const TextStyle(color: Colors.grey),
+//               iconColor: Colors.grey,
+//             ),
+//             IconsButton(
+//               onPressed: () {
 
-sharedPrefs.clear();
+// sharedPrefs.clear();
 
-const SplashScreen().launch(context);
+// const SplashScreen().launch(context);
 
-              },
-              text: appLocale.translate("logout")!,
-              iconData: Icons.delete,
-              color: Colors.red,
-              textStyle: const TextStyle(color: Colors.white),
-              iconColor: Colors.white,
-            ),
-          ]);
-          }, icon: const ImageIcon(
-            AssetImage('assets/icons/power-off.png')
+//               },
+//               text: appLocale.translate("logout")!,
+//               iconData: Icons.delete,
+//               color: Colors.red,
+//               textStyle: const TextStyle(color: Colors.white),
+//               iconColor: Colors.white,
+//             ),
+//           ]);
+//           }, icon: const ImageIcon(
+//             AssetImage('assets/icons/power-off.png')
             
-            ) ,  
+//             ) ,  
             
-            color: Colors.white,
-            )
-        ,
+//             color: Colors.white,
+//             )
+//         ,
 
 
 
@@ -102,13 +97,14 @@ const ChagePage().launch(context);
             color: Colors.white,
             )
         ,
-          IconButton(onPressed: (){
 
-          }, icon: const ImageIcon(AssetImage('assets/icons/bell.png'))
+          // IconButton(onPressed: (){
+
+          // }, icon: const ImageIcon(AssetImage('assets/icons/bell.png'))
           
-          ,
-          color: Colors.white
-          )
+          // ,
+          // color: Colors.white
+          // )
         
         
 
@@ -164,47 +160,47 @@ return
 
 
 
- IconButton(onPressed: (){
+//  IconButton(onPressed: (){
 
                         
-                   Dialogs.materialDialog(
-          msg:   appLocale!.translate("sure_logout")!,
-          title: appLocale.translate("logout")!,
-          color: Colors.white,
-          context: context,
-          actions: [
-            IconsOutlineButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              text: appLocale.translate("cancel")!,
-              iconData: Icons.cancel_outlined,
-              textStyle: const TextStyle(color: Colors.grey),
-              iconColor: Colors.grey,
-            ),
-            IconsButton(
-              onPressed: () {
+//                    Dialogs.materialDialog(
+//           msg:   appLocale!.translate("sure_logout")!,
+//           title: appLocale.translate("logout")!,
+//           color: Colors.white,
+//           context: context,
+//           actions: [
+//             IconsOutlineButton(
+//               onPressed: () {
+//                 Navigator.pop(context);
+//               },
+//               text: appLocale.translate("cancel")!,
+//               iconData: Icons.cancel_outlined,
+//               textStyle: const TextStyle(color: Colors.grey),
+//               iconColor: Colors.grey,
+//             ),
+//             IconsButton(
+//               onPressed: () {
 
-sharedPrefs.clear();
+// sharedPrefs.clear();
 
-const SplashScreen().launch(context);
+// const SplashScreen().launch(context);
 
-              },
-              text: appLocale.translate("logout")!,
-              iconData: Icons.delete,
-              color: Colors.red,
-              textStyle: const TextStyle(color: Colors.white),
-              iconColor: Colors.white,
-            ),
-          ]);
-          }, icon: const ImageIcon(
-            AssetImage('assets/icons/power-off.png')
+//               },
+//               text: appLocale.translate("logout")!,
+//               iconData: Icons.delete,
+//               color: Colors.red,
+//               textStyle: const TextStyle(color: Colors.white),
+//               iconColor: Colors.white,
+//             ),
+//           ]);
+//           }, icon: const ImageIcon(
+//             AssetImage('assets/icons/power-off.png')
             
-            ) ,  
+//             ) ,  
             
-            // color: Colors.white,
-            )
-        ,
+//             // color: Colors.white,
+//             )
+//         ,
 
 
 
@@ -219,13 +215,13 @@ const ChagePage().launch(context);
             // color: Colors.white,
             )
         ,
-          IconButton(onPressed: (){
+          // IconButton(onPressed: (){
 
-          }, icon: const ImageIcon(AssetImage('assets/icons/bell.png'))
+          // }, icon: const ImageIcon(AssetImage('assets/icons/bell.png'))
           
-          ,
-          // color: Colors.white
-          )
+          // ,
+          // // color: Colors.white
+          // )
         
         
 

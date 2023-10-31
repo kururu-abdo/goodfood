@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:goodfoods/app/documents/models/document_model.dart';
+import 'package:goodfoods/core/data/network/apis/document_apis.dart';
 import 'package:goodfoods/core/presentation/splash_screen.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
@@ -62,25 +64,72 @@ locale
 return formattedDate;
 }
 
+String getPlainDate(String date, [String locale="en_US"]){
+  DateTime now = DateTime.parse(date);
+var formattedDate = DateFormat('EEEE, MMM d, yyyy',
+locale
 
-  
+)
+.format(now ,);
+
+return formattedDate;
+}
+
+  String getFileIocn(String path){
+    var ext = getFileExtenstion(path);
+     if (ext.toString().contains("png")){
+
+return "assets/icons/png.png";
+     }
+    else if(
+    ext.toString().contains("jpeg")|| 
+    ext.toString().contains("jpg") ) {
+
+return "assets/icons/jpg.png";
+
+    }
+else  if (ext.toString().contains("xls")){
+return "assets/icons/xls.png";
+
+
+     }
+else  if (ext.toString().contains("doc")){
+
+return "assets/icons/doc.png";
+
+     }
+else {
+return "assets/icons/pdf.png";
+
+
+}
+  }
   Color getOrderColor(status){
     switch (status) {
       case 0:
         return Colors.orange;
         
         case 1:
-        return Colors.green;
+        return Colors.red;
        
       default:
-       return Colors.red;
+       return Colors.green;
     }
   }
 
 
 
 
+Future<DocumentModel?>  getDocument(String? id ,)async {
+  try {
+        var  response = await DocumentsApis().viewDocument(id);
 
+return response;
+  } catch (e) {
+
+    return null;
+  }
+}
 
 
 

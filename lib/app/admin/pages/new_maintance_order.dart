@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:goodfoods/app/maintenance/widgets/pages/select_maintainance_emp.dart';
 import 'package:goodfoods/core/controllers/maintenance_controller.dart';
+import 'package:goodfoods/core/presentation/widgets/custom_switch.dart';
 import 'package:goodfoods/core/presentation/widgets/image_picker_container.dart';
 import 'package:goodfoods/core/presentation/widgets/input_field.dart';
+import 'package:goodfoods/core/utils/utils.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
@@ -108,8 +109,35 @@ var  images =[
         placeholder: 'Task',
         )
         
-        ,8.height,
+        ,15.height,
         
+
+
+
+         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+
+             Text(
+              currentLang(context)=="ar"?
+              
+              ' : صيانة فورية':"Urgent Maintenance: ", style: const TextStyle(
+              color: Colors.black,
+              fontSize: 20.0
+            ),),
+             const SizedBox(width: 8.0,),
+            CustomSwitch(
+              // activeColor: Colors.pinkAccent,
+              value: maintenanceController.isEmediate,
+              onChanged: (value) {
+               maintenanceController.setEmdeiate(value);
+              },
+            ),
+            const SizedBox(width: 8.0,),
+            
+          ],
+        ),
         // ImagePickerContainer(
         //   onSelect: (file){
         // maintenanceController.addFile(file!);
@@ -117,7 +145,16 @@ var  images =[
         // ),
         // maintenanceController.addFile(file!);
         8.height,
-        
+          maintenanceController.newOrderFiles.isEmpty?
+
+          Center(
+            child:   ImagePickerContainer(
+                         showFiles: true, 
+                        
+                         onSelect: (file, isImage){
+                              maintenanceController.addFile(file!);
+                       },) ,
+          ):
         SizedBox(
            height: MediaQuery.of(context).size.height/2,
           child: GridView.builder(
@@ -131,13 +168,21 @@ var  images =[
                 
                    if (index ==  0) {
                      return Center(
-                       child: AddUserButton(
+                       child:
+                       
+                       ImagePickerContainer(
+                         showFiles: true, 
+                         showRounded: true,
+                         onSelect: (file, isImage){
+                              maintenanceController.addFile(file!);
+                       },)
+                      //   AddUserButton(
                                
-                               onSelect: (file){
-                               maintenanceController.addFile(file!);
-                                 },
+                      //          onSelect: (file){
+                      //          maintenanceController.addFile(file!);
+                      //            },
                                
-                       ),
+                      //  ),
                      );
                    }
           var e =maintenanceController.newOrderFiles[index-1];
@@ -272,7 +317,12 @@ var  images =[
                           const SelectMaintainenaceEmpolyee().launch(context);
                         // }
                       },
-                      child: const Text('Next')),
+                      child:  Text(
+                        
+                        
+                        currentLang(context)=="ar"?
+                        "التالي":
+                        'Next')),
                 )
             
             ,

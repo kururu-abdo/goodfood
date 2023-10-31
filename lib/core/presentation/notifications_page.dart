@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:goodfoods/app/admin/pages/admin_dashboard.dart';
 import 'package:goodfoods/app/admin/pages/chat_page.dart';
-import 'package:goodfoods/app/documents/views/pages/open_document_page.dart';
 import 'package:goodfoods/app/managment_orders/views/pages/order_reply.dart';
 import 'package:goodfoods/app/notifications/controllers/notification_controller.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
@@ -9,6 +9,7 @@ import 'package:goodfoods/core/presentation/widgets/no_items.dart';
 import 'package:goodfoods/core/presentation/widgets/notification_widget.dart';
 import 'package:goodfoods/core/presentation/widgets/progress.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
+import 'package:goodfoods/core/services/document_service.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:goodfoods/core/utils/utils.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -313,14 +314,28 @@ log("$modelName\n$modelId");
 
 if (model.contains("doc") ) {
    // go to doc
-  
- Navigator.of(context).push(
-    MaterialPageRoute(builder: (_)=> OpenDocumentPage(
-      docID: id,
-      // isAdmin: !sharedPrefs.isAdmin ,
-      fromNotitications: true,
-    ))
-  );
+  getDocument(id).then((value) {
+
+    if (value!.files!.isNotEmpty) {
+      DocumentService().initPlatformState(value.files!.first);
+
+    }
+
+  }).onError((error, stackTrace) {
+const Dashboard().launch(context);
+
+  }).catchError((e){
+const Dashboard().launch(context);
+
+
+  });
+//  Navigator.of(context).push(
+//     MaterialPageRoute(builder: (_)=> OpenDocumentPage(
+//       docID: id,
+//       // isAdmin: !sharedPrefs.isAdmin ,
+//       fromNotitications: true,
+//     ))
+//   );
  }
 
 if (model.contains("request") ) {

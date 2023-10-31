@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:goodfoods/app/admin/pages/home.dart';
+import 'package:goodfoods/app/admin/pages/admin_dashboard.dart';
 import 'package:goodfoods/app/success/view/widgets/empty_section.dart';
 import 'package:goodfoods/app/success/view/widgets/subtitle.dart';
+import 'package:goodfoods/core/utils/utils.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class Success extends StatefulWidget {
@@ -21,12 +22,20 @@ class _SuccessState extends State<Success> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const EmptySection(
+             EmptySection(
               emptyImg: 'assets/images/success.gif',
-              emptyMsg: 'Successful !!',
+              emptyMsg: 
+              
+                currentLang(context)=="ar"?
+                "نجحت العملية":
+              'Successful !!',
             ),
-            const SubTitle(
-              subTitleText: 'Your Request  was done successfully',
+             SubTitle(
+              subTitleText: 
+              
+              currentLang(context)=="ar"?
+              "تم ارسال الطلب بنجاح":
+              'Your Request  was done successfully',
             ),
                 const SizedBox(height: 20,),
                   ElevatedButton(
@@ -36,10 +45,14 @@ class _SuccessState extends State<Success> {
                       onPressed: () {
         
       
-        const Home().launch(context, isNewTask: true);
+        const  Dashboard().launch(context, isNewTask: true);
         
                       },
-                      child: const Text('OK'))
+                      child:  Text(
+                        
+                        currentLang(context)=="ar"?
+                        "الرجوع إلى الشاشة الرئيسية":
+                        'Go to Home'))
               
           ],
         ),
