@@ -68,11 +68,11 @@ var  authController  = Provider.of<AuthController>(context);
         elevation: 0,
         actions: [
           IconButton(onPressed: (){
-
+const ChagePage().launch(context);
           }, icon: const ImageIcon(AssetImage('assets/icons/headset.png')))
         ,
           IconButton(onPressed: (){
-
+   const NotificationPage().launch(context);  
           }, icon: const ImageIcon(AssetImage('assets/icons/bell.png')))
         
         
@@ -130,7 +130,7 @@ body: SingleChildScrollView(
                             Text(sharedPrefs.user_name, style: boldTextStyle())
                                 .paddingOnly(top: 2)
                                 .visible(true),
-                            Text('Admin of x Branch',
+                            Text(sharedPrefs.userType,
                                     style: boldTextStyle(
                                         color: Colors.grey))
                                 .paddingOnly(top: 2)
@@ -301,8 +301,10 @@ body: SingleChildScrollView(
             IconsButton(
               onPressed: () {
 
-sharedPrefs.clear();
+
 authController.logout(context);
+
+sharedPrefs.logout();
 const SplashScreen().launch(context);
 
               },

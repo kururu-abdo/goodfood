@@ -53,6 +53,7 @@ requestHeaders = {
     try {
 
       requestHeaders!.addAll({'Content-type': 'application/json'});
+      log(requestHeaders.toString());
       final response = await http.post
       (Uri.parse(_baseUrl + url),
        body: body

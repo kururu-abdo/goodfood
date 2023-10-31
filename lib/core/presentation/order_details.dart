@@ -1193,8 +1193,9 @@ Builder(
       ),
       child:  SingleChildScrollView(
         child: Text(
-          detailMapper.task! ,
+          detailMapper.task!,
          
+          //  maxLines: 10, 
            
           
           textAlign: TextAlign.justify,
@@ -1356,7 +1357,8 @@ DocumentService().initPlatformState(e);
       ),
       child:  SingleChildScrollView(
         child: Text(
-          widget.task! ,
+          "${widget.task!} "
+          ,
          
            
           

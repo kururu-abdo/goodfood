@@ -87,6 +87,7 @@ Image.asset(icon ,width: 50,height: 40,  )
   ],
 ),).onTap((){
   langController.changeLanguage(Locale(code));
+  Navigator.pop(context);
 });
   }
 }

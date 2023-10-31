@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/maintenance/widgets/pages/select_maintainance_emp.dart';
 import 'package:goodfoods/core/controllers/maintenance_controller.dart';
@@ -152,7 +154,10 @@ var  images =[
                          showFiles: true, 
                         
                          onSelect: (file, isImage){
+                          //  if (isImage!) {
                               maintenanceController.addFile(file!);
+                          //  }
+                              // maintenanceController.addFile(file!);
                        },) ,
           ):
         SizedBox(
@@ -160,39 +165,39 @@ var  images =[
           child: GridView.builder(
                  itemCount:  
                  
-                 maintenanceController.newOrderFiles.length+1
+                 maintenanceController.newOrderFiles.length
                  ,
                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
                  itemBuilder: (BuildContext context, int index) {
                 
                 
-                   if (index ==  0) {
-                     return Center(
-                       child:
+                  //  if (index ==  0) {
+                  //    return Center(
+                  //      child:
                        
-                       ImagePickerContainer(
-                         showFiles: true, 
-                         showRounded: true,
-                         onSelect: (file, isImage){
-                              maintenanceController.addFile(file!);
-                       },)
-                      //   AddUserButton(
+                  //      ImagePickerContainer(
+                  //        showFiles: true, 
+                  //        showRounded: true,
+                  //        onSelect: (file, isImage){
+                  //             maintenanceController.addFile(file!);
+                  //      },)
+                  //     //   AddUserButton(
                                
-                      //          onSelect: (file){
-                      //          maintenanceController.addFile(file!);
-                      //            },
+                  //     //          onSelect: (file){
+                  //     //          maintenanceController.addFile(file!);
+                  //     //            },
                                
-                      //  ),
-                     );
-                   }
-          var e =maintenanceController.newOrderFiles[index-1];
+                  //     //  ),
+                  //    );
+                  //  }
+          var e =maintenanceController.newOrderFiles[index];
               return          Card(
             clipBehavior: Clip.antiAlias,
             
             child: Stack(
               children: <Widget>[
-               Image.asset(
-                 e.icon!,
+               Image.file(
+                 File(e.path!),
                   // 'assets/images/logo.png',
                   width: 100,
                   height: 100,
@@ -207,6 +212,9 @@ var  images =[
                       color: Colors.red,
                     ),
                     onTap: () {
+                      // if (maintenanceController.newOrderFiles.isEmpty) {
+                      //   showToast(currentLang(context)=="ar"?"الرجاء ارف", isError)
+                      // }
                       maintenanceController.removeFile(e.path!);
                       // setState(() {
                       //   images.replaceRange(index, index + 1, ['Add Image']);

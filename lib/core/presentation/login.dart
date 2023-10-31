@@ -6,6 +6,8 @@ import 'package:goodfoods/core/presentation/widgets/input_field.dart';
 import 'package:goodfoods/core/presentation/widgets/password_field.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
 import 'package:goodfoods/core/sizes.dart';
+import 'package:goodfoods/core/utils/shared_prefs.dart';
+import 'package:goodfoods/core/utils/utils.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
@@ -47,6 +49,18 @@ else   {
     }
   }
   
+
+  @override
+  void initState() { 
+    super.initState();
+    
+
+if(  sharedPrefs.isRemember){
+  passwordController.text = sharedPrefs.userPass;
+  userCodeController.text = sharedPrefs.userEmail;
+}
+
+  }
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<AuthController>(context);
@@ -135,6 +149,10 @@ else   {
                    
                      ),
                    ),
+remberMeCheckBox(),
+
+                                      // SizedBox(height: defaultSpace,),
+
                   BoxButton(
             title:                                     locale.translate("login")!
 ,
@@ -156,4 +174,35 @@ else   {
       
     );
   }
+
+  remberMeCheckBox() {
+      return CheckboxListTile(
+        checkColor: Colors.green,
+        activeColor:  Colors.white,
+        
+        value: sharedPrefs.isRemember,
+        onChanged: (value) {
+
+          sharedPrefs.isRemember=value!;
+          setState(() {
+            
+          });
+          // if (value) {
+          //   sharedPrefs.userPass= passwordController.text.trim();
+          //   sharedPrefs.userEmail = userCodeController.text.trim();
+          // }else {
+          //    sharedPrefs.userPass= '';
+          //   sharedPrefs.userEmail = '';
+          // }
+        },
+        controlAffinity: ListTileControlAffinity.leading,
+        contentPadding: const EdgeInsets.only(left: 0, top: 0),
+        title: Text(
+          currentLang(context)=="ar"?
+          "حفظ معلومات الدخول":
+          "Remember Me",
+          style: const TextStyle(color:  Colors.grey,  fontSize: 14),
+        ),
+      );
+    }
 }

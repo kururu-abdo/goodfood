@@ -110,7 +110,6 @@ var controller = Provider.of<MaintenanceController>(context);
          ListView.builder(
            itemCount: controller.userOrdersData.length+1,
            itemBuilder: (BuildContext context, int index) {
-             var orderData = controller.userOrdersData[index-1];
              // var files = jsonDecode(carData.files!) as List;
 
 
@@ -128,7 +127,11 @@ controller.getUserOrdersPaginate(context, controller.userOrders!.data!.nextPageU
                  },
                );
              }
-             return 
+             else {
+               var i =index==0?0: index==controller.userOrdersData.length?  index-1:index;
+               var orderData = controller.userOrdersData[i];
+
+                 return 
              
              OrderWidget(to: const ['Samani' ,'Husam']  , 
                  
@@ -153,6 +156,9 @@ controller.getUserOrdersPaginate(context, controller.userOrders!.data!.nextPageU
          
                  
                  );
+           
+             }
+
            
            },
          );

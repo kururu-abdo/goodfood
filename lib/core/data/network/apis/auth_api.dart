@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:goodfoods/core/data/models/user_model.dart';
 import 'package:goodfoods/core/data/network/api_base_helper.dart';
@@ -26,7 +27,7 @@ class AuthApi {
  Future<void> logout(
     
    ) async {
-    final response = await _helper.post("auth/logout" ,
+    final response = await _helper.post("logout" ,
    jsonEncode(
       {
     //   "email":email ,
@@ -36,6 +37,7 @@ class AuthApi {
    
     
     ));
+    log(response.toString());
     return ;
   }
 

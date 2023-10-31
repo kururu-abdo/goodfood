@@ -297,7 +297,7 @@ var controller = Provider.of<MaintenanceController>(context);
          ListView.builder(
            itemCount: controller.adminOrders.length+1, //logical
            itemBuilder: (BuildContext context, int index) {
-         var orderData = controller.adminOrders[2];  //logical
+        
              // var files = jsonDecode(carData.files!) as List;
              
              
@@ -317,8 +317,9 @@ controller.getMaintainOrdersPaginate(context, controller.maintainOrders!.data!.d
              }
              
         
-                  
-                  
+                  else {
+                var i =index==0?0: index==controller.userOrdersData.length?  index-1:index;
+                  var orderData = controller.adminOrders[i];  //logical  
               return  OrderWidget(to: const ['Samani' ,'Husam']  , 
                  
                  from:sharedPrefs.user_name,
@@ -342,6 +343,8 @@ controller.getMaintainOrdersPaginate(context, controller.maintainOrders!.data!.d
                  confirmed: orderData.forwardTo!.confirmed,
                  );
              
+              }
+               
              
              
               

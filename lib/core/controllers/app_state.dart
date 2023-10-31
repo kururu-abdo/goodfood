@@ -24,7 +24,7 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 logout(BuildContext context){
-  sharedPrefs.clear();
+  sharedPrefs.logout();
 
 const SplashScreen().launch(context);
 }

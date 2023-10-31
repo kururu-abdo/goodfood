@@ -58,6 +58,10 @@ if (user!.data!= null) {
 sharedPrefs.isLoggedIn= true;
 sharedPrefs.isAdmin= user!.data!.user!.maintain_emp!;   
 sharedPrefs.isMaintain = user!.data!.user!.maintain_emp!;
+sharedPrefs.userEmail=user!.data!.user!.email!.trim();
+if (sharedPrefs.isRemember) {
+  sharedPrefs.userPass= password!.trim();
+}
 //getAuth
   List<String> auth = [];
 if (user!.data!.permisions!.showBranchs!) {

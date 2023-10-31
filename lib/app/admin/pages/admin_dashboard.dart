@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/home.dart';
 import 'package:goodfoods/app/admin/pages/settings_page.dart';
-import 'package:goodfoods/app/admin/pages/stats_page.dart';
 import 'package:goodfoods/core/presentation/notifications_page.dart';
 import 'package:goodfoods/core/services/notification_plugin.dart';
 
@@ -28,7 +27,7 @@ void initState() {
 
     List screens = [
       const Home(),
-      const StatsPage(),
+      // const StatsPage(),
       const NotificationPage(
         fromDashboard: true,
       ),
@@ -59,130 +58,130 @@ bottomNavigationBar:
           
           _currentTab==0?
           Colors.white.withOpacity(.10):
-          Theme.of(context).primaryColor.withOpacity(.10) ,
+          Theme.of(context).primaryColor.withOpacity(.60) ,
           borderRadius: BorderRadius.circular(50)
         ),
 
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
         
         
-              MaterialButton(onPressed: (){
+            MaterialButton(onPressed: (){
         _currentTab=0;
          
          setState(() {
-          
+        
         });
-              } ,  
-              child:   ImageIcon(
-          const AssetImage('assets/icons/home.png'),
-           size:25 ,  
-              
-              color: 
-              _currentTab ==0? 
-              
-              Colors.white
-              :Colors.grey
-        
-              ,),
-              
-              )
+            } ,  
+            child:   ImageIcon(
+        const AssetImage('assets/icons/home.png'),
+         size:25 ,  
             
+            color: 
+            _currentTab ==0? 
             
-            ,
+            Colors.white
+            :Colors.black
         
-        
-        
-              MaterialButton(onPressed: (){
-         _currentTab=1;
-        setState(() {
+            ,),
+            
+            )
           
-        });
+          
+          ,
+        
+        
+        
+        //       MaterialButton(onPressed: (){
+        //  _currentTab=1;
+        // setState(() {
+        
+        // });
         
          
-              } ,  
-              child:  ImageIcon(
-          const AssetImage('assets/icons/stats.png')
+        //       } ,  
+        //       child:  ImageIcon(
+        //   const AssetImage('assets/icons/stats.png')
+        // ,
+        //   size:25 ,  
+            
+        //       color:  _currentTab ==1? 
+        //     Theme.of(context).primaryColor
+        //       :Colors.grey
+        
+        
+        
+        
+        //       ),
+            
+        //       )
+        
+        
+        
+        
+        
+         MaterialButton(onPressed: (){
+         _currentTab=1;
+        
+        setState(() {
+        
+        });
+         
+            } ,  
+            child:  ImageIcon(
+        const AssetImage('assets/icons/bell.png')
         ,
-          size:25 ,  
-              
-              color:  _currentTab ==1? 
-            Theme.of(context).primaryColor
-              :Colors.grey
+        size:25 ,  
+            
+            color:  _currentTab ==1? 
+          
+           Colors.white
+            :Colors.black
+          
+          // Theme.of(context).primaryColor
+          //   :Colors.grey
         
         
         
         
-              ),
-              
-              )
+            ),
+            
+            )
         
         
         
         ,
         
-           MaterialButton(onPressed: (){
+        
+        
+            MaterialButton(onPressed: (){
          _currentTab=2;
         
         setState(() {
-          
-        });
-         
-              } ,  
-              child:  ImageIcon(
-          const AssetImage('assets/icons/bell.png')
-        ,
-          size:25 ,  
-              
-              color:  _currentTab ==2? 
-            Theme.of(context).primaryColor
-              :Colors.grey
         
-        
-        
-        
-              ),
-              
-              )
-        
-        
-        
-        ,
-        
-        
-        
-              MaterialButton(onPressed: (){
-         _currentTab=3;
-        
-        setState(() {
-          
         });
         
-              } ,  
-              child:  ImageIcon(
-          const AssetImage('assets/icons/settings.png')
+            } ,  
+            child:  ImageIcon(
+        const AssetImage('assets/icons/settings.png')
         ,
-          size:25 ,  
-              
-              color:  _currentTab ==3? 
-            Theme.of(context).primaryColor
-              :Colors.grey
+        size:25 ,  
+            
+            color:  _currentTab ==2? 
+         Colors.white
+            :Colors.black
+        
+        
+        
+            ),
+            
+            )
         
         
         
         
-              ),
-              
-              )
-        
-        
-        
-        
-            ],
-          ),
+          ],
         ),
       ),
     

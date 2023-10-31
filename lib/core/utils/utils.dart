@@ -189,7 +189,7 @@ showToast(String message, bool isError) {
 
 
   logout(BuildContext context){
-  sharedPrefs.clear();
+  sharedPrefs.logout();
 
 const SplashScreen().launch(context);
 }
