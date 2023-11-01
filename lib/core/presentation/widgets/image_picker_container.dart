@@ -88,7 +88,12 @@ child: Text.rich(TextSpan(
   }
 
 _pickFile(BuildContext context)async{
-  FilePickerResult? result = await FilePicker.platform.pickFiles();
+  FilePickerResult? result = await FilePicker.platform.pickFiles(
+    type: FileType.custom,
+   allowedExtensions: [
+     'pdf' ,'doc','docx','ppt','xls'
+   ]
+  );
 
 if (result != null) {
   File file = File(result.files.single.path!);

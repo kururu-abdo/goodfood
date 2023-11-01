@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/chat_page.dart';
+import 'package:goodfoods/app/help/view/pages/help_page.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -88,7 +89,7 @@ return
 
 
  IconButton(onPressed: (){
-const ChagePage().launch(context);
+const HelpPage().launch(context);
           }, icon: const ImageIcon(
             AssetImage('assets/icons/headset.png')
             

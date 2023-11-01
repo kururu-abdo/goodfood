@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:clear_all_notifications/clear_all_notifications.dart';
+import 'package:eraser/eraser.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:goodfoods/app/admin/pages/admin_dashboard.dart';
 import 'package:goodfoods/app/admin/pages/chat_page.dart';
 import 'package:goodfoods/app/managment_orders/views/pages/order_reply.dart';
+import 'package:goodfoods/core/presentation/login.dart';
 import 'package:goodfoods/core/presentation/order_details.dart';
 import 'package:goodfoods/core/services/document_service.dart';
 import 'package:goodfoods/core/services/navigation_service.dart';
@@ -245,7 +248,8 @@ static selectNotification(String payload) async {
    final Map data = jsonDecode(payload);
     var model =data['screen'].toString().toLowerCase();
     var id=data['model_id'].toString().toLowerCase();
- 
+ if (sharedPrefs.isLoggedIn) {
+   
 
  if (model.contains("order")) {
    // go to order
@@ -311,6 +315,24 @@ if (model.contains("request") ) {
   );
  
  }
+ ClearAllNotifications.clear();
+NotificationApi.clear();
+
+
+
+
+
+ }else {
+    ClearAllNotifications.clear();
+NotificationApi.clear();
+    Navigator.pushAndRemoveUntil(
+
+          main.navigatorKey.currentContext!, MaterialPageRoute(builder: (_)=>const LoginScreen()) ,
+          (route)=>false
+         );
+ }
+
+
 }
 
 
@@ -379,7 +401,26 @@ static  Future initMessage()async{
 
   if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
     NotificationApi.onSelectNotification(notificationAppLaunchDetails!.notificationResponse);
+    // _notification.cancelAll();
+    _notification.getNotificationAppLaunchDetails().ignore();
+      Eraser.clearAllAppNotifications();
+        ClearAllNotifications.clear();
+        
   }
+
+}
+
+
+static Future<void> clear()async{
+   try {
+     
+   } catch (e) {
+      FirebaseMessaging.instance.deleteToken();
+      // FirebaseMessaging.instance.ca();
+// _notification.cancelAll();
+    ClearAllNotifications.clear();
+      Eraser.clearAllAppNotifications();
+   }
 
 }
 }

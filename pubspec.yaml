@@ -80,6 +80,8 @@ dependencies:
   timeago: ^3.5.0
   open_document: ^1.0.7
   dio: ^5.3.3
+  eraser: ^2.0.1
+  clear_all_notifications: ^1.0.0
   scrollable_positioned_list: ^0.3.8
 dev_dependencies:
   flutter_test:

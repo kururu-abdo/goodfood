@@ -10,11 +10,11 @@ class UploadButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Container(
 
-      width: 350 ,
+      width: MediaQuery.of(context).size.width ,
       height: 50,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(5),
         color: Theme.of(context).primaryColor
       ),
       child:  Center(
@@ -22,7 +22,7 @@ class UploadButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       
           children: [
-      Icon(Icons.drive_folder_upload_outlined ,
+      const Icon(Icons.drive_folder_upload_outlined ,
       
       size: 30,
        color: Colors.white,),
@@ -33,11 +33,11 @@ class UploadButton extends StatelessWidget {
         "Upload File"
        ,
 
-       style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold 
+       style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold 
        , fontSize: 20),
       ),
       
-      SizedBox()
+      const SizedBox()
           ],
         ),
       ),

@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:goodfoods/app/documents/controllers/document_controller.dart';
+import 'package:goodfoods/app/help/controller/help_controller.dart';
 import 'package:goodfoods/app/managment_orders/controllers/requests_controller.dart';
 import 'package:goodfoods/app/notifications/controllers/notification_controller.dart';
 import 'package:goodfoods/app/report/controllers/report_controller.dart';
@@ -73,6 +74,7 @@ ChangeNotifierProvider<NotificationController>(create: (_)=>NotificationControll
            ChangeNotifierProvider(create: (context) => di.sl<ReportController>()),
            ChangeNotifierProvider(create: (context) => di.sl<DocumentController>()),
                       ChangeNotifierProvider(create: (context) => di.sl<RequestController>()),
+                      ChangeNotifierProvider(create: (context) => di.sl<HelpController>()),
 
 
       ],

@@ -3,6 +3,7 @@ import 'package:goodfoods/app/admin/pages/chat_page.dart';
 import 'package:goodfoods/app/assets/view/pages/cars_page.dart';
 import 'package:goodfoods/app/assets/view/pages/other_assets_page.dart';
 import 'package:goodfoods/app/assets/view/pages/region_list.dart';
+import 'package:goodfoods/app/help/view/pages/help_page.dart';
 import 'package:goodfoods/core/utils/utils.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -26,7 +27,8 @@ class _AssetsPageState extends State<AssetsPage> {
           elevation: 0,
           actions: [
             IconButton(onPressed: (){
-    const ChagePage().launch(context);
+    // const ChagePage().launch(context);
+    HelpPage().launch(context);
             }, icon: const ImageIcon(AssetImage('assets/icons/headset.png')))
           ,
             // IconButton(onPressed: (){

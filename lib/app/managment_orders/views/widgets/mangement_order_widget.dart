@@ -72,15 +72,22 @@ child:
 
          Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    crossAxisAlignment: CrossAxisAlignment.center,
     children: [
   
   
-  Row(
+  Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: [
           Text(
             
             currentLang(context)=="ar"?
-            widget.orderModel!.taskAr!: widget.orderModel!.taskEn!)    , 
+            widget.orderModel!.taskAr!: widget.orderModel!.taskEn!,
+            
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+            )
+      , 
           const SizedBox(
             width: 20,
           ) , 

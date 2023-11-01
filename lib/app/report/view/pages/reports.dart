@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/report_details.dart';
+import 'package:goodfoods/app/help/view/pages/help_page.dart';
 import 'package:goodfoods/app/report/controllers/report_controller.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
+import 'package:goodfoods/core/presentation/notifications_page.dart';
 import 'package:goodfoods/core/presentation/widgets/no_items.dart';
 import 'package:goodfoods/core/presentation/widgets/progress.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
@@ -39,11 +41,11 @@ class _AdminReporsState extends State<AdminRepors> {
         elevation: 0,
         actions: [
           IconButton(onPressed: (){
-
+HelpPage().launch(context);
           }, icon: const ImageIcon(AssetImage('assets/icons/headset.png')))
         ,
           IconButton(onPressed: (){
-
+NotificationPage().launch(context);
           }, icon: const ImageIcon(AssetImage('assets/icons/bell.png')))
         
         

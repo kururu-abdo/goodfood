@@ -24,7 +24,8 @@ try {
 
  notifications=ApiResponse.completed(response);
 
-  
+  notifications!.data!.sort((a, b) => b.id!.compareTo(a.id!));
+notifications!.data!.reversed;  
   
 } catch (e) {
 
@@ -51,7 +52,8 @@ try {
 
  notifications=ApiResponse.completed(response);
 
-notifications!.data!.sort((a, b) => a.id!.compareTo(b.id!));  
+notifications!.data!.sort((a, b) => b.id!.compareTo(a.id!));
+notifications!.data!.reversed;  
   
 } catch (e) {
 

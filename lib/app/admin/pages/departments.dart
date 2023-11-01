@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:goodfoods/app/help/view/pages/help_page.dart';
+import 'package:goodfoods/core/presentation/notifications_page.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class DepartmentPage extends StatefulWidget {
   final bool?  fromDashboard;
@@ -20,11 +23,11 @@ class _DepartmentPageState extends State<DepartmentPage> {
         elevation: 0,
         actions: [
           IconButton(onPressed: (){
-
+HelpPage().launch(context);
           }, icon: const ImageIcon(AssetImage('assets/icons/headset.png')))
         ,
           IconButton(onPressed: (){
-
+NotificationPage().launch(context);
           }, icon: const ImageIcon(AssetImage('assets/icons/bell.png')))
         
         

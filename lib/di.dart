@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:goodfoods/app/documents/controllers/document_controller.dart';
+import 'package:goodfoods/app/help/controller/help_controller.dart';
 import 'package:goodfoods/app/managment_orders/controllers/requests_controller.dart';
 import 'package:goodfoods/app/notifications/controllers/notification_controller.dart';
 import 'package:goodfoods/app/report/controllers/report_controller.dart';
@@ -28,6 +29,7 @@ Future<void> init() async {
     sl.registerFactory(() => ReportController());
     sl.registerFactory(() => RequestController());
     sl.registerFactory(() => DocumentController());
+    sl.registerFactory(() => HelpController());
 
 
  // External

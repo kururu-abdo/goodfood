@@ -171,16 +171,22 @@ empId ,modelType,modelId, task, files , bool immedatly
 
 
 Future<OrderData> getUserOrders(
+
   [
     String? nextUrl,
-    bool? isPaginate=false
+    bool? isPaginate=false ,
+    String? status
   ]
+   
    ) async {
      //
     final response = await _helper.get(
-     
-      "maintain/get_order" ,
-   pageUrl: nextUrl,
+     status !=null?
+      "maintain/get_order?status=$status":"maintain/get_order"   ,
+   pageUrl: 
+   
+   status != null?
+   nextUrl!+"&status=$status":nextUrl,
    isPaginate:  isPaginate
     
     );

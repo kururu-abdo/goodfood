@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:goodfoods/core/presentation/splash_screen.dart';
+import 'package:goodfoods/core/services/notification_plugin.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -24,6 +25,7 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 logout(BuildContext context){
+  NotificationApi.clear();
   sharedPrefs.logout();
 
 const SplashScreen().launch(context);

@@ -22,7 +22,7 @@ List<Message>? messages=[];
 
 // //nexpageUrl
 
-  
+  bool isSending=false;
 //   var nextMessagesUrl;
 
 //scroll Controller
@@ -309,7 +309,7 @@ try {
   log(msg!);
   log(base64.toString());
   log(ext.toString());
-
+isSending=true;
 
 
   var response = await  ChatApis().sendMessage(emp.id.toString(), msg, base64 ,ext);
@@ -338,6 +338,8 @@ messages!.sort((a, b) => a.id!.compareTo(b.id!));
   
   );
 }finally{
+  isSending=false;
+
 notifyListeners();
 }
 }
@@ -404,7 +406,8 @@ String? msg, String? base64
 )async{
 try {
   log(msg!);
-
+isSending=true;
+notifyListeners();
 
   var response = await  ChatApis().editeMessage(messageId!, receiver!, msg, base64);
   messageModel = null;
@@ -415,6 +418,7 @@ messages!.addAll(messageModel!.data!.data!);
 messages!.sort((a, b) => a.id!.compareTo(b.id!));  log("DONE");
 messageModel!.data!.data!.sort((a, b) => a.id!.compareTo(b.id!));
 }finally{
+  isSending= false;
 notifyListeners();
 }
 }

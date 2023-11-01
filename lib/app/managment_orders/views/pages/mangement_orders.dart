@@ -30,6 +30,7 @@ class _ManagmentOrdersState extends State<ManagmentOrders> {
      WidgetsBinding.instance.addPostFrameCallback((_) {
     context.read<RequestController>().getMyRquests(context);
 
+
  });
 
   }
@@ -68,7 +69,7 @@ appBar: mLightAppBar(context, translate(context, "manage_orders") ,
       body: 
         RefreshIndicator(
           onRefresh: ()async{
-
+   context.read<RequestController>().getMyRquests(context);
           },
           child: SizedBox.expand(
             child: Builder(builder: (_){
@@ -88,7 +89,7 @@ appBar: mLightAppBar(context, translate(context, "manage_orders") ,
             children: [
           Text(controller.orders!.message!),
           const SizedBox(height: 10,) ,
-          IconButton(onPressed: (){
+          IconButton(onPressed: ()async{
             controller.getMyRquests(context );
           }, icon:  Icon(
             Icons.refresh ,color: Theme.of(context).primaryColor,

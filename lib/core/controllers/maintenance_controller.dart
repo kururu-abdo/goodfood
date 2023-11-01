@@ -79,6 +79,43 @@ ApiResponse<OrderDetailMapper>?  orderDetailsMapper =
 ApiResponse.completed(null);
 
 
+List<Map>  perioicList =[
+
+
+  {
+"en":"Oil",
+"ar":"زيت" ,
+"id":0
+  },
+ {
+"en":"Flatters",
+"ar":"الفلاتر" ,
+"id":1
+  },
+ {
+"en":"Check",
+"ar":"الفحص" ,
+"id":2
+  },
+   {
+"en":"Tuers",
+"ar":"اطارات" ,
+"id":3
+  },
+
+
+
+];
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -456,9 +493,20 @@ log("/////////////////////////   $e");
 
 
 
+
+
+
+
+
+
+
+
+
 Future<void> getUserOrders(BuildContext context ,
 
-
+   {
+String?  status=''
+  }
 )async{
    userOrders = ApiResponse.loading('loading');
 userOrdersData=[];
@@ -467,7 +515,7 @@ notifyListeners();
     var  response = await 
     
     MaintenanceApis().getUserOrders(
-      
+      '' ,false , 3.toString()
       
       );
 
@@ -494,7 +542,10 @@ showToast(e.toString(), true);
 
 Future<void> getUserOrdersPaginate(BuildContext context ,
 
-String nextUrl
+String nextUrl, 
+ {
+String?  status
+  }
 )async{
    userOrderPaginate = ApiResponse.loading('loading');
 notifyListeners();
@@ -503,7 +554,7 @@ notifyListeners();
     
     MaintenanceApis().getUserOrders(
       nextUrl,
-      true);
+      true ,   status);
 
 
 

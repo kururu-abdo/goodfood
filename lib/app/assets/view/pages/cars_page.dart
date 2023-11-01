@@ -12,7 +12,8 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class CarsPage extends StatefulWidget {
-  const CarsPage({ Key? key }) : super(key: key);
+  final String? maintainanceType;
+  const CarsPage({ Key? key, this.maintainanceType }) : super(key: key);
 
   @override
   _CarsPageState createState() => _CarsPageState();

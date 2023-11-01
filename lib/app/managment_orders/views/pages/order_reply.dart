@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:goodfoods/app/documents/views/pages/open_document_page.dart';
 import 'package:goodfoods/app/managment_orders/controllers/requests_controller.dart';
 import 'package:goodfoods/app/managment_orders/models/management_order.dart';
 import 'package:goodfoods/core/box_text.dart';
@@ -124,7 +123,13 @@ Builder(builder: (_){
 else {
 var orderData = controller.order!.data;
 
-                return Padding(
+
+
+                return 
+                
+                orderData==null?
+                const SizedBox.shrink():
+                Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SingleChildScrollView(
                     child: SizedBox(
@@ -184,7 +189,7 @@ var orderData = controller.order!.data;
                                     
                                     8.width,
                                     Text(getMaintenanceFormattedDate(
-                      orderData!.createdAt!
+                      orderData.createdAt!.toString()
                                     ))
                                     
                                     
@@ -268,6 +273,8 @@ var orderData = controller.order!.data;
                         orderData.files ==null?
                             []:
                          orderData.files!.map((e) {
+                       
+                       
                         if (e.toString().contains("png")|| 
                         
                         e.toString().contains("jpeg")|| 
@@ -281,9 +288,9 @@ var orderData = controller.order!.data;
                           height: 300,
                         ),
                            
-                          ).onTap((){
-        OpenDocumentPage(needLoadfromUrl: false,url: e,);
-      });
+                          ).onTap(()async{
+                            log(e.toString());
+await DocumentService().initPlatformState(e);      });
                         }else {
                            return Container(
                            child: Image.asset(
@@ -293,9 +300,8 @@ var orderData = controller.order!.data;
                           width: 300,
                           height: 300,
                            ),
-                           ).onTap((){
-        OpenDocumentPage(needLoadfromUrl: false,url: e,);
-      });
+                           ).onTap(()async{
+await DocumentService().initPlatformState(e);      });
                         }
                         
                         
@@ -688,10 +694,14 @@ var orderData = controller.order!.data;
                            widget.order!.files ==null?
                             []:
                            widget.order!.files!.map((e) {
-                        if (e.toString().contains("png")|| 
+                        if (
+                          e
+                          
+                          .toString().contains("png")|| 
                         
-                        e.toString().contains("jpeg")|| 
-                        e.toString().contains("jpg") ) {
+                        e.toUpperCase().toString().contains("jpeg")|| 
+                        e.toUpperCase().toString().contains("jpg") ) {
+                          log(e);
                           return Container(
                            child: 
                            
@@ -702,6 +712,7 @@ var orderData = controller.order!.data;
                         ),
                            
                           ).onTap(()async{
+                            log("OPEN");
                               await DocumentService().initPlatformState(e);
                           });
                         }else {
@@ -716,6 +727,7 @@ var orderData = controller.order!.data;
                            ).onTap(
                              
                              ()async{
+                                  log("OPEN");
                                  await DocumentService().initPlatformState(e);
                              }
                            );
@@ -761,6 +773,8 @@ var orderData = controller.order!.data;
                                 
                                 
                                  20.height,
+                                
+
                                 
                                  Form(
                                    key: formKey,
@@ -966,6 +980,9 @@ var orderData = controller.order!.data;
                                  )
                                  
                                  )
+                     
+                     
+                     
                       ]),
                     ),
                   ),

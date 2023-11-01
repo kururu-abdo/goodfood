@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/assets_page.dart';
 import 'package:goodfoods/app/admin/pages/chat_page.dart';
 import 'package:goodfoods/app/documents/views/pages/documents_page.dart';
+import 'package:goodfoods/app/help/view/pages/help_page.dart';
 import 'package:goodfoods/common/controllers/langauage_controller.dart';
 import 'package:goodfoods/common/pages/order_page.dart';
 import 'package:goodfoods/core/controllers/auth_controller.dart';
@@ -9,6 +10,7 @@ import 'package:goodfoods/core/presentation/notifications_page.dart';
 import 'package:goodfoods/core/presentation/splash_screen.dart';
 import 'package:goodfoods/core/presentation/widgets/change_language_bottomsheet.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
+import 'package:goodfoods/core/services/notification_plugin.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
@@ -68,7 +70,8 @@ var  authController  = Provider.of<AuthController>(context);
         elevation: 0,
         actions: [
           IconButton(onPressed: (){
-const ChagePage().launch(context);
+// const ChagePage().launch(context);
+const HelpPage().launch(context);
           }, icon: const ImageIcon(AssetImage('assets/icons/headset.png')))
         ,
           IconButton(onPressed: (){
@@ -167,7 +170,7 @@ body: SingleChildScrollView(
                       .visible(true),
                   mSideMenu(
                            appLocale.translate("message"),
-                       'assets/icons/headset.png',
+                       'assets/icons/chat2.png',
                       () async {
                    const ChagePage().launch(context);
                   }).visible(true),  
@@ -188,10 +191,13 @@ body: SingleChildScrollView(
                        'assets/icons/financial.png',
                       () async {
                    const AssetsPage().launch(context);
-                  }).visible(!sharedPrefs.isAdmin),  
+                  }).visible(!sharedPrefs.isMaintain),  
    Divider(height: 4, thickness: 2, color: context.dividerColor)
                       .paddingOnly(top: 16, bottom: 8)
-                      .visible(!sharedPrefs.isAdmin),
+                      
+                      .visible(!sharedPrefs.isMaintain)
+                      
+                      ,
                   mSideMenu(
                       appLocale.translate("documents"),
                        'assets/icons/document.png',
@@ -303,7 +309,7 @@ body: SingleChildScrollView(
 
 
 authController.logout(context);
-
+NotificationApi.clear();
 sharedPrefs.logout();
 const SplashScreen().launch(context);
 

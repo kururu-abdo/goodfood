@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/chat_page.dart';
+import 'package:goodfoods/app/help/view/pages/help_page.dart';
+import 'package:goodfoods/core/presentation/notifications_page.dart';
 import 'package:goodfoods/core/presentation/widgets/document_widget.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -21,11 +23,12 @@ class _DocumentsPageState extends State<DocumentsPage> {
           elevation: 0,
           actions: [
             IconButton(onPressed: (){
-    const ChagePage().launch(context);
+    // const ChagePage().launch(context);
+    HelpPage().launch(context);
             }, icon: const ImageIcon(AssetImage('assets/icons/headset.png')))
           ,
             IconButton(onPressed: (){
-    
+    NotificationPage();
             }, icon: const ImageIcon(AssetImage('assets/icons/bell.png')))
           
           

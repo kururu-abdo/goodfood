@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/chat_page.dart';
 import 'package:goodfoods/app/admin/widgets/branch_widget.dart';
 import 'package:goodfoods/app/admin/widgets/dashboard_item.dart';
+import 'package:goodfoods/app/help/view/pages/help_page.dart';
 import 'package:goodfoods/core/colors.dart';
 import 'package:goodfoods/core/controllers/admin_home_controller.dart';
 import 'package:goodfoods/core/presentation/widgets/progress.dart';
@@ -39,7 +40,8 @@ class _AdminHomeState extends State<AdminHome> {
         elevation: 0,
         actions: [
           IconButton(onPressed: (){
-const ChagePage().launch(context);
+// const ChagePage().launch(context);
+HelpPage().launch(context);
           }, icon: const ImageIcon(AssetImage('assets/icons/headset.png')))
         ,
           IconButton(onPressed: (){

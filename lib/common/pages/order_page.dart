@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/chat_page.dart';
 import 'package:goodfoods/app/admin/pages/new_maintance_order.dart';
 import 'package:goodfoods/app/admin/widgets/dashboard_item.dart';
+import 'package:goodfoods/app/help/view/pages/help_page.dart';
+import 'package:goodfoods/core/presentation/notifications_page.dart';
 import 'package:goodfoods/core/presentation/widgets/order_list.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -75,11 +77,12 @@ const MaintenanceOrder().launch(context);
           elevation: 0,
           actions: [
             IconButton(onPressed: (){
-    const ChagePage().launch(context);
+    // const ChagePage().launch(context);
+    HelpPage().launch(context);
             }, icon: const ImageIcon(AssetImage('assets/icons/headset.png')))
           ,
             IconButton(onPressed: (){
-    
+    NotificationPage().launch(context);
             }, icon: const ImageIcon(AssetImage('assets/icons/bell.png')))
           
           

@@ -977,6 +977,12 @@ else{
                                             color: Colors.white,
                                           ),
                                           onPressed: ()async {
+
+if (!chatController.isSending) {
+  
+}
+
+                                            
                                  chatController.sendMessage(chatController.chatUser , _controller.text, 
                                  null,
                                  
