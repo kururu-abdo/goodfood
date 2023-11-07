@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/chat_page.dart';
 import 'package:goodfoods/app/assets/view/pages/cars_page.dart';
+import 'package:goodfoods/app/assets/view/pages/maintainace_type.dart';
+// import 'package:goodfoods/app/assets/view/pages/cars_page.dart';
 import 'package:goodfoods/app/assets/view/pages/other_assets_page.dart';
 import 'package:goodfoods/app/assets/view/pages/region_list.dart';
 import 'package:goodfoods/app/help/view/pages/help_page.dart';
@@ -122,8 +124,9 @@ Card(
           ),
         ),
       ).onTap((){
-
         const CarsPage().launch(context);
+
+  
       })
   ,
   

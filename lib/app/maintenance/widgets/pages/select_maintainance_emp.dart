@@ -6,7 +6,10 @@ import 'package:goodfoods/core/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class SelectMaintainenaceEmpolyee extends StatefulWidget {
-  const SelectMaintainenaceEmpolyee({ Key? key }) : super(key: key);
+  final String? maintain_type;
+    final String? category;
+      final String? walkway;
+  const SelectMaintainenaceEmpolyee({ Key? key, this.maintain_type, this.category, this.walkway }) : super(key: key);
 
   @override
   _SelectMaintainenaceEmpolyeeState createState() => _SelectMaintainenaceEmpolyeeState();
@@ -135,7 +138,10 @@ return Padding(
                           //Do Something...
 if (controller.maintainModel!=null) {
   
-  controller.addOrder(context);
+  controller.addOrder(context,
+  widget.maintain_type,widget.category,widget.walkway
+  
+  );
 }
 
 

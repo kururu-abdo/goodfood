@@ -22,14 +22,16 @@ import 'package:goodfoods/main.dart' as main;
 import 'package:nb_utils/nb_utils.dart';
 // import 'package:nb_utils/nb_utils.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:rxdart/subjects.dart';
 final NavigationService navService = NavigationService();
 class NotificationApi{
-  
+    final BehaviorSubject<bool> behaviorSubject = BehaviorSubject();
   //code here
 
  static final _notification = FlutterLocalNotificationsPlugin();
 
   static void init() async{
+     NotificationApi.createNorifiacationChannel();
     _notification.initialize(
        const InitializationSettings(
         android: AndroidInitializationSettings('app_icon'),
@@ -113,7 +115,7 @@ static pushNotification(
 
 
 
-
+// sharedPrefs.isOpen= false;
 
 
     var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
@@ -175,7 +177,7 @@ static  void notificationHandler() {
 
     // FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
     FirebaseMessaging.onMessage.listen((event) async {
-     
+     sharedPrefs.isOpen= false;
       await NotificationApi.pushNotification(event);
     });
 
@@ -394,19 +396,22 @@ if (status.isDenied || !status.isGranted) {
     
   }
 static  Future initMessage()async{
-  final NotificationAppLaunchDetails? notificationAppLaunchDetails = !kIsWeb &&
+   NotificationAppLaunchDetails? notificationAppLaunchDetails = !kIsWeb &&
           Platform.isLinux
       ? null
       : await _notification.getNotificationAppLaunchDetails();
-
-  if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+if (!sharedPrefs.isOpen) {
+   if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
     NotificationApi.onSelectNotification(notificationAppLaunchDetails!.notificationResponse);
     // _notification.cancelAll();
-    _notification.getNotificationAppLaunchDetails().ignore();
-      Eraser.clearAllAppNotifications();
+    notificationAppLaunchDetails =null;
+      // Eraser.clearAllAppNotifications();
+      
         ClearAllNotifications.clear();
-        
+      sharedPrefs.isOpen= true;
   }
+}
+ 
 
 }
 

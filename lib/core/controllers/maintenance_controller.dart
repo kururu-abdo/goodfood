@@ -32,6 +32,17 @@ extends AppState
 
 
  {
+String? startDate;
+String? endDate;
+
+
+String? status;
+String? statusText='';
+
+String? modelTypeId;
+String? modelTextId;
+
+String filterLink='';
 
   bool isEmediate=false;
 ApiResponse<List<RegionModel>>?  regions = ApiResponse.completed([]);
@@ -72,11 +83,81 @@ ApiResponse<OrderData>?  userOrderPaginate =
 ApiResponse.completed(null);
 List<UserOrder> userOrdersData = [];
 // List<Space> spaces = [];
+String? selectedStatus;
+String? selectedModel;
+
 
 
 
 ApiResponse<OrderDetailMapper>?  orderDetailsMapper = 
 ApiResponse.completed(null);
+
+
+
+List<Map>  modelTypes =[
+  {
+"en":"Machiens",
+"ar":"الماكينات" ,
+"value":'Asset'
+  },
+
+ {
+"en":"Cars",
+"ar":"السيارات" ,
+"value":'Car'
+  },
+
+ {
+"en":"Branches",
+"ar":"الفروع" ,
+"value":'Branch'
+  },
+ {
+"en":"Departments",
+"ar":"الاقسام" ,
+"value":'Department'
+  },
+
+   {
+"en":"Houses",
+"ar":"السكنات" ,
+"value":'Skin'
+  },
+   {
+"en":" Other Assets",
+"ar":"الاصول الاخرى" ,
+"value":'OtherAsset'
+  },
+
+
+];
+
+
+
+List<Map>  statusList =[
+  {
+"en":"Created",
+"ar":"قيد الانشاء" ,
+"value":'0'
+  },
+
+ {
+"en":"Closing",
+"ar":"قيد الاغلاق" ,
+"value":'1'
+  },
+
+ {
+"en":"Closed",
+"ar":"تم الاغلاق" ,
+"value":'2'
+  },
+ 
+
+
+];
+
+
 
 
 List<Map>  perioicList =[
@@ -108,6 +189,77 @@ List<Map>  perioicList =[
 ];
 
 
+int? selectedOption =0;
+int? selectedMaintenanceType =0;
+
+
+
+Map? getSelectedModelObject(){
+  if (selectedModel==null) {
+    return null;
+  }else {
+   Map? value= modelTypes.firstWhere((e)=>  e['value']==selectedModel);
+    
+
+    return value;
+
+  }
+}
+
+
+
+Map? getSelectedStatusObject(){
+  if (selectedStatus==null) {
+    return null;
+  }else {
+   Map? value= statusList.firstWhere((e)=>  e['value']==selectedStatus);
+    
+
+    return value;
+
+  }
+}
+
+setselectedStatus(status){
+  selectedStatus=status;
+  notifyListeners();
+}
+
+
+clearFilter(){
+  filterLink='';
+  startDate=null;
+  endDate=null;
+  selectedModel=null;
+  selectedStatus=null;
+  notifyListeners();
+}
+
+setFilterLink(
+  
+  BuildContext context,
+  String type){
+ 
+  // filterLink = 'status=$selectedStatus&start_date=$startDate&end_date=$endDate&model_type=$selectedModel';
+filterLink='';
+
+
+if (selectedStatus!=null) {
+  filterLink='${filterLink}status=$selectedStatus&';
+}
+if (startDate!=null) {
+    filterLink='${filterLink}start_date=$startDate&';
+
+}
+
+if (endDate!=null) {
+    filterLink='${filterLink}end_date=$endDate&';
+
+}
+if (selectedModel!=null) {
+    filterLink='${filterLink}model_type=$selectedModel&';
+
+}
 
 
 
@@ -116,7 +268,22 @@ List<Map>  perioicList =[
 
 
 
+  log(filterLink);
+  if (type=="maintain") {
+  getFiliterUserOrders(context);
+  }else {
+    geFiltertMaintainOrders(context);
 
+  }
+  notifyListeners();
+}
+
+// setModelType(String modelType){
+
+// }
+setStatus(String status){
+selectedStatus = status;
+}
 
 
 ApiResponse<List<OtherAsset>>?  otherAssets = ApiResponse.completed([]);
@@ -126,6 +293,16 @@ String? modelId;
 String? modelType;
 MaintainModel? maintainModel;
 String? task;
+
+
+setSelectedOption(int? value){
+  selectedOption =value;
+  notifyListeners();
+}
+setSelectedMaintenanceType(int? value){
+  selectedMaintenanceType =value;
+  notifyListeners();
+}
 
 setEmdeiate(bool value){
   isEmediate=value;
@@ -144,8 +321,19 @@ setModelType(String type){
   modelType=type;
   notifyListeners();
 }
+setFilterModelType( type){
+  selectedModel=type;
+  notifyListeners();
+}
+setStartDate(String? value){
+  startDate=value;
+  notifyListeners();
+}
 
-
+setEndDate(String? value){
+  endDate=value;
+  notifyListeners();
+}
 setEmployee(MaintainModel model){
   maintainModel=model;
   notifyListeners();
@@ -158,15 +346,6 @@ removeFile(String path){
 }
 
 filterUserRoders(int status){
-  //  spaceSearch = [];
-  //   if(startingPrice > 0 && endingPrice > startingPrice) {
-  //     spaceSearch.addAll( spaces.where((product) =>
-  //    double.parse( product.price!.toString()) > startingPrice && double.parse( product.price!.toString()) < endingPrice).toList());
-  //   }else {
-  //     spaceSearch.addAll(spaces);
-  //   }
-}
-filterAdminRoders(int status){
   //  spaceSearch = [];
   //   if(startingPrice > 0 && endingPrice > startingPrice) {
   //     spaceSearch.addAll( spaces.where((product) =>
@@ -330,7 +509,7 @@ List<Map> getFiles(List<FileModel> files
 
   return files0;
 }
-addOrder(BuildContext context)async{
+addOrder(BuildContext context ,  maintainType , option , walkway)async{
   newOrder = ApiResponse.loading('sdfds');
   notifyListeners();
   try {
@@ -341,7 +520,7 @@ addOrder(BuildContext context)async{
 var response = await MaintenanceApis().addOrder(
   maintainModel!.id.toString(), modelType, modelId, task, getFiles(
   newOrderFiles , 
-) ,  isEmediate);
+) ,  selectedMaintenanceType , maintainType ,option, walkway);
   newOrder =ApiResponse.completed({});
   notifyListeners();
     const Success().launch(context , isNewTask: true);
@@ -427,6 +606,37 @@ notifyListeners();
 
   }finally{
       isBusy= false; 
+  }
+}
+
+
+Future<void> geFiltertMaintainOrders(BuildContext context ,
+
+
+)async{
+   maintainOrders = ApiResponse.loading('loading');
+adminOrders=[];
+
+notifyListeners();
+  try {
+    var  response = await MaintenanceApis().filterMaintainOrder(
+      filterLink
+    );
+
+
+
+    maintainOrders=ApiResponse.completed(response);
+    adminOrders.addAll(maintainOrders!.data!.data!.data!);
+    log('DOTAT');
+    notifyListeners();
+  } catch (e) {
+       maintainOrders = ApiResponse.error('$e');
+notifyListeners();
+
+  }finally{
+      isBusy= false; 
+
+      notifyListeners();
   }
 }
 
@@ -536,6 +746,39 @@ showToast(e.toString(), true);
 }
 
 
+
+
+
+
+Future<void> getFiliterUserOrders(BuildContext context ,
+
+)async{
+   userOrders = ApiResponse.loading('loading');
+userOrdersData=[];
+notifyListeners();
+  try {
+    var  response = await 
+    
+    MaintenanceApis().filterUserOrders(
+     filterLink
+      
+      );
+
+
+
+    userOrders=ApiResponse.completed(response , );
+    userOrdersData.addAll(userOrders!.data!.data!);
+    // notifyListeners();
+  } catch (e) {
+       userOrders = ApiResponse.error('$e');
+notifyListeners();
+showToast(e.toString(), true);
+  }finally{
+      isBusy= false; 
+
+      notifyListeners();
+  }
+}
 
 
 

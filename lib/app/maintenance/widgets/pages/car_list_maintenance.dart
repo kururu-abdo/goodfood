@@ -12,7 +12,12 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class CartListMeintance extends StatefulWidget {
-  const CartListMeintance({ Key? key }) : super(key: key);
+  final String? maintain_type;
+    final String? category;
+      final String? walkway;
+
+
+  const CartListMeintance({ Key? key, this.maintain_type, this.category, this.walkway }) : super(key: key);
 
   @override
   _CartListMeintanceState createState() => _CartListMeintanceState();
@@ -185,9 +190,12 @@ const SizedBox(height: 8,),
 ,const SizedBox(width: 8,),
 
 TextButton(onPressed: (){
- MaintenanceOrder(
+  MaintenanceOrder(
           modelId: carData.id.toString(),
           modelType: 'Car',
+           maintain_type:widget.maintain_type,
+   category:widget.category,
+     walkway:widget.walkway,
         ).launch(context);
 }, child: Text(
   currentLang(context)=="ar"? "طلب صيانة":"Add order"
@@ -200,10 +208,13 @@ TextButton(onPressed: (){
 
       (){
 
-
+log(widget.maintain_type.toString());
         MaintenanceOrder(
           modelId: carData.id.toString(),
           modelType: 'Car',
+           maintain_type:widget.maintain_type,
+   category:widget.category,
+     walkway:widget.walkway,
         ).launch(context);
       }
     );

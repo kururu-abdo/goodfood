@@ -1,10 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/maintenance/widgets/pages/maintance_page.dart';
+import 'package:goodfoods/app/maintenance/widgets/view/maintenance_filter_bottomsheet.dart';
 import 'package:goodfoods/app/order/view/widgets/next_pg_btn.dart';
 import 'package:goodfoods/core/controllers/maintenance_controller.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
-import 'package:goodfoods/core/presentation/widgets/app_bar.dart';
 import 'package:goodfoods/core/presentation/widgets/no_items.dart';
 import 'package:goodfoods/core/presentation/widgets/order_widget.dart';
 import 'package:goodfoods/core/presentation/widgets/progress.dart';
@@ -71,14 +71,43 @@ var controller = Provider.of<MaintenanceController>(context);
       
        Scaffold(
 
-           appBar: mLightAppBar(context,
-            translate(context, "maintains"),
+           appBar: AppBar(
+elevation: 1,
+             title: Text(  translate(context, "maintains")),
+             actions:  [
+
+            
+IconButton(onPressed: (){
+showModalBottomSheet(context: context,
+
+shape: const RoundedRectangleBorder(
+  borderRadius: BorderRadius.vertical(
+    top: Radius.circular(20)
+  )
+),
+ builder: (_){
+return const FilterBottomSheet(
+  
+);
+ });
+}, icon: ImageIcon(const AssetImage('assets/icons/filter2.png') ,size: 20 , 
+                   
+                   color: Theme.of(context).primaryColor
+                   ,),) ,
+
+             ],
+           )
+            ,
+           
+           
+      //      mLightAppBar(context,
+      //       translate(context, "maintains"),
       
-      IconButton(onPressed: (){
-        Navigator.pop(context);
-      }, icon: const Icon(Icons.arrow_back ,
-      color: Colors.black,))
-      ),
+      // IconButton(onPressed: (){
+      //   Navigator.pop(context);
+      // }, icon: const Icon(Icons.arrow_back ,
+      // color: Colors.black,))
+      // ),
 // drawer:
 
 // Drawer(
@@ -318,7 +347,7 @@ controller.getMaintainOrdersPaginate(context, controller.maintainOrders!.data!.d
              
         
                   else {
-                var i =index==0?0: index==controller.userOrdersData.length?  index-1:index;
+                var i =index==0?0: index==controller.adminOrders.length?  index-1:index;
                   var orderData = controller.adminOrders[i];  //logical  
               return  OrderWidget(to: const ['Samani' ,'Husam']  , 
                  

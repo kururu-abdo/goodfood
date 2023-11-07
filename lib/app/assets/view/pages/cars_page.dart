@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:goodfoods/app/admin/pages/new_maintance_order.dart';
+import 'package:goodfoods/app/assets/view/pages/maintainace_type.dart';
 import 'package:goodfoods/core/controllers/maintenance_controller.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
 import 'package:goodfoods/core/presentation/widgets/app_bar.dart';
@@ -184,10 +184,14 @@ const SizedBox(height: 8,),
 ,const SizedBox(width: 8,),
 
 TextButton(onPressed: (){
- MaintenanceOrder(
-          modelId: carData.id.toString(),
-          modelType: 'Car',
-        ).launch(context);
+//  MaintenanceOrder(
+//           modelId: carData.id.toString(),
+//           modelType: 'Car',
+//         ).launch(context);
+         CarMaintainanceType(
+        fromAssetsPage: true,
+        modelId: carData.id.toString(),
+      ).launch(context);
 }, child: Text(
   currentLang(context)=="ar"? "طلب صيانة":"add order"
 
@@ -199,11 +203,14 @@ TextButton(onPressed: (){
 
       (){
 
-
-        MaintenanceOrder(
-          modelId: carData.id.toString(),
-          modelType: 'Car',
-        ).launch(context);
+       CarMaintainanceType(
+        fromAssetsPage: true,
+        modelId: carData.id.toString(),
+      ).launch(context);
+        // MaintenanceOrder(
+        //   modelId: carData.id.toString(),
+        //   modelType: 'Car',
+        // ).launch(context);
       }
     );
   },

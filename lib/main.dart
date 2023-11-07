@@ -27,6 +27,7 @@ GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) {
+  sharedPrefs.isOpen= true;
   // handle action
   NotificationApi.onSelectNotification(notificationResponse);
 }
@@ -34,11 +35,12 @@ void notificationTapBackground(NotificationResponse notificationResponse) {
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-   Firebase.initializeApp();
-   NotificationApi.init();
+  //  Firebase.initializeApp();
+  //  NotificationApi.init();
 
   
     NotificationApi.pushNotification(message);
+    sharedPrefs.isOpen= false;
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   print('Handling a background message ${message.messageId}');
@@ -62,7 +64,7 @@ var  _notification = FlutterLocalNotificationsPlugin();
   await di.init();
 DocumentService().initCheckPermission();
      Firebase.initializeApp();
-     NotificationApi.createNorifiacationChannel();
+    
     NotificationApi.init();
       
 
@@ -91,7 +93,10 @@ DocumentService().initCheckPermission();
 
 
 
-  runApp( AppInitializer(child: MyApp(  appLanguage: appLanguage,)));
+  runApp( RootRestorationScope(
+      restorationId: 'root', // <-- and give the resorationId
+    
+    child: AppInitializer(child: MyApp(  appLanguage: appLanguage,))));
 }
 Future backgroundHandler(RemoteMessage msg) async {
   NotificationApi.pushNotification(msg);
@@ -114,6 +119,7 @@ class MyApp extends StatelessWidget {
         builder: (context , locale , child) {
            
           return MaterialApp(
+             restorationScopeId: 'app',
             title: 'Flutter Demo',
             navigatorKey: navigatorKey,
             debugShowCheckedModeBanner: false,

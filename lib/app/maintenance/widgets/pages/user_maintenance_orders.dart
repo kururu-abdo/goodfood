@@ -58,6 +58,7 @@ var controller = Provider.of<MaintenanceController>(context);
              title: Text(translate(context, 'maintains')),
 
              actions: [
+               
 IconButton(onPressed: (){
 showModalBottomSheet(context: context,
 
@@ -67,7 +68,7 @@ shape: const RoundedRectangleBorder(
   )
 ),
  builder: (_){
-return const FilterBottomSheet();
+return const FilterBottomSheet(isMaintain: true,);
  });
 }, icon: ImageIcon(const AssetImage('assets/icons/filter2.png') ,size: 20 , 
                    

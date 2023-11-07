@@ -190,12 +190,13 @@ body: SingleChildScrollView(
                         appLocale.translate("assets"),
                        'assets/icons/financial.png',
                       () async {
+
                    const AssetsPage().launch(context);
-                  }).visible(!sharedPrefs.isMaintain),  
+                  }).visible(sharedPrefs.authList.contains("branch")),  
    Divider(height: 4, thickness: 2, color: context.dividerColor)
                       .paddingOnly(top: 16, bottom: 8)
                       
-                      .visible(!sharedPrefs.isMaintain)
+                      .visible(sharedPrefs.authList.contains("branch"))
                       
                       ,
                   mSideMenu(

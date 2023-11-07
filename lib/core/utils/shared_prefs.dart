@@ -14,7 +14,7 @@ class SharedPrefs {
   List<String> get authList => _sharedPrefs!.getStringList(AUTHLIST) ?? [];
 
   bool get isAdmin => _sharedPrefs!.getBool(ISADMIN) ?? false;
-
+  bool get isOpen => _sharedPrefs!.getBool(ISOPEM) ?? false;
   bool get isMaintain => _sharedPrefs!.getBool(ISMAINTAIN) ?? false;
  bool get isRemember => _sharedPrefs!.getBool(IS_REMEMBER) ?? false;
   String get user_name => _sharedPrefs!.getString(USER_NAME) ?? "";
@@ -45,7 +45,9 @@ class SharedPrefs {
  set isMaintain(bool value){
  _sharedPrefs!.setBool(ISMAINTAIN, value);
  }
-
+ set isOpen(bool value){
+ _sharedPrefs!.setBool(ISOPEM, value);
+ }
   set userType(String value) {
     _sharedPrefs!.setString(USER_TYPE, value);
   }

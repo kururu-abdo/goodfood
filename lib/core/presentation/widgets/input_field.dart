@@ -5,6 +5,7 @@ class BoxInputField extends StatelessWidget {
   final TextEditingController controller;
   final String placeholder;
   String? Function(String?)? validator;
+  final TextInputType? textInputType;
   final Widget? leading;
   final Widget? trailing;
   final bool password;
@@ -23,16 +24,17 @@ class BoxInputField extends StatelessWidget {
     this.trailing,
     this.trailingTapped,
     this.password = false, this.isInputAea=false,
-    this.validator
+    this.validator , this.textInputType=TextInputType.text
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       validator: validator,
+      
       controller: controller,
       style: const TextStyle(height: 1),
-       keyboardType:isInputAea!? TextInputType.multiline:null,
+       keyboardType:isInputAea!? TextInputType.multiline:   textInputType,
                       maxLines: isInputAea!?10:1,
       obscureText: password,
       decoration: InputDecoration(

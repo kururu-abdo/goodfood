@@ -12,3 +12,5 @@ const String TOKEN="user_token";
 const String ISADMIN = 'is_admin';
 const String ISMAINTAIN = 'is_admin';
 const String IS_REMEMBER = 'is_remember';
+
+const String ISOPEM = 'is_open';

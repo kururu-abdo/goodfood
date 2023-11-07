@@ -333,7 +333,7 @@ messages!.sort((a, b) => a.id!.compareTo(b.id!));
   itemScrollController!.scrollTo(
   index: messages!.length,
 
-  duration: const Duration(seconds: 2),
+  duration: const Duration(milliseconds: 100),
   curve: Curves.easeInOutCubic
   
   );
@@ -391,7 +391,7 @@ scrollToBottom(){
     itemScrollController!.scrollTo(
   index: messages!.length,
 
-  duration: const Duration(milliseconds: 800),
+  duration: const Duration(milliseconds: 100),
   curve: Curves.easeInOutCubic
   
   );

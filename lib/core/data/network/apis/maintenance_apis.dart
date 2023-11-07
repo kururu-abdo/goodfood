@@ -119,11 +119,74 @@ assets = I.map((e) => OtherAsset.fromJson(e)).toList();
 
 
 Future<void> addOrder(
-empId ,modelType,modelId, task, files , bool immedatly
+empId ,modelType,modelId, task, files ,  immedatly ,
+
+maintainType , option , walkway
    ) async {
      //
- 
+     dynamic carBody;
+if (modelType.toString().toLowerCase()=="car") {
+ if (maintainType.toString()=="1") {
+  carBody=   jsonEncode({ 
+	"forward_to":empId,
+	
+	"model_type" : modelType,
+ "model_id"   : modelId,
+  "task"      : task.toString() 
+,
+"maintain_type":maintainType,
+"files" : files ,
+'immedatly':immedatly ,
+
+});
+ }else {
+
+if (walkway!= null) {
+  
+carBody=   jsonEncode({ 
+	"forward_to":empId,
+	
+	"model_type" : modelType,
+ "model_id"   : modelId,
+  "task"      : task.toString() 
+,
+"files" : files ,
+'immedatly':immedatly ,
+"walkway":walkway,
+"maintain_type":maintainType,
+"maintain_cat":option
+});
+
+}else {
+
+carBody=   jsonEncode({ 
+	"forward_to":empId,
+	
+	"model_type" : modelType,
+ "model_id"   : modelId,
+  "task"      : task.toString() 
+,
+"files" : files ,
+'immedatly':immedatly ,
+// "walkway":walkway,
+"maintain_type":maintainType,
+"maintain_cat":option
+});
+
+}
+
+ }
+}
+
+log("CAR BODY    $carBody");
     final response = await _helper.post("maintain/add_order" ,
+
+
+
+
+modelType.toString().toLowerCase()=="car"? carBody:
+
+
    jsonEncode({ 
 	"forward_to":empId,
 	
@@ -170,6 +233,24 @@ empId ,modelType,modelId, task, files , bool immedatly
 
 
 
+  Future<MaintainenanceOrderModel> filterMaintainOrder(
+  filterParmas
+   ) async {
+  
+     //
+    final response = await _helper.get("maintain/get_submitted_orders?$filterParmas" ,
+    
+    
+    );
+    // List<MaintainenanceOrderModel> orders=[];
+    // Iterable I = response['data'];
+
+
+    return  MaintainenanceOrderModel.fromJson(response) ;
+  }
+
+
+
 Future<OrderData> getUserOrders(
 
   [
@@ -186,7 +267,7 @@ Future<OrderData> getUserOrders(
    pageUrl: 
    
    status != null?
-   nextUrl!+"&status=$status":nextUrl,
+   "${nextUrl!}&status=$status":nextUrl,
    isPaginate:  isPaginate
     
     );
@@ -196,6 +277,23 @@ OrderData.fromJson(response['data']);
     return orderData;
   }
 
+
+Future<OrderData> filterUserOrders(
+
+  filterParams
+   
+   ) async {
+     //
+    final response = await _helper.get(
+   
+      "maintain/get_order?$filterParams"   ,
+  
+    );
+   
+    var orderData=
+OrderData.fromJson(response['data']);
+    return orderData;
+  }
 
 
 

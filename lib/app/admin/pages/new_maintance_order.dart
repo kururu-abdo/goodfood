@@ -21,7 +21,10 @@ enum  ModelType{
 class MaintenanceOrder extends StatefulWidget {
   final String? modelType;
   final String? modelId;
-  const MaintenanceOrder({super.key, this.modelType, this.modelId});
+   final String? maintain_type;
+    final String? category;
+      final String? walkway;
+  const MaintenanceOrder({super.key, this.modelType, this.modelId, this.maintain_type, this.category, this.walkway});
 
   @override
   State<MaintenanceOrder> createState() => _MaintenanceOrderState();
@@ -108,38 +111,126 @@ var  images =[
         controller: _nameController,
         isInputAea: true,
         
-        placeholder: 'Task',
+        placeholder:currentLang(context) =="ar"?"المهمة":'Task',
         )
         
         ,15.height,
         
+Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+Text(currentLang(context)=="ar"?"اختار حالة الصيانة: ":"Select Order Status: ")
+,
+6.height ,
+
+Column(
+  
+  children: [
+//urgedn
+  
+Row(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+Checkbox( 
+   side: MaterialStateBorderSide.resolveWith(
+      (states) => BorderSide(width: 1.0, color: Theme.of(context).primaryColor),
+  ),
+  activeColor: Theme.of(context).primaryColor,
+  // fillColor: MaterialStateProperty.all(Theme.of(context).primaryColor),
+  value:maintenanceController.selectedMaintenanceType==0 ,
+  
+  onChanged: (value){
+if (value!) {
+  maintenanceController.setSelectedMaintenanceType(0);
+}
+},),
+const SizedBox(width: 8,),
+
+Text(currentLang(context)=="ar"?
+               "صيانة عادية":
+                "Normal"
+               
+               
+               ),
+
+  ],
+),
 
 
 
-         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
 
-             Text(
-              currentLang(context)=="ar"?
+
+
+
+
+
+Row(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+Checkbox( 
+   side: MaterialStateBorderSide.resolveWith(
+      (states) => BorderSide(width: 1.0, color: Theme.of(context).primaryColor),
+  ),
+  activeColor: Theme.of(context).primaryColor,
+  // fillColor: MaterialStateProperty.all(Theme.of(context).primaryColor),
+  value:maintenanceController.selectedMaintenanceType==1 ,
+  
+  onChanged: (value){
+if (value!) {
+  maintenanceController.setSelectedMaintenanceType(1);
+}
+},),
+const SizedBox(width: 8,),
+
+Text(currentLang(context)=="ar"?
+               "صيانة فورية":
+                "Urgent"
+               
+               
+               ),
+
+  ],
+),
+
+
+
+
+
+
+
+],)
+
+
+  ],
+),
+
+
+        //  Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   crossAxisAlignment: CrossAxisAlignment.center,
+        //   children: <Widget>[
+
+        //      Text(
+        //       currentLang(context)=="ar"?
               
-              ' : صيانة فورية':"Urgent Maintenance: ", style: const TextStyle(
-              color: Colors.black,
-              fontSize: 20.0
-            ),),
-             const SizedBox(width: 8.0,),
-            CustomSwitch(
-              // activeColor: Colors.pinkAccent,
-              value: maintenanceController.isEmediate,
-              onChanged: (value) {
-               maintenanceController.setEmdeiate(value);
-              },
-            ),
-            const SizedBox(width: 8.0,),
+        //       ' : صيانة فورية':"Urgent Maintenance: ", style: const TextStyle(
+        //       color: Colors.black,
+        //       fontSize: 20.0
+        //     ),),
+        //      const SizedBox(width: 8.0,),
+        //     CustomSwitch(
+        //       // activeColor: Colors.pinkAccent,
+        //       value: maintenanceController.isEmediate,
+        //       onChanged: (value) {
+        //        maintenanceController.setEmdeiate(value);
+        //       },
+        //     ),
+        //     const SizedBox(width: 8.0,),
             
-          ],
-        ),
+        //   ],
+        // ),
+       
+       
         // ImagePickerContainer(
         //   onSelect: (file){
         // maintenanceController.addFile(file!);
@@ -322,7 +413,11 @@ var  images =[
                 
                 
                 
-                          const SelectMaintainenaceEmpolyee().launch(context);
+                           SelectMaintainenaceEmpolyee(
+                            maintain_type: widget.maintain_type,
+category: widget.category,
+walkway: widget.walkway,
+                          ).launch(context);
                         // }
                       },
                       child:  Text(

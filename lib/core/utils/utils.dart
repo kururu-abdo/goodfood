@@ -75,6 +75,16 @@ locale
 return formattedDate;
 }
 
+String getUsaualDate(String date, [String locale="en_US"]){
+  DateTime now = DateTime.parse(date);
+var formattedDate = DateFormat('dd-MM-yyyy',
+locale
+
+)
+.format(now ,);
+
+return formattedDate;
+}
   String getFileIocn(String path){
     var ext = getFileExtenstion(path);
      if (ext.toString().contains("png")){
