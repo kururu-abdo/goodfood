@@ -131,7 +131,7 @@ class MaintainOrder {
   int? modelId;
   dynamic machines;
   String? task;
-  List<dynamic>? files;
+  List<String>? files;
   int? status;
   int? immedatly;
   String? createdAt;
@@ -160,10 +160,12 @@ class MaintainOrder {
     machines = json['machines'];
     task = json['task'];
     if (json['files'] != null) {
-      files = <dynamic>[];
+      files = <String>[];
      jsonDecode( json['files'].toString()).forEach((v) {
         files!.add(v);
       });
+    }else {
+       files = <String>[];
     }
     status = json['status'];
     immedatly = json['immedatly'];

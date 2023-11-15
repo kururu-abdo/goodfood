@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class ChatSelectionModel {
   int? code;
   List<RegionData>? regions;
@@ -134,7 +136,7 @@ class Branchs {
   int? cityId;
   int? brandId;
   String? manegers;
-  String? files;
+  List<String>? files;
   String? admins;
   String? createdAt;
   String? updatedAt;
@@ -160,7 +162,14 @@ class Branchs {
     cityId = json['city_id'];
     brandId = json['brand_id'];
     manegers = json['manegers'];
-    files = json['files'];
+    if (json['files'] != null) {
+      files = <String>[];
+     jsonDecode( json['files'].toString()).forEach((v) {
+        files!.add(v);
+      });
+    }else {
+       files = <String>[];
+    }
     admins = json['admins'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];

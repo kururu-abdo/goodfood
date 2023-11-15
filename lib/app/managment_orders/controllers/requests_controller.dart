@@ -124,10 +124,16 @@ notifyListeners();
     
 addReply =  ApiResponse.completed(response);
 
-notifyListeners();
+
 Navigator.pop(context);
  showToast(translate(context, 'successfull'), false);
 
+imageFile=null;
+imagePath=null;;
+fileDoc=null;;
+fileBase64=null;;
+filePath=null;;
+notifyListeners();
   } catch (e) {
     log(e.toString());
        addReply = ApiResponse.error('$e');

@@ -26,7 +26,9 @@ class _BranchListMeintanceState extends State<BranchListMeintance> {
   void initState() {
     // TODO: implement initState
     super.initState();
+     WidgetsBinding.instance.addPostFrameCallback((_) {
     context.read<AdminHomeController>().getBranches(context);
+     });
   }
 
   @override

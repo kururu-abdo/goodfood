@@ -1,34 +1,34 @@
 import 'dart:convert';
 
-class CarModel {
+class DepartmentAsset {
   int? id;
-  String? bordNumber;
-  String? carType;
-  String? bodyNum;
-  String? carMark;
-  int? adminId;
+  String? nameAr;
+  String? nameEn;
+  String? desAr;
+  String? desEn;
+  int? departmentId;
   List<String>? files;
   String? createdAt;
   String? updatedAt;
 
-  CarModel(
+  DepartmentAsset(
       {this.id,
-      this.bordNumber,
-      this.carType,
-      this.bodyNum,
-      this.carMark,
-      this.adminId,
+      this.nameAr,
+      this.nameEn,
+      this.desAr,
+      this.desEn,
+      this.departmentId,
       this.files,
       this.createdAt,
       this.updatedAt});
 
-  CarModel.fromJson(Map<String, dynamic> json) {
+  DepartmentAsset.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    bordNumber = json['bord_number'];
-    carType = json['car_type'];
-    bodyNum = json['body_num'];
-    carMark = json['car_mark'];
-    adminId = json['admin_id'];
+    nameAr = json['name_ar'];
+    nameEn = json['name_en'];
+    desAr = json['des_ar'];
+    desEn = json['des_en'];
+    departmentId = json['department_id'];
     if (json['files'] != null) {
       files = <String>[];
      jsonDecode( json['files'].toString()).forEach((v) {
@@ -44,11 +44,11 @@ class CarModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['bord_number'] = this.bordNumber;
-    data['car_type'] = this.carType;
-    data['body_num'] = this.bodyNum;
-    data['car_mark'] = this.carMark;
-    data['admin_id'] = this.adminId;
+    data['name_ar'] = this.nameAr;
+    data['name_en'] = this.nameEn;
+    data['des_ar'] = this.desAr;
+    data['des_en'] = this.desEn;
+    data['department_id'] = this.departmentId;
     data['files'] = this.files;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;

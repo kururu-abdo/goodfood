@@ -59,6 +59,7 @@ sharedPrefs.isLoggedIn= true;
 sharedPrefs.isAdmin= user!.data!.user!.maintain_emp!;   
 sharedPrefs.isMaintain = user!.data!.user!.maintain_emp!;
 sharedPrefs.userEmail=user!.data!.user!.email!.trim();
+sharedPrefs.userId= user!.data!.user!.id.toString();
 if (sharedPrefs.isRemember) {
   sharedPrefs.userPass= password!.trim();
 }

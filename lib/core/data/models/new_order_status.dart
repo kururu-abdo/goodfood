@@ -1,11 +1,13 @@
+import 'dart:convert';
+
 class NewOrderStatus {
   int? id;
   int? adminId;
   String? modelType;
   int? modelId;
-  Null? machines;
+ dynamic machines;
   String? task;
-  Null? files;
+  List<String>? files;
   int? status;
   int? immedatly;
   String? createdAt;
@@ -31,7 +33,14 @@ class NewOrderStatus {
     modelId = json['model_id'];
     machines = json['machines'];
     task = json['task'];
-    files = json['files'];
+   if (json['files'] != null) {
+      files = <String>[];
+     jsonDecode( json['files'].toString()).forEach((v) {
+        files!.add(v);
+      });
+    }else {
+       files = <String>[];
+    }
     status = json['status'];
     immedatly = json['immedatly'];
     createdAt = json['created_at'];

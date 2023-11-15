@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/new_maintance_order.dart';
@@ -12,7 +11,8 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class OtherAssetsListMeintance extends StatefulWidget {
-  const OtherAssetsListMeintance({ Key? key }) : super(key: key);
+  final String? deptId;
+  const OtherAssetsListMeintance({ Key? key, this.deptId }) : super(key: key);
 
   @override
   _OtherAssetsListMeintanceState createState() => _OtherAssetsListMeintanceState();
@@ -26,9 +26,13 @@ class _OtherAssetsListMeintanceState extends State<OtherAssetsListMeintance> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    // context.read<MaintenanceController>().getOtherAssets(context);
+    // });
     WidgetsBinding.instance.addPostFrameCallback((_) {
-    context.read<MaintenanceController>().getOtherAssets(context);
-    });
+    context.read<MaintenanceController>().getDepartementAssets(context , widget.deptId!);
+
+     });
   }
 
   @override
@@ -61,22 +65,22 @@ class _OtherAssetsListMeintanceState extends State<OtherAssetsListMeintance> {
         Builder(builder: (_){
 
 
-if (controller.otherAssets!.status==Status.LOADING) {
+if (controller.departmeentAssets!.status==Status.LOADING) {
   return Center(
         child: mProgress(context ,fromPage: true),
   );
 } 
-else if( controller.otherAssets!.status==Status.ERROR){
+else if( controller.departmeentAssets!.status==Status.ERROR){
 return Center(
   child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-Text(controller.otherAssets!.message!),
+Text(controller.departmeentAssets!.message!),
 const SizedBox(height: 10,) ,
 IconButton(onPressed: (){
-  controller.getOtherAssets(context);
+  controller.getDepartementAssets(context,widget.deptId!);
 }, icon:  Icon(
   Icons.refresh ,color: Theme.of(context).primaryColor,
 ))
@@ -88,19 +92,19 @@ else {
 
 return 
 
-controller.otherAssets!.data!.isEmpty?
+controller.departmeentAssets!.data!.isEmpty?
 Center(child: NoContent(currentLang(context)=="ar"?
 
 "لا توجد اصول":"No Assets"
 ),):
 
 ListView.builder(
-  itemCount: controller.otherAssets!.data!.length,
+  itemCount: controller.departmeentAssets!.data!.length,
   itemBuilder: (BuildContext context, int index) {
-        var assetData = controller.otherAssets!.data![index];
+        var assetData = controller.departmeentAssets!.data![index];
         var files = 
         assetData.files!=null?
-        jsonDecode(assetData.files!) as List:[];
+       assetData.files!:[];
         return   
         
         

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/maintenance/widgets/pages/select_maintainance_emp.dart';
 import 'package:goodfoods/core/controllers/maintenance_controller.dart';
-import 'package:goodfoods/core/presentation/widgets/custom_switch.dart';
 import 'package:goodfoods/core/presentation/widgets/image_picker_container.dart';
 import 'package:goodfoods/core/presentation/widgets/input_field.dart';
 import 'package:goodfoods/core/utils/utils.dart';
@@ -256,43 +255,65 @@ Text(currentLang(context)=="ar"?
           child: GridView.builder(
                  itemCount:  
                  
-                 maintenanceController.newOrderFiles.length
+                 maintenanceController.newOrderFiles.length+1
                  ,
                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
                  itemBuilder: (BuildContext context, int index) {
                 
                 
-                  //  if (index ==  0) {
-                  //    return Center(
-                  //      child:
+                   if (index ==    maintenanceController.newOrderFiles.length) {
+                     return Center(
+                       child:
                        
-                  //      ImagePickerContainer(
-                  //        showFiles: true, 
-                  //        showRounded: true,
-                  //        onSelect: (file, isImage){
-                  //             maintenanceController.addFile(file!);
-                  //      },)
-                  //     //   AddUserButton(
+                       ImagePickerContainer(
+                         showFiles: true, 
+                         showRounded: true,
+                         onSelect: (file, isImage){
+                              maintenanceController.addFile(file!);
+                       },)
+                      //   AddUserButton(
                                
-                  //     //          onSelect: (file){
-                  //     //          maintenanceController.addFile(file!);
-                  //     //            },
+                      //          onSelect: (file){
+                      //          maintenanceController.addFile(file!);
+                      //            },
                                
-                  //     //  ),
-                  //    );
-                  //  }
+                      //  ),
+                     );
+                   }
           var e =maintenanceController.newOrderFiles[index];
               return          Card(
             clipBehavior: Clip.antiAlias,
             
             child: Stack(
               children: <Widget>[
+                (
+                  
+                  getFileExtenstion(e.path!)==".png"
+                
+||                  getFileExtenstion(e.path!)==".jpg"||
+                                  getFileExtenstion(e.path!)==".jpeg"
+                                  ||
+  getFileExtenstion(e.path!)==".PNG"
+  ||
+  getFileExtenstion(e.path!)==".JPEG"
+  ||
+  getFileExtenstion(e.path!)==".JPG"
+                )?
                Image.file(
                  File(e.path!),
                   // 'assets/images/logo.png',
                   width: 100,
                   height: 100,
-                ),
+                )
+                :
+                  Image.asset(
+                getFileIocn(e.path!),
+                  // 'assets/images/logo.png',
+                  width: 100,
+                  height: 100,
+                )
+                
+                ,
                 Positioned(
                   right: 5,
                   top: 5,

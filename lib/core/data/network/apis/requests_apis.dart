@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:goodfoods/app/managment_orders/models/management_order.dart';
 import 'package:goodfoods/core/data/network/api_base_helper.dart';
@@ -56,6 +57,16 @@ Future<dynamic> addReuestReply(
 String extension
    ) async {
      //
+     log(
+       
+       jsonEncode({
+    
+	"replay":reply ,
+  "file" :image ,
+"extention" : extension
+
+     })
+     );
     final response = await _helper.post(
       
       "request/add_replay/$order" ,

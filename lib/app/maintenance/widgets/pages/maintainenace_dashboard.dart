@@ -324,12 +324,16 @@ return const FilterBottomSheet(
          Center(child: NoContent(translate(context, "no_maintain_orders")),):
          
          ListView.builder(
-           itemCount: controller.adminOrders.length+1, //logical
+           itemCount:
+           controller.adminOrders.length>1?
+           
+           
+            controller.adminOrders.length+1:   controller.adminOrders.length, //logical
            itemBuilder: (BuildContext context, int index) {
         
              // var files = jsonDecode(carData.files!) as List;
              
-             
+            //  return const ListTile();
               if (index==controller.adminOrders.length
              
              && controller.maintainOrders!.data!.data!.nextPageUrl !=null
@@ -347,29 +351,37 @@ controller.getMaintainOrdersPaginate(context, controller.maintainOrders!.data!.d
              
         
                   else {
-                var i =index==0?0: index==controller.adminOrders.length?  index-1:index;
+               var i =index==0?0: index==controller.adminOrders.length?  index-1:index;
                   var orderData = controller.adminOrders[i];  //logical  
-              return  OrderWidget(to: const ['Samani' ,'Husam']  , 
+              return  OrderWidget(
+                orderMapper: orderData,
+//                 to: const ['Samani' ,'Husam']  , 
                  
-                 from:sharedPrefs.user_name,
-                 to2: orderData.forwardTo!.admin!.name,
-                 fileLink: 'a.com',
-                 orderId: orderData.forwardTo!.maintainId!.toString(),
-                 date: orderData.createdAt,
-                 orderTitle: 'maintanenace machine x',
-         files: orderData.files,
+//                  from:sharedPrefs.user_name,
+//                  to2: orderData.forwardTo!.admin!.name,
+//                  fileLink: 'a.com',
+//                  subnittedOrder: orderData.forwardTo!.maintainId! ,
+//  maintainStatus: orderData.status,
+//                  OrderStatus: orderData.forwardTo!.confirmed,
+//                  orderUserId: orderData.adminId!.toString(),
+//                  modelType: orderData.modelType,
+
+//                  orderId: orderData.id.toString(),
+//                  date: orderData.createdAt,
+//                  orderTitle: 'maintanenace machine x',
+//          files: orderData.files,
          
-                 task: orderData.task!,
-                 orderDate: 
-                 getMaintenanceFormattedDate(
-            orderData.createdAt!
-                 )
+//                  task: orderData.task!,
+//                  orderDate: 
+//                  getMaintenanceFormattedDate(
+//             orderData.createdAt!
+//                  )
                  
                  
-                 // '12-10-2023'
-                 ,
-                 status: orderData.status,
-                 confirmed: orderData.forwardTo!.confirmed,
+//                  // '12-10-2023'
+//                  ,
+//                  status: orderData.status,
+//                  confirmed: orderData.forwardTo!.confirmed,
                  );
              
               }
@@ -492,7 +504,9 @@ controller.getMaintainOrdersPaginate(context, controller.maintainOrders!.data!.d
          ,
          backgroundColor: Theme.of(context).primaryColor,
          child: const Icon(Icons.add ,color: Colors.white,),
-         ).visible(
+         )
+         
+         .visible(
            sharedPrefs.authList.contains("branch")
          ),
       ),

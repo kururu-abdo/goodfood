@@ -133,7 +133,7 @@ int selectedOptions=-1;
   Widget build(BuildContext context) {
     List options2 =[{
   "title":
-  currentLang(context)=="ar"?"الاقسامح":
+  currentLang(context)=="ar"?"الاقسام":
   'Departments' ,  "key":"departments"   } ,{
   "title":
    currentLang(context)=="ar"?"الفروع":

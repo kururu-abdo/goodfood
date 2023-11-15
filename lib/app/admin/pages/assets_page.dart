@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:goodfoods/app/admin/pages/chat_page.dart';
 import 'package:goodfoods/app/assets/view/pages/cars_page.dart';
-import 'package:goodfoods/app/assets/view/pages/maintainace_type.dart';
 // import 'package:goodfoods/app/assets/view/pages/cars_page.dart';
-import 'package:goodfoods/app/assets/view/pages/other_assets_page.dart';
 import 'package:goodfoods/app/assets/view/pages/region_list.dart';
 import 'package:goodfoods/app/help/view/pages/help_page.dart';
+import 'package:goodfoods/app/maintenance/widgets/pages/dept_list_maintainance.dart';
 import 'package:goodfoods/core/utils/utils.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -30,7 +28,7 @@ class _AssetsPageState extends State<AssetsPage> {
           actions: [
             IconButton(onPressed: (){
     // const ChagePage().launch(context);
-    HelpPage().launch(context);
+    const HelpPage().launch(context);
             }, icon: const ImageIcon(AssetImage('assets/icons/headset.png')))
           ,
             // IconButton(onPressed: (){
@@ -138,15 +136,15 @@ Card(
              crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-               Image.asset("assets/icons/financial.png"
+               Image.asset("assets/icons/dept.png"
              ,color: Colors.white,
              
              height: 50,width: 50,
              
              ),
               Text(
-                currentLang(context)=="ar"?"الاصول الاخرى":
-                "Other Assets",
+                currentLang(context)=="ar"?"الادارات":
+                "Deparments",
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   
@@ -158,7 +156,7 @@ Card(
         ),
       ).onTap((){
 
-        const OtherAssetsPage().launch(context);
+        const DepartmentListMaintanance().launch(context);
       })
   
   

@@ -1,9 +1,12 @@
+
 import 'package:flutter/material.dart';
 import 'package:goodfoods/core/controllers/maintenance_controller.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
 import 'package:goodfoods/core/presentation/widgets/progress.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
+import 'package:goodfoods/core/services/document_service.dart';
 import 'package:goodfoods/core/utils/utils.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class OrderRecords extends StatefulWidget {
@@ -95,11 +98,169 @@ var locale = AppLocalizations.of(context);
                 
                 
                 
-                
+                e.fileUrl!= null?
+
+
+
                    Center(
-                    child: SizedBox(
+                    child: Container(
+                      margin: const EdgeInsets.only(
+          bottom: 10 , left: 10 ,right: 10,
+          top: 10
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: 8 ,horizontal: 15
+        ),
+                      decoration: const BoxDecoration(
+color: Colors.white,
+
+                          boxShadow: [
+      BoxShadow(
+      color: Color(0xffDDDDDD),
+      blurRadius: 2.0,
+      spreadRadius: 1.0,
+      offset: Offset(0.0, 3.0),
+      )
+      ],
+                      ),
                     width: 316,
-                    height: 108,
+                    // height: 108,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+    
+    
+                         Text(
+                           '${e.name}',
+                           style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    height: 0,
+                           ),
+                         )
+                          
+                          ,
+    
+                            Text(
+    
+                          getMaintenanceFormattedDate(e.createdAt!,
+                          
+                          locale!.locale.languageCode=="ar"?
+                          "ar":"en_US"
+                          )
+                          // 'Monday 20/10'
+                          ,
+                          style: const TextStyle(
+                    color: Color(0xFF7A7979),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    height: 0,
+                          ),
+                        ),
+    
+                        
+                          
+                          ],
+                        ),
+    const SizedBox(height: 10,),
+    
+                         SizedBox(
+                           width: 309,
+                          //  height: 84,
+                           child: Text(
+                    '${e.des}',
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.justify,
+                    maxLines: 3,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      
+                      
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+    
+                      height: 0,
+                    ),
+                           ),
+                         ),
+
+
+
+
+                (  getFileExtenstion(e.fileUrl!)==".png"
+                
+||                  getFileExtenstion(e.fileUrl!)==".jpg"||
+                                  getFileExtenstion(e.fileUrl!)==".jpeg"
+                                  ||
+  getFileExtenstion(e.fileUrl!)==".PNG"
+  ||
+  getFileExtenstion(e.fileUrl!)==".JPEG"
+  ||
+  getFileExtenstion(e.fileUrl!)==".JPG"
+                )?
+               Image.network(
+              
+                
+                 "https://goodfoodsa.co${  e.fileUrl!}"
+                ,
+                  // 'assets/images/logo.png',
+                  width: 50,
+                  height: 50,
+                ).onTap(
+                             
+                             ()async{
+                                  log("OPEN");
+                                 await DocumentService().initPlatformState(e.fileUrl);
+                             }
+                           )
+                :
+                  Image.asset(
+                getFileIocn(e.fileUrl!),
+                  // 'assets/images/logo.png',
+                  width: 50,
+                  height: 50,
+                ).onTap(
+                             
+                             ()async{
+                                  log("OPEN");
+                                 await DocumentService().initPlatformState(e.fileUrl);
+                             }
+                           )
+                
+
+
+
+                      ],
+                    ),
+                  ),
+                  )
+              :
+
+
+                   Center(
+                    child:Container(  margin: const EdgeInsets.only(
+          bottom: 10 , left: 10 ,right: 10,
+          top: 10
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: 8 ,horizontal: 15
+        ),
+                      decoration: const BoxDecoration(
+color: Colors.white,
+                          boxShadow: [
+      BoxShadow(
+      color: Color(0xffDDDDDD),
+      blurRadius: 2.0,
+      spreadRadius: 1.0,
+      offset: Offset(0.0, 3.0),
+      )
+      ],
+                      ),
+                      
+                    width: 316,
                     child: Column(
                       children: [
                         Row(

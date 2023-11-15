@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:goodfoods/app/maintenance/model/asset_info.dart';
 import 'package:goodfoods/app/maintenance/model/details_mapper.dart';
 import 'package:goodfoods/app/order/model/admin_order_details.dart';
 import 'package:goodfoods/app/order/model/maintain_order_details.dart';
 import 'package:goodfoods/app/order/model/order_data.dart';
+import 'package:goodfoods/app/order/model/order_mapper.dart';
 import 'package:goodfoods/app/success/view/pages/success.dart';
 import 'package:goodfoods/core/controllers/app_state.dart';
 import 'package:goodfoods/core/data/models/branch_asset.dart';
@@ -12,6 +14,8 @@ import 'package:goodfoods/core/data/models/branch_model.dart';
 import 'package:goodfoods/core/data/models/car_model.dart';
 import 'package:goodfoods/core/data/models/city_model.dart';
 import 'package:goodfoods/core/data/models/department.dart';
+import 'package:goodfoods/core/data/models/department_asset.dart';
+import 'package:goodfoods/core/data/models/deprtment_model.dart';
 import 'package:goodfoods/core/data/models/file_model.dart';
 import 'package:goodfoods/core/data/models/mainenance_order_model.dart';
 import 'package:goodfoods/core/data/models/maintain_model.dart';
@@ -19,6 +23,7 @@ import 'package:goodfoods/core/data/models/other_asset_model.dart';
 import 'package:goodfoods/core/data/models/record_model.dart';
 import 'package:goodfoods/core/data/models/region_model.dart';
 import 'package:goodfoods/core/data/models/skin_model.dart';
+import 'package:goodfoods/core/data/models/upload_file_model.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
 import 'package:goodfoods/core/data/network/apis/common_apis.dart';
 import 'package:goodfoods/core/data/network/apis/maintenance_apis.dart';
@@ -46,6 +51,8 @@ String filterLink='';
 
   bool isEmediate=false;
 ApiResponse<List<RegionModel>>?  regions = ApiResponse.completed([]);
+ApiResponse<List<DepartmentModel>>?  departments2 = ApiResponse.completed([]);
+ApiResponse<List<DepartmentAsset>>?  departmeentAssets = ApiResponse.completed([]);
 
 
 ApiResponse<List<CarModel>>?  cars = ApiResponse.completed([]);
@@ -58,6 +65,8 @@ ApiResponse<List<BranchAsset>>?  branchAssets = ApiResponse.completed([]);
 ApiResponse<List<MaintainModel>>?  maintenanceEmployees = ApiResponse.completed([]);
 ApiResponse<void>?  newOrder = ApiResponse.completed({});
 ApiResponse<void>?  updateOrder = ApiResponse.completed({});
+String? orderIdToAccept;
+ApiResponse<void>?  closingOrderResponse = ApiResponse.completed({});
 
 ApiResponse<List<RecordModel>>?  orderRecorders = 
 ApiResponse.completed([]);
@@ -68,12 +77,14 @@ ApiResponse<List<CityModel>>?  cities = ApiResponse.completed([]);
 
 
 ApiResponse<MaintainenanceOrderModel>?  maintainOrders = ApiResponse.completed(null);
-List<AdminOrderData2> adminOrders=[];
+List<OrderMapper> adminOrders=[];
 
 
 ApiResponse<MaintainenanceOrderModel>?  maintainOrdersPaginate = 
 ApiResponse.completed(null);
 
+ApiResponse<void>?  addRecordStatus = 
+ApiResponse.completed(null);
 
 ApiResponse<OrderData>?  userOrders = 
 ApiResponse.completed(null);
@@ -81,14 +92,99 @@ ApiResponse.completed(null);
 
 ApiResponse<OrderData>?  userOrderPaginate = 
 ApiResponse.completed(null);
-List<UserOrder> userOrdersData = [];
+List<OrderMapper> userOrdersData = [];
 // List<Space> spaces = [];
 String? selectedStatus;
 String? selectedModel;
 
 
+List<UploadFile> closeOrderFiles = [];
 
 
+UploadFile? recordFile;
+File? imageFile;
+String? imagePath;
+File? fileDoc;
+String? fileBase64;
+String? filePath;
+String? base64Image;
+setImage(String data){
+  imageFile= File(data);
+  base64Image= getBase64(data);
+  imagePath =data;
+  notifyListeners();
+
+  clearFile();
+}
+setRecordFile(String? data ){
+  var  file= File(data!);
+  var filetobase64= getBase64(data);
+  log("PATH    ${file.path}");
+  // imagePath =data;
+ recordFile=
+    UploadFile( 
+      
+      path: file.path,
+      extension: getFileExtenstion(file.path) , fileBase64: filetobase64);
+
+  notifyListeners();
+}
+removeRecordFile(){
+  recordFile=
+    null;
+
+  notifyListeners();
+}
+
+
+
+addCloseOrderFile(String data){
+ var  file= File(data);
+  var filetobase64= getBase64(data);
+  log("PATH    ${file.path}");
+  // imagePath =data;
+  closeOrderFiles.add( 
+    UploadFile( 
+      
+      path: file.path,
+      extension: getFileExtenstion(file.path) , fileBase64: filetobase64)
+  );
+
+  notifyListeners();
+}
+removeCloseOrderFile(String hasCode){
+ log(hashCode);
+  closeOrderFiles.removeWhere( 
+    (file)=> file.path==hasCode
+  );
+  
+  notifyListeners();
+}
+
+
+
+setFile(String data){
+fileDoc= File(data);
+fileBase64=getBase64(data);
+filePath=data;
+notifyListeners();
+removeImage();
+}
+setOrderAccept(String id){
+  orderIdToAccept= id;
+  notifyListeners();
+}
+removeImage(){
+  imageFile= null;
+  base64Image= null;
+  notifyListeners();
+}
+clearFile(){
+  fileDoc= null;
+  fileBase64= null;
+
+  notifyListeners();
+}
 ApiResponse<OrderDetailMapper>?  orderDetailsMapper = 
 ApiResponse.completed(null);
 
@@ -164,8 +260,8 @@ List<Map>  perioicList =[
 
 
   {
-"en":"Oil",
-"ar":"زيت" ,
+"en":"change oil",
+"ar":"تغيير زيت" ,
 "id":0
   },
  {
@@ -248,16 +344,16 @@ if (selectedStatus!=null) {
   filterLink='${filterLink}status=$selectedStatus&';
 }
 if (startDate!=null) {
-    filterLink='${filterLink}start_date=$startDate&';
+    filterLink='${filterLink}start_date=${     getUsaualDate(startDate!.toString())}&';
 
 }
 
 if (endDate!=null) {
-    filterLink='${filterLink}end_date=$endDate&';
+    filterLink='${filterLink}end_date=${     getUsaualDate(endDate!.toString())}&';
 
 }
 if (selectedModel!=null) {
-    filterLink='${filterLink}model_type=$selectedModel&';
+    filterLink='${filterLink}model_type=$selectedModel';
 
 }
 
@@ -487,6 +583,68 @@ notifyListeners();
 }
 
 
+
+
+
+
+
+
+
+Future<void> getDepartements(BuildContext context ,
+
+)async{
+   departments2 = ApiResponse.loading('loading');
+
+isBusy= true;
+
+  try {
+    var  response = await MaintenanceApis().getDepartments2();
+
+
+
+    departments2=ApiResponse.completed(response);
+  } catch (e) {
+       departments2 = ApiResponse.error('$e');
+notifyListeners();
+
+  }finally{
+      isBusy= false; 
+  }
+}
+
+
+
+
+Future<void> getDepartementAssets(BuildContext context ,
+String dept
+)async{
+   departmeentAssets = ApiResponse.loading('loading');
+
+isBusy= true;
+
+  try {
+    var  response = await MaintenanceApis().getDepartmentAssets(dept);
+
+
+
+    departmeentAssets=ApiResponse.completed(response);
+  } catch (e) {
+       departmeentAssets = ApiResponse.error('$e');
+notifyListeners();
+
+  }finally{
+      isBusy= false; 
+  }
+}
+
+
+
+
+
+
+
+
+
 addFile(File file){
 var base64 = getBase64(file.path);
 var fileName = getFileName(file.path);
@@ -518,16 +676,21 @@ addOrder(BuildContext context ,  maintainType , option , walkway)async{
 ).toString());
      log(task.toString());
 var response = await MaintenanceApis().addOrder(
-  maintainModel!.id.toString(), modelType, modelId, task, getFiles(
+  maintainModel!.id.toString(), modelType, modelId, task,
+   getFiles(
   newOrderFiles , 
 ) ,  selectedMaintenanceType , maintainType ,option, walkway);
   newOrder =ApiResponse.completed({});
   notifyListeners();
     const Success().launch(context , isNewTask: true);
+   newOrderFiles=[];
+   
+    
   } catch (e) {
     log("add order $e");
     newOrder =ApiResponse.error(e.toString());
   }finally{
+
     notifyListeners();
   }
 }
@@ -626,7 +789,39 @@ notifyListeners();
 
 
     maintainOrders=ApiResponse.completed(response);
-    adminOrders.addAll(maintainOrders!.data!.data!.data!);
+   List<OrderMapper> data=[]; 
+for (var item in maintainOrders!.data!.data!.data!) {
+  data.add(
+    OrderMapper(
+        orderCreaterId: item.adminId!.toString() ,
+        fromMe: sharedPrefs.user_id== item.adminId.toString(),
+          confirmd:item.forwardTo!.confirmed,
+      
+  orderId:item.id,
+ maintainOrderId:item.forwardTo!.maintainId , 
+
+  createrName:   '',
+
+   forwardToId:item.adminId.toString(),
+  forwardToName:item.forwardTo!.admin!.name,
+  status:item.status,
+ 
+   immediately:item.immedatly,
+  files:  item.files,
+  modelType:item.modelType,
+  modelId: item.modelId.toString(),
+ task:item.task,
+ orderDate:item.forwardTo!.createdAt,
+   records: [],
+    )
+  );
+}
+
+
+
+
+
+    adminOrders.addAll(data);
     log('DOTAT');
     notifyListeners();
   } catch (e) {
@@ -655,7 +850,41 @@ notifyListeners();
 
 
     maintainOrders=ApiResponse.completed(response);
-    adminOrders.addAll(maintainOrders!.data!.data!.data!);
+
+
+List<OrderMapper> data=[]; 
+for (var item in maintainOrders!.data!.data!.data!) {
+  data.add(
+    OrderMapper(
+        orderCreaterId: item.adminId!.toString() ,
+        fromMe: sharedPrefs.user_id== item.adminId.toString(),
+          confirmd:item.forwardTo!.confirmed,
+      
+  orderId:item.id,
+ maintainOrderId:item.forwardTo!.maintainId , 
+
+  createrName:   '',
+
+   forwardToId:item.adminId.toString(),
+  forwardToName:item.forwardTo!.admin!.name,
+  status:item.status,
+ 
+   immediately:item.immedatly,
+  files:  item.files,
+  modelType:item.modelType,
+  modelId: item.modelId.toString(),
+ task:item.task,
+ orderDate:item.forwardTo!.createdAt,
+   records: [],
+    )
+  );
+}
+
+
+
+
+
+    adminOrders.addAll(data);
     log('DOTAT');
     notifyListeners();
   } catch (e) {
@@ -686,7 +915,39 @@ notifyListeners();
 
     maintainOrdersPaginate=ApiResponse.completed(response);
     maintainOrders=maintainOrdersPaginate;
-    adminOrders.addAll(maintainOrders!.data!.data!.data!);
+  List<OrderMapper> data=[]; 
+for (var item in maintainOrders!.data!.data!.data!) {
+  data.add(
+    OrderMapper(
+        orderCreaterId: item.adminId!.toString() ,
+        fromMe: sharedPrefs.user_id== item.adminId.toString(),
+          confirmd:item.forwardTo!.confirmed,
+      
+  orderId:item.id,
+ maintainOrderId:item.forwardTo!.maintainId , 
+
+  createrName:   '',
+
+   forwardToId:item.adminId.toString(),
+  forwardToName:item.forwardTo!.admin!.name,
+  status:item.status,
+ 
+   immediately:item.immedatly,
+  files:  item.files,
+  modelType:item.modelType,
+  modelId: item.modelId.toString(),
+ task:item.task,
+ orderDate:item.forwardTo!.createdAt,
+   records: [],
+    )
+  );
+}
+
+
+
+
+
+    adminOrders.addAll(data);
     notifyListeners();
   } catch (e) {
        maintainOrdersPaginate = ApiResponse.error('$e');
@@ -732,7 +993,37 @@ notifyListeners();
 
 
     userOrders=ApiResponse.completed(response , );
-    userOrdersData.addAll(userOrders!.data!.data!);
+List<OrderMapper> data=[]; 
+for (var item in userOrders!.data!.data!) {
+  data.add(
+
+    OrderMapper(
+        orderCreaterId: item.maintainOrder!.admin!.name ,
+        fromMe: sharedPrefs.user_id== item.maintainOrder!.adminId.toString(),
+          confirmd:item.confirmed,
+      
+  orderId:item.id,
+ maintainOrderId:item.maintainOrder!.id , 
+
+  createrName:   item.maintainOrder!.admin!.name,
+
+   forwardToId:item.adminId.toString(),
+  forwardToName:'',
+  status:item.maintainOrder!.status,
+ 
+   immediately:item.maintainOrder!.immedatly,
+  files:  item.maintainOrder!.files,
+  modelType:item.maintainOrder!.modelType.toString(),
+  modelId: item.maintainOrder!.modelId.toString(),
+ task:item.maintainOrder!.task.toString(),
+ orderDate:item.createdAt,
+   records: [],
+    )
+  
+  );
+}
+
+    userOrdersData.addAll(data);
     // notifyListeners();
   } catch (e) {
        userOrders = ApiResponse.error('$e');
@@ -767,9 +1058,42 @@ notifyListeners();
 
 
     userOrders=ApiResponse.completed(response , );
-    userOrdersData.addAll(userOrders!.data!.data!);
+    List<OrderMapper> data=[]; 
+for (var item in userOrders!.data!.data!) {
+  log('USER FILER NO PROBLEM 1');
+  data.add(
+    OrderMapper(
+        orderCreaterId: item.maintainOrder!.admin!.name ,
+        fromMe: sharedPrefs.user_id== item.adminId.toString(),
+          confirmd:item.confirmed,
+      
+  orderId:item.id,
+ maintainOrderId:item.maintainOrder!.id , 
+
+  createrName:   item.maintainOrder!.admin!.name,
+
+   forwardToId:item.adminId.toString(),
+  forwardToName:'',
+  status:item.maintainOrder!.status,
+ 
+   immediately:item.maintainOrder!.immedatly,
+  files:  item.maintainOrder!.files!,
+  modelType:item.maintainOrder!.modelType,
+  modelId: item.maintainOrder!.modelId.toString(),
+ task:item.maintainOrder!.task,
+ orderDate:item.createdAt,
+   records: [],
+    )
+  );
+}
+
+   log('USER FILER NO PROBLEM');
+
+
+    userOrdersData.addAll(data);
     // notifyListeners();
   } catch (e) {
+    log('USER FILER$e');
        userOrders = ApiResponse.error('$e');
 notifyListeners();
 showToast(e.toString(), true);
@@ -790,6 +1114,7 @@ String nextUrl,
 String?  status
   }
 )async{
+
    userOrderPaginate = ApiResponse.loading('loading');
 notifyListeners();
   try {
@@ -797,15 +1122,44 @@ notifyListeners();
     
     MaintenanceApis().getUserOrders(
       nextUrl,
-      true ,   status);
+      true ,   null);
 
 
 
     userOrderPaginate=ApiResponse.completed(response , );
     userOrders =userOrderPaginate;
-    userOrdersData.addAll(userOrderPaginate!.data!.data!);
+    List<OrderMapper> data=[]; 
+for (var item in userOrders!.data!.data!) {
+  data.add(
+    OrderMapper(
+        orderCreaterId: item.maintainOrder!.admin!.name ,
+        fromMe: sharedPrefs.user_id== item.adminId.toString(),
+          confirmd:item.confirmed,
+      
+  orderId:item.id,
+ maintainOrderId:item.maintainOrder!.id , 
+
+  createrName:   item.maintainOrder!.admin!.name,
+
+   forwardToId:item.adminId.toString(),
+  forwardToName:'',
+  status:item.maintainOrder!.status,
+ 
+   immediately:item.maintainOrder!.immedatly,
+  files:  item.maintainOrder!.files,
+  modelType:item.maintainOrder!.modelType,
+  modelId: item.maintainOrder!.modelId.toString(),
+ task:item.maintainOrder!.task,
+ orderDate:item.createdAt,
+   records: [],
+    )
+  );
+}
+    userOrdersData.addAll(data);
     // notifyListeners();
   } catch (e) {
+    log(
+      "USER PAGINATED  $e");
        userOrderPaginate = ApiResponse.error('$e');
 notifyListeners();
 showToast(e.toString(), true);
@@ -857,25 +1211,31 @@ Future<void> addRecord(
   BuildContext context ,
 
 String orderId ,
-String desc
+String desc ,
+file , extension
 )async{
-
+addRecordStatus= ApiResponse.loading('loading');
 notifyListeners();
   try {
     var  response = await 
     
     MaintenanceApis().addRecord(sharedPrefs.user_id,
-     orderId, desc);
+     orderId, desc, file , extension);
 
 
+await
+getOrderRecord(context, orderId);
 
-    // notifyListeners();
+recordFile=null;
+    notifyListeners();
+    
   } catch (e) {
 notifyListeners();
 showToast(e.toString(), true);
   }finally{
       isBusy= false; 
-
+addRecordStatus= ApiResponse.completed('loading');
+notifyListeners();
       notifyListeners();
   }
 }
@@ -917,6 +1277,37 @@ showToast(e.toString(), true);
 
 
 
+
+
+Future<void> closingOrder(
+  BuildContext context ,
+
+String orderId ,
+)async{
+
+notifyListeners();
+  try {
+    var  response = await 
+    
+    MaintenanceApis().confrimOrder(orderId);
+
+showToast(
+  
+  currentLang(context)=="ar"?
+  "تم تأكيد الطلب":
+  
+  'Order Confimed Successfully', false);
+
+    // notifyListeners();
+  } catch (e) {
+notifyListeners();
+showToast(e.toString(), true);
+  }finally{
+      isBusy= false; 
+
+      notifyListeners();
+  }
+}
 
 
 
@@ -965,19 +1356,22 @@ Future<void> changeOrderStatus(
 
 
 String orderId ,
-String status
+String status ,
+List<UploadFile> files
 )async{
 
 notifyListeners();
   try {
     var  response = await 
     
-    MaintenanceApis().changeOrderStatus(orderId, status);
+    MaintenanceApis().changeOrderStatus(orderId, status  ,  files);
 
 showToast(
   
   currentLang(context)=="ar"?"تم تغيير حالة الطلب":
   'Status changed successfully', false);
+
+  getOrderDetails(!sharedPrefs.isMaintain, orderId);
 
     // notifyListeners();
   } catch (e) {
@@ -985,7 +1379,8 @@ notifyListeners();
 showToast(e.toString(), true);
   }finally{
       isBusy= false; 
-
+clearFile();
+removeImage();
       notifyListeners();
   }
 }
@@ -1004,36 +1399,76 @@ Future<void> getOrderDetails(
 
 try {
   
-if (isAdmin) {
-  var response = await MaintenanceApis().getOrderDetails("maintain/get_admin_order/$modelId");
+if (!isAdmin) {
+  var response = await MaintenanceApis().
+  getOrderDetails("maintain/get_admin_order/$modelId");
 log(response['data'].toString());
  var adminOrder= AdminOrderDetails.fromJson(response);
 
+
  orderDetailsMapper = ApiResponse.completed(
-   OrderDetailMapper(orderId: adminOrder.data!.maintainId.toString(),
+   OrderDetailMapper(
+
+     maintainStats: adminOrder.data!.maintainOrder!.status.toString(),
+    
+     orderStatus: adminOrder.data!.maintainOrder!.status.toString(),
+     submittedOrder: adminOrder.data!.maintainId.toString() ,
+     
+modelType: adminOrder.data!.maintainOrder!.modelType,
+
+
+orderUserId: adminOrder.data!.adminId!.toString(),
+     orderId: adminOrder.data!.maintainId.toString(),
     confirmed: adminOrder.data!.confirmed,
-    task: adminOrder.data!.maintainOrder!.task, from: adminOrder.data!.admin!.name ,
+    task: adminOrder.data!.maintainOrder!.task,
+     from: adminOrder.data!.maintainOrder!.admin!.name ,
     status: adminOrder.data!.maintainOrder!.status.toString(),
-     to: sharedPrefs.user_name,
+     to: adminOrder.data!.admin!.name!,
+
      date: adminOrder.data!.createdAt, file: 
-     adminOrder.data!.maintainOrder!.files)
+     adminOrder.data!.maintainOrder!.files ,  
+     
+     maintainanceAsset: MaintainanceAsset.makeAsset(adminOrder.data!.maintainOrder!.model!.toJson(), 
+     adminOrder.data!.maintainOrder!.modelType!)
+     
+     )
  );
 
 }else {
-  var response = await MaintenanceApis().getOrderDetails("maintain/show_submitted_order/$modelId");
+  var response = await MaintenanceApis().
+  getOrderDetails("maintain/show_submitted_order/$modelId");
 log(response['data'].runtimeType.toString());
 log("NO PROBLEM");
   var userOrder =
    MaintainOrderDetails.fromJson(response);
 
  orderDetailsMapper = ApiResponse.completed(
-   OrderDetailMapper(orderId: userOrder.data!.id.toString(),
+   
+   OrderDetailMapper(
+     
+      maintainStats: userOrder.data!.status.toString(),
+     orderStatus: userOrder.data!.status.toString().toString(),
+     submittedOrder: userOrder.data!.forwardTo!.maintainId.toString() ,
+modelType: userOrder.data!.modelType,
+
+orderUserId: userOrder.data!.forwardTo!.adminId!.toString(),
+     
+     
+     
+     
+     
+     orderId: userOrder.data!.id.toString(),
     confirmed: userOrder.data!.forwardTo!.confirmed,
     task: userOrder.data!.task, from: userOrder.data!.forwardTo!.admin!.name ,
       status: userOrder.data!.status.toString(),
-     to: sharedPrefs.user_name,
+     to:userOrder.data!.forwardTo!.admin!.name,
      date: userOrder.data!.createdAt, file: 
-     userOrder.data!.files)
+     userOrder.data!.files, 
+     
+     
+       maintainanceAsset: MaintainanceAsset.makeAsset(userOrder.data!.model!.toJson(), 
+     userOrder.data!.modelType!)
+     )
  );
 }
 notifyListeners();

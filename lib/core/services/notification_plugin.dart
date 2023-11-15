@@ -258,7 +258,7 @@ static selectNotification(String payload) async {
   Navigator.of(main.navigatorKey.currentContext!).push(
     MaterialPageRoute(builder: (_)=> OrderDetails(
       orderId: id,
-      isAdmin: !sharedPrefs.isAdmin ,
+      isMaintain: sharedPrefs.isMaintain ,
       isFromNotificaiton: true,
     ))
   );

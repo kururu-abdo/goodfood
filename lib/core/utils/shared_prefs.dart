@@ -27,6 +27,9 @@ class SharedPrefs {
  set userEmail(String email){
  _sharedPrefs!.setString(USER_EMAIL, email);
  }
+  set userId(String email){
+ _sharedPrefs!.setString(USER_ID, email);
+ }
  set userPass(String pass){
  _sharedPrefs!.setString(USER_PASS, pass);
  }

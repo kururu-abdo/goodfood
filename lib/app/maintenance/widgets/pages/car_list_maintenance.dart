@@ -105,7 +105,7 @@ Center(child: NoContent(translate(context, "no_cars")),):
   itemCount: controller.cars!.data!.length,
   itemBuilder: (BuildContext context, int index) {
     var carData = controller.cars!.data![index];
-    var files = jsonDecode(carData.files!) as List;
+    var files =carData.files! as List;
     return
     
        Container(

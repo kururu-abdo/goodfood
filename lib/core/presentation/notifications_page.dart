@@ -295,7 +295,7 @@ log("$modelName\n$modelId");
   Navigator.of(context).push(
     MaterialPageRoute(builder: (_)=> OrderDetails(
       orderId: id,
-      isAdmin: !sharedPrefs.isAdmin ,
+      isMaintain: sharedPrefs.isMaintain ,
       isFromNotificaiton: true,
     ))
   );

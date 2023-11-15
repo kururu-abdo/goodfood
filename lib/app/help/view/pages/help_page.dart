@@ -20,6 +20,7 @@ TextEditingController();
 var formKey =GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+
         var controller = Provider.of<HelpController>(context);
 
     return  Scaffold(
@@ -60,10 +61,68 @@ Form(
 
 Padding(
   padding: const EdgeInsets.all(8.0),
-  child:   Column(
+  child:   Column(  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                   
-                                  
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    // mainAxisSize: MainAxisSize.min,
+                                    children: [
+Text(currentLang(context)=="ar"?"نوع المشكلة: ":"Issue Type: "),
+5.height,
+
+PopupMenuButton(
+          onSelected: (value) {
+            // your logic
+            controller.setSelectedIssue(value);
+          },
+          itemBuilder: (BuildContext bc) {
+            return 
+            controller.issueTypes.map((e) =>   PopupMenuItem(
+                value: e['value'],
+                child:Text(currentLang(context)=="ar"?e['ar']:e['en']),
+              )).toList();
+          },
+  child:   Container(
+     height: 30,
+     padding: const EdgeInsets.symmetric(horizontal: 5),
+    decoration: BoxDecoration(
+      border: Border.all(
+        color: Colors.grey ,width: .5
+      )
+  
+    ),
+    child:  Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        
+        Text(
+          controller.getSelectedIssueObject()!=null?
+          currentLang(context)=="ar"?controller.getSelectedIssueObject()!['ar']: 
+          controller.getSelectedIssueObject()!['en']
+          // maintenanceController.selectedModel!
+          :
+           currentLang(context)=="ar"?'اختار':'select'
+          
+          ,
+          
+          // 'Status'
+          
+          ),
+        const Icon(Icons.keyboard_arrow_down_outlined )
+      ],
+    ),
+  
+  )
+)
+
+                                    ],
+                                  ),
+                    
+                    10.height,
+                    
+                    
+                    
                         BoxInputField(
   
                           validator: (str){

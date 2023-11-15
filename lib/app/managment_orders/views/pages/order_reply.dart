@@ -35,6 +35,8 @@ var formKey =GlobalKey<FormState>();
    WidgetsBinding.instance.addPostFrameCallback((_) {
 if (widget.fromNotifications!) {
   //load data
+context.read<RequestController>().removeImage();
+context.read<RequestController>().removeFile();
 
 
 context.read<RequestController>().getRequest(context, widget.orderId);
@@ -60,7 +62,7 @@ context.read<RequestController>().getRequest(context, widget.orderId);
 
       var controller = Provider.of<RequestController>(context);
     return    Scaffold(
-      
+      resizeToAvoidBottomInset: false,
 
 appBar: mLightAppBar(context, translate(context, "replay") ,
       
@@ -695,12 +697,12 @@ await DocumentService().initPlatformState(e);      });
                             []:
                            widget.order!.files!.map((e) {
                         if (
-                          e
+                          getFileExtenstion(e).toLowerCase()
                           
                           .toString().contains("png")|| 
                         
-                        e.toUpperCase().toString().contains("jpeg")|| 
-                        e.toUpperCase().toString().contains("jpg") ) {
+                         getFileExtenstion(e).toLowerCase().toString().contains("jpeg")|| 
+                         getFileExtenstion(e).toLowerCase().toString().contains("jpg") ) {
                           log(e);
                           return Container(
                            child: 
@@ -933,7 +935,7 @@ await DocumentService().initPlatformState(e);      });
                                    
                                    );
                   }
-                   if (controller.fileDoc!=null) {
+                  else  if (controller.fileDoc!=null) {
                      controller.addReplyument(context,
                                   
                                    widget.order!.id.toString(), commentController.text ,
@@ -999,5 +1001,9 @@ await DocumentService().initPlatformState(e);      });
       ),
       
     );
+  
+  
+  
+  
   }
 }

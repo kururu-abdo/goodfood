@@ -5,11 +5,14 @@ import 'package:goodfoods/app/order/model/order_data.dart';
 import 'package:goodfoods/core/data/models/branch_asset.dart';
 import 'package:goodfoods/core/data/models/car_model.dart';
 import 'package:goodfoods/core/data/models/department.dart';
+import 'package:goodfoods/core/data/models/department_asset.dart';
+import 'package:goodfoods/core/data/models/deprtment_model.dart';
 import 'package:goodfoods/core/data/models/mainenance_order_model.dart';
 import 'package:goodfoods/core/data/models/maintain_model.dart';
 import 'package:goodfoods/core/data/models/other_asset_model.dart';
 import 'package:goodfoods/core/data/models/record_model.dart';
 import 'package:goodfoods/core/data/models/skin_model.dart';
+import 'package:goodfoods/core/data/models/upload_file_model.dart';
 import 'package:goodfoods/core/data/network/api_base_helper.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -66,6 +69,45 @@ depts = I.map((e) => Department.fromJson(e)).toList();
 skins = I.map((e) => SkinModel.fromJson(e)).toList();
     return skins;
   }
+
+
+
+
+
+
+
+
+  Future<List<DepartmentModel>> getDepartments2(
+   ) async {
+     //
+    final response = await _helper.get("department/get_departments" ,
+   
+    
+    );
+    List<DepartmentModel> skins=[];
+    Iterable I = response['data'];
+
+skins = I.map((e) => DepartmentModel.fromJson(e)).toList();
+    return skins;
+  }
+Future<List<DepartmentAsset>> getDepartmentAssets(
+  String? dept
+   ) async {
+     //
+    final response = await _helper.get("department/get_asset/$dept" ,
+   
+    
+    );
+    List<DepartmentAsset> skins=[];
+    Iterable I = response['data'];
+
+skins = I.map((e) => DepartmentAsset.fromJson(e)).toList();
+    return skins;
+  }
+
+
+
+
 
 
   Future<List<MaintainModel>> getMaintenanceEmployee(
@@ -263,7 +305,7 @@ Future<OrderData> getUserOrders(
      //
     final response = await _helper.get(
      status !=null?
-      "maintain/get_order?status=$status":"maintain/get_order"   ,
+      "maintain/get_order":"maintain/get_order"   ,
    pageUrl: 
    
    status != null?
@@ -325,13 +367,24 @@ records = I.map((e) => RecordModel.fromJson(e)).toList();
 
 Future<dynamic> addRecord(
   String? uid,
-    String? order , String desc
+    String? order , String desc ,
+    file,extension
   
    ) async {
      //
+     log(extension.toString());
+
     final response = await _helper.post(
       
       "maintain/add_order_record/$order" ,
+      file!=null?
+       jsonEncode({
+      	"maintain_id":order ,
+"des" :desc ,
+"file":file,
+"extention":extension
+
+     }):
      jsonEncode({
       	"maintain_id":order ,
 "des" :desc
@@ -433,23 +486,34 @@ Future<dynamic> getOrderDetails(
 
 Future<dynamic> changeOrderStatus(
     String? order  ,
-    String status
-  
+    String status , 
+    List<UploadFile> files
    ) async {
      //
     final response = await _helper.post(
       
       "maintain/change_order_status/$order" ,
+      files.isNotEmpty?
+         jsonEncode({
+    
+	"status":status,
+"files":
+files.map((e) =>  { "file":e.fileBase64,
+"extention":e.extension}).toList()
+
+
+     }):
      jsonEncode({
     
-	"status":status
+	"status":status , 
+  "files":[]
 
      })
    
     
     );
    
-
+log(response.toString());
    
     return response;
   }

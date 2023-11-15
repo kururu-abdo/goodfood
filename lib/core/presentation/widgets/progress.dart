@@ -12,7 +12,7 @@ return Builder(builder
 if (fromPage) {
   return Container(
     
-    padding: const EdgeInsets.all(6),
+    padding: const EdgeInsets.all(3),
     decoration: const BoxDecoration(
       color: Colors.white,
     shape: BoxShape.circle ,
@@ -22,7 +22,7 @@ if (fromPage) {
      color: Theme.of(context).primaryColor,
      backgroundColor: Colors.white,
       strokeCap: StrokeCap.round,
-     strokeWidth: 2,
+     strokeWidth: 1,
   ),
   );
 }
@@ -32,7 +32,7 @@ return
   CircularProgressIndicator(
      color: color!,
      strokeCap: StrokeCap.round,
-     strokeWidth: 2,
+     strokeWidth: 1,
     //  backgroundColor: Colors.white,
   );
 

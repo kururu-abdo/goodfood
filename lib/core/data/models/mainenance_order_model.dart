@@ -560,7 +560,7 @@ class AdminOrderData2 {
   int? modelId;
 dynamic machines;
   String? task;
-List<dynamic>? files;
+List<String>? files;
   int? status;
   int? immedatly;
   String? createdAt;
@@ -589,7 +589,7 @@ List<dynamic>? files;
     machines = json['machines'];
     task = json['task'];
    if (json['files'] != null) {
-      files = <dynamic>[];
+      files = <String>[];
      jsonDecode( json['files'].toString()).forEach((v) {
         files!.add(v);
       });

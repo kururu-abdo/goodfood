@@ -14,6 +14,60 @@ String? base64Image;
 File? imageFile;
 String? imagePath;
 
+
+List<Map>  issueTypes =[
+
+
+  {
+"en":"Problem in app",
+"ar":"مشكلة في التطبيق" ,
+"value":0
+  },
+ {
+"en":"Maintenance Order not completed",
+"ar":"لم يكتمل الطلب" ,
+"value":1
+
+  },
+ {
+"en":"Problem with order response",
+"ar":"مشكلة في الرد على الطلب" ,
+"value":2
+
+  },
+   {
+"en":"Problem with notifications",
+"ar":"مشكلة في الاشعارات" ,
+"value":3
+
+  },
+
+
+  {
+"en":"Other",
+"ar":"اخرى" ,
+"value":4
+
+  },
+];
+int? selectedOption =0;
+setSelectedIssue(val){
+  selectedOption=val;
+  notifyListeners();
+}
+Map? getSelectedIssueObject(){
+  if (selectedOption==null) {
+    return null;
+  }else {
+   Map? value= issueTypes.firstWhere((e)=>  e['value']==selectedOption);
+    
+
+    return value;
+
+  }
+}
+
+
 setImage(String data){
   imageFile= File(data);
   var base64Image= getBase64(data);

@@ -6,7 +6,6 @@ import 'package:goodfoods/core/data/network/api_response.dart';
 import 'package:goodfoods/core/presentation/widgets/no_items.dart';
 import 'package:goodfoods/core/presentation/widgets/order_widget.dart';
 import 'package:goodfoods/core/presentation/widgets/progress.dart';
-import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:goodfoods/core/utils/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -187,7 +186,10 @@ return const FilterBottomSheet(isMaintain: true,);
          :"No Orders"
          ),) :
          ListView.builder(
-           itemCount: controller.userOrdersData.length+1,
+           itemCount:
+           controller.userOrdersData.length>1?
+           
+            controller.userOrdersData.length+1:  controller.userOrdersData.length,
            itemBuilder: (BuildContext context, int index) {
              // var files = jsonDecode(carData.files!) as List;
 
@@ -212,26 +214,35 @@ controller.getUserOrdersPaginate(context, controller.userOrders!.data!.nextPageU
 
                  return 
              
-             OrderWidget(to: const ['Samani' ,'Husam']  , 
+             OrderWidget(
+               
+               orderMapper: orderData,
+        //        to: const ['Samani' ,'Husam']  , 
                  
-                 from:orderData.maintainOrder!.admin!.name,
-                 confirmed: orderData.confirmed,
-                 fileLink: 'a.com',
-                 to2: sharedPrefs.user_name,
-                 orderTitle: 'maintanenace machine x',
-         files: orderData.maintainOrder!.files,
-         
-         orderId: orderData.maintainOrder!.id.toString(),
-                 task: orderData.maintainOrder!.task,
-                 orderDate: 
-                 getMaintenanceFormattedDate(
-            orderData.createdAt!
-                 ),
-                 date:  orderData.createdAt!,
+        //          from:orderData.maintainOrder!.admin!.name,
+        //          confirmed: orderData.confirmed,
+        //          fileLink: 'a.com',
+        //          isMaintain: true,
                  
-                 // '12-10-2023'
+        //          maintainStatus: orderData.maintainOrder!.status,
+        //          OrderStatus: orderData.confirmed,
+        //          orderUserId: orderData.maintainOrder!.adminId!.toString(),
+        //          modelType: orderData.maintainOrder!.modelType,
+        //          to2: sharedPrefs.user_name,
+        //          orderTitle: 'maintanenace machine x',
+        //  files: orderData.maintainOrder!.files,
+        //  subnittedOrder: orderData.maintainOrder!.id,
+        //  orderId: orderData.id.toString(),
+        //          task: orderData.maintainOrder!.task,
+        //          orderDate: 
+        //          getMaintenanceFormattedDate(
+        //     orderData.createdAt!
+        //          ),
+        //          date:  orderData.createdAt!,
                  
-                 status: orderData.maintainOrder!.status,
+        //          // '12-10-2023'
+                 
+        //          status: orderData.maintainOrder!.status,
          
                  
                  );
@@ -261,6 +272,22 @@ controller.getUserOrdersPaginate(context, controller.userOrders!.data!.nextPageU
 
 
 
+
+        //  floatingActionButton: 
+        //  FloatingActionButton(onPressed: 
+         
+         
+        //  (){
+
+
+        //     const MaintenancePage().launch(context);
+        //  }
+
+        //  ,
+        //  backgroundColor: Theme.of(context).primaryColor,
+        //  child: const Icon(Icons.add ,color: Colors.white,),
+        //  )
+         
 
 
 

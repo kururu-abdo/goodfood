@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Asset {
   int? id;
   String? nameAr;
@@ -27,7 +29,14 @@ class Asset {
     desAr = json['des_ar'];
     desEn = json['des_en'];
     regionId = json['region_id'];
-    files = json['files'];
+    if (json['files'] != null) {
+      files = <String>[];
+     jsonDecode( json['files'].toString()).forEach((v) {
+        files!.add(v);
+      });
+    }else {
+       files = <String>[];
+    }
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
