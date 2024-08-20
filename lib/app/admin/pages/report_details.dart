@@ -30,9 +30,12 @@ class _ReportDetailsPageState extends State<ReportDetailsPage> {
 @override
 void initState() { 
   super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
   context.read<ReportController>().getReportDetails(context ,
   widget.reportId
   );
+
+    });
 }
   @override
   Widget build(BuildContext context) {
@@ -138,7 +141,7 @@ Container(
   padding: const EdgeInsets.symmetric(
     horizontal: 10 , vertical: 20
   ),
-  height: MediaQuery.of(context).size.height*.20,
+  height: MediaQuery.of(context).size.height*.30,
   width:  MediaQuery.of(context).size.width,
   decoration:  BoxDecoration(
     color: Colors.white , 

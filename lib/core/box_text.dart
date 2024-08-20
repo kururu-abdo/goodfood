@@ -7,14 +7,14 @@ class BoxText extends StatelessWidget {
   final String text;
   final TextStyle style;
 
-  const BoxText.headingOne(this.text) : style = heading1Style;
-  const BoxText.headingTwo(this.text) : style = heading2Style;
-  const BoxText.headingThree(this.text) : style = heading3Style;
-  const BoxText.headline(this.text) : style = headlineStyle;
-  const BoxText.subheading(this.text) : style = subheadingStyle;
-  const BoxText.caption(this.text) : style = captionStyle;
+  const BoxText.headingOne(this.text, {super.key}) : style = heading1Style;
+  const BoxText.headingTwo(this.text, {super.key}) : style = heading2Style;
+  const BoxText.headingThree(this.text, {super.key}) : style = heading3Style;
+  const BoxText.headline(this.text, {super.key}) : style = headlineStyle;
+  const BoxText.subheading(this.text, {super.key}) : style = subheadingStyle;
+  const BoxText.caption(this.text, {super.key}) : style = captionStyle;
 
-  BoxText.body(this.text, {Color color = MyColors.dark})
+  BoxText.body(this.text, {super.key, Color color = MyColors.dark})
       : style = bodyStyle.copyWith(color: color);
 
   @override

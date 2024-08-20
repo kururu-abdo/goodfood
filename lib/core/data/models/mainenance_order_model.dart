@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 
 
@@ -506,12 +507,16 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
+        log("GET_ORDER4{MAINN}");
+log("GET_ORDER4$json");
     if (json['data'] != null) {
       data = <AdminOrderData2>[];
       json['data'].forEach((v) {
         data!.add(AdminOrderData2.fromJson(v));
       });
     }
+        log("GET_ORDER5{MAINN}");
+
     firstPageUrl = json['first_page_url'];
     from = json['from'];
     lastPage = json['last_page'];
@@ -588,11 +593,19 @@ List<String>? files;
     modelId = json['model_id'];
     machines = json['machines'];
     task = json['task'];
-   if (json['files'] != null) {
+    if (!json.containsKey("files")|| json['files'] == null) {
+      
+    
+files = <String>[];
+    }
+    else if (json['files'].toString()!=null.toString() ) {
       files = <String>[];
      jsonDecode( json['files'].toString()).forEach((v) {
         files!.add(v);
       });
+    }else {
+      files = <String>[];
+
     }
     status = json['status'];
     immedatly = json['immedatly'];

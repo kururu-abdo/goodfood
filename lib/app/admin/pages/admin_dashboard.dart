@@ -5,7 +5,8 @@ import 'package:goodfoods/core/presentation/notifications_page.dart';
 import 'package:goodfoods/core/services/notification_plugin.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({ Key? key }) : super(key: key);
+  final bool? isLauchByNotificaion;
+  const Dashboard({ Key? key , this.isLauchByNotificaion }) : super(key: key);
 
   @override
   _DashboardState createState() => _DashboardState();
@@ -20,7 +21,10 @@ class _DashboardState extends State<Dashboard> {
 @override
 void initState() { 
   super.initState();
-   NotificationApi.initMessage();
+
+  // if (widget.isLauchByNotificaion??false) {
+  //    NotificationApi.initMessage();
+  // }
 }
   @override
   Widget build(BuildContext context) {

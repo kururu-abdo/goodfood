@@ -270,12 +270,20 @@ Form(
   commentController ,
   textInputType: TextInputType.number,
   isInputAea: false, 
-  placeholder: '0',
+  placeholder: 'walkay',
   validator: (str){
 
     if (str!.isEmpty) {
       return currentLang(context)=="ar"?"الحقل مطلوب":"this field is required";
     }
+   else  if(int.parse(str.toString()) <=0){
+       return 
+       currentLang(context)=="ar"?"الرجاء اختيار رقم اكبر من ال 0":"please select number bigger than 0";
+    }
+
+
+
+
     
 
     return null;
@@ -334,6 +342,7 @@ if (maintaincenaceController.selectedOption ==null) {
   if (maintaincenaceController.selectedOption==0) {
   if (formKey.currentState!.validate()) {
     //
+    log('VALIDATEED');
  if (widget.fromAssetsPage!) {
       MaintenanceOrder(
           modelId: widget.modelId,

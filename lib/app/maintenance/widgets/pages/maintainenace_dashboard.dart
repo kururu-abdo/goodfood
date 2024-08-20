@@ -325,16 +325,21 @@ return const FilterBottomSheet(
          
          ListView.builder(
            itemCount:
-           controller.adminOrders.length>1?
+          //  controller.adminOrders.length>10
+           
+           controller.maintainOrders!.data!.data!.nextPageUrl !=null
+           ?
            
            
-            controller.adminOrders.length+1:   controller.adminOrders.length, //logical
+            controller.adminOrders.length+1
+            :   
+            controller.adminOrders.length, //logical
            itemBuilder: (BuildContext context, int index) {
         
              // var files = jsonDecode(carData.files!) as List;
              
             //  return const ListTile();
-              if (index==controller.adminOrders.length
+              if (index==controller.adminOrders.length+1
              
              && controller.maintainOrders!.data!.data!.nextPageUrl !=null
              ) {
@@ -351,7 +356,8 @@ controller.getMaintainOrdersPaginate(context, controller.maintainOrders!.data!.d
              
         
                   else {
-               var i =index==0?0: index==controller.adminOrders.length?  index-1:index;
+               var i =index==0?0: 
+               index==controller.adminOrders.length?  index-1:index;
                   var orderData = controller.adminOrders[i];  //logical  
               return  OrderWidget(
                 orderMapper: orderData,

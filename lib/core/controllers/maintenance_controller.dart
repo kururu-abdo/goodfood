@@ -59,11 +59,13 @@ ApiResponse<List<CarModel>>?  cars = ApiResponse.completed([]);
 
 ApiResponse<List<Department>>?  departments = ApiResponse.completed([]);
 ApiResponse<List<SkinModel>>?  skins = ApiResponse.completed([]);
+ApiResponse<void>?  changeStatusState = ApiResponse.completed([]);
 
 ApiResponse<List<BranchAsset>>?  branchAssets = ApiResponse.completed([]);
 
 ApiResponse<List<MaintainModel>>?  maintenanceEmployees = ApiResponse.completed([]);
 ApiResponse<void>?  newOrder = ApiResponse.completed({});
+
 ApiResponse<void>?  updateOrder = ApiResponse.completed({});
 String? orderIdToAccept;
 ApiResponse<void>?  closingOrderResponse = ApiResponse.completed({});
@@ -89,6 +91,8 @@ ApiResponse.completed(null);
 ApiResponse<OrderData>?  userOrders = 
 ApiResponse.completed(null);
 
+
+List<FileModel> newFiles=[];
 
 ApiResponse<OrderData>?  userOrderPaginate = 
 ApiResponse.completed(null);
@@ -153,7 +157,6 @@ addCloseOrderFile(String data){
   notifyListeners();
 }
 removeCloseOrderFile(String hasCode){
- log(hashCode);
   closeOrderFiles.removeWhere( 
     (file)=> file.path==hasCode
   );
@@ -161,6 +164,29 @@ removeCloseOrderFile(String hasCode){
   notifyListeners();
 }
 
+
+// addEditOrderFile(String data){
+//  var  file= File(data);
+//   var filetobase64= getBase64(data);
+//   log("PATH    ${file.path}");
+//   // imagePath =data;
+//   newFiles.add( 
+//     UploadFile( 
+      
+//       path: file.path,
+//       extension: getFileExtenstion(file.path) , fileBase64: filetobase64)
+//   );
+
+//   notifyListeners();
+// }
+removeEditOrderFile(String hasCode){
+ log(hashCode);
+  newFiles.removeWhere( 
+    (file)=> file.path==hasCode
+  );
+  
+  notifyListeners();
+}
 
 
 setFile(String data){
@@ -186,9 +212,10 @@ clearFile(){
   notifyListeners();
 }
 ApiResponse<OrderDetailMapper>?  orderDetailsMapper = 
-ApiResponse.completed(null);
+ApiResponse.loading(null);
 
-
+ApiResponse<OrderDetailMapper>?  ordeEditMapper = 
+ApiResponse.loading(null);
 
 List<Map>  modelTypes =[
   {
@@ -331,6 +358,7 @@ clearFilter(){
   notifyListeners();
 }
 
+
 setFilterLink(
   
   BuildContext context,
@@ -360,7 +388,24 @@ if (selectedModel!=null) {
 
 
 
+updateMaintainOrder(){
+  ///api/maintain/update/{maintain_id}   api
+  ///
+  ////
+  ///
+  ///
+  /*
 
+$maintain->update([
+           'task'           => $request['task'],
+           'immedatly'      => $request['immedatly'],
+           'maintain_type'  => $request['maintain_type'],
+           'maintain_cat'   => $request['maintain_cat'],
+           'files'          => json_encode($request['files'])
+        ]);
+
+  */
+}
 
 
 
@@ -440,7 +485,14 @@ removeFile(String path){
  newOrderFiles.removeWhere((file)=>file.path==path);
   notifyListeners();
 }
-
+clearEditFiles(){
+  newFiles.clear();
+  notifyListeners();
+}
+removeEditFile(String path){
+ newFiles.removeWhere((file)=>file.path==path);
+  notifyListeners();
+}
 filterUserRoders(int status){
   //  spaceSearch = [];
   //   if(startingPrice > 0 && endingPrice > startingPrice) {
@@ -629,6 +681,7 @@ isBusy= true;
 
     departmeentAssets=ApiResponse.completed(response);
   } catch (e) {
+   
        departmeentAssets = ApiResponse.error('$e');
 notifyListeners();
 
@@ -655,7 +708,16 @@ var fileModel = FileModel(fileName: fileName, path: file.path,   )
 newOrderFiles.add(fileModel);
 notifyListeners();
 }
-
+addEdit(File file){
+var base64 = getBase64(file.path);
+var fileName = getFileName(file.path);
+var extenstion= getFileExtenstion(file.path);
+var fileModel = FileModel(fileName: fileName, path: file.path,   )
+..setExtension(extenstion)
+..setBase64(base64);
+newFiles.add(fileModel);
+notifyListeners();
+}
 List<Map> getFiles(List<FileModel> files
 ){
 
@@ -667,6 +729,8 @@ List<Map> getFiles(List<FileModel> files
 
   return files0;
 }
+
+
 addOrder(BuildContext context ,  maintainType , option , walkway)async{
   newOrder = ApiResponse.loading('sdfds');
   notifyListeners();
@@ -684,7 +748,9 @@ var response = await MaintenanceApis().addOrder(
   notifyListeners();
     const Success().launch(context , isNewTask: true);
    newOrderFiles=[];
-   
+  //  if (response) {
+     
+  //  }
     
   } catch (e) {
     log("add order $e");
@@ -694,6 +760,51 @@ var response = await MaintenanceApis().addOrder(
     notifyListeners();
   }
 }
+
+
+
+updateOrder2(BuildContext context , order,
+task , immeditaley, List oldFiles ,
+ List<FileModel> newFiles,
+ {
+  Function(bool)? isSuccess
+ }
+)async{
+  updateOrder = ApiResponse.loading('loading');
+  notifyListeners();
+  try {
+    log(getFiles(
+  newOrderFiles
+).toString());
+     log(task.toString());
+var response = await MaintenanceApis().updateOrder(
+ order,task ,immeditaley ,
+  oldFiles ,
+
+   getFiles(
+  newFiles , 
+) );
+  updateOrder =ApiResponse.completed({});
+  notifyListeners();
+    // const Success().launch(context , isNewTask: true);
+   newOrderFiles=[];
+  //  if (response) {
+     
+  //  }
+    isSuccess!(true);
+  } catch (e) {
+    log("update my order $e");
+        isSuccess!(false);
+
+    updateOrder =ApiResponse.error(e.toString());
+  }finally{
+
+    notifyListeners();
+  }
+}
+
+
+
 
 
 Future<void> getBranchAssets(BuildContext context ,
@@ -845,14 +956,19 @@ Future<void> getMaintainOrders(BuildContext context ,
 adminOrders=[];
 notifyListeners();
   try {
+    log("GET_ORDER3{MAINN}");
+
     var  response = await MaintenanceApis().getMaintainOrder();
 
 
 
     maintainOrders=ApiResponse.completed(response);
+    log("GET_ORDER4{MAINN}");
 
 
-List<OrderMapper> data=[]; 
+List<OrderMapper> data=[];    
+
+
 for (var item in maintainOrders!.data!.data!.data!) {
   data.add(
     OrderMapper(
@@ -989,7 +1105,6 @@ notifyListeners();
       '' ,false , 3.toString()
       
       );
-
 
 
     userOrders=ApiResponse.completed(response , );
@@ -1359,7 +1474,7 @@ String orderId ,
 String status ,
 List<UploadFile> files
 )async{
-
+changeStatusState= ApiResponse.loading("loading");
 notifyListeners();
   try {
     var  response = await 
@@ -1370,8 +1485,9 @@ showToast(
   
   currentLang(context)=="ar"?"تم تغيير حالة الطلب":
   'Status changed successfully', false);
-
-  getOrderDetails(!sharedPrefs.isMaintain, orderId);
+changeStatusState= ApiResponse.completed("done");
+notifyListeners();
+  refreshOrderDetails(!sharedPrefs.isMaintain, orderId);
 
     // notifyListeners();
   } catch (e) {
@@ -1393,9 +1509,290 @@ removeImage();
 //load order data by 
 
 Future<void> getOrderDetails(
-  bool isAdmin , String modelId
+  bool isAdmin , String modelId, 
+  {
+    bool isEdit =false,
+    Function(OrderDetailMapper?, bool)? onData
+  }
 )async{
   orderDetailsMapper = ApiResponse.loading('loading');
+notifyListeners();
+try {
+   log("NO_CARE_ASSET{UNKNWON}");
+  
+if (!isAdmin) {
+     log("NO_CARE_ASSET{MAINTAIN}");
+
+  var response = await MaintenanceApis().
+  getOrderDetails("maintain/get_admin_order/$modelId");
+// log(response['data'].toString());
+ var adminOrder= AdminOrderDetails.fromJson(response);
+ log("NO_CARE_ASSET${adminOrder.data!.maintainOrder!.model!.toJson()}");
+
+ orderDetailsMapper = ApiResponse.completed(
+  
+  
+  
+   OrderDetailMapper(
+
+     maintainStats: adminOrder.data!.maintainOrder!.status.toString(),
+    
+     orderStatus: adminOrder.data!.maintainOrder!.status.toString(),
+     submittedOrder: adminOrder.data!.maintainId.toString() ,
+     
+modelType: adminOrder.data!.maintainOrder!.modelType,
+reject_resion: adminOrder.data!.maintainOrder!.reject_resion ,
+
+orderUserId: adminOrder.data!.adminId!.toString(),
+     orderId: adminOrder.data!.maintainId.toString(),
+    confirmed: adminOrder.data!.confirmed,
+    task: adminOrder.data!.maintainOrder!.task,
+     from: adminOrder.data!.maintainOrder!.admin!.name ,
+    status: adminOrder.data!.maintainOrder!.status.toString(),
+     to: adminOrder.data!.admin!.name!,
+
+     date: adminOrder.data!.createdAt, file: 
+     adminOrder.data!.maintainOrder!.files ,  
+     
+     maintainanceAsset: MaintainanceAsset.makeAsset(adminOrder.data!.maintainOrder!.model!.toJson(), 
+     adminOrder.data!.maintainOrder!.modelType!)
+     
+     )
+ );
+
+}else {
+   log("NO_CARE_ASSET{ORDER}");
+
+  var response = await MaintenanceApis().
+  getOrderDetails("maintain/show_submitted_order/$modelId");
+
+  var userOrder =
+   MaintainOrderDetails.fromJson(response);
+
+ log("NO_CARE_ASSET${userOrder.data!.model!.toJson()}");
+
+
+ orderDetailsMapper = ApiResponse.completed(
+   
+   OrderDetailMapper(
+     reject_resion:userOrder.data!.forwardTo!.reject_resion ,
+      maintainStats: userOrder.data!.status.toString(),
+     orderStatus: userOrder.data!.status.toString().toString(),
+     submittedOrder: userOrder.data!.forwardTo!.maintainId.toString() ,
+modelType: userOrder.data!.modelType,
+
+orderUserId: userOrder.data!.forwardTo!.adminId!.toString(),
+     
+     immedatly: userOrder.data!.immedatly,
+     
+     
+     
+     orderId: userOrder.data!.id.toString(),
+    confirmed: userOrder.data!.forwardTo!.confirmed,
+    task: userOrder.data!.task, from: userOrder.data!.forwardTo!.admin!.name ,
+      status: userOrder.data!.status.toString(),
+     to:userOrder.data!.forwardTo!.admin!.name,
+     date: userOrder.data!.createdAt, file: 
+     userOrder.data!.files, 
+     
+     
+       maintainanceAsset: MaintainanceAsset.makeAsset(userOrder.data!.model!.toJson(), 
+     userOrder.data!.modelType!)
+     )
+ );
+
+
+
+
+}
+notifyListeners();
+
+if (isEdit && orderDetailsMapper!.data!=null ) {
+  onData!(orderDetailsMapper!.data!, true);
+}
+
+
+
+
+
+} catch (e) {
+  if (isEdit) {
+      onData!(null, false);
+  }
+  
+
+  orderDetailsMapper = ApiResponse.error(e.toString());
+}finally{
+
+  notifyListeners();
+}
+
+
+
+
+
+
+
+}
+
+
+
+Future<void> getOrderDetailsForEdit(
+  bool isAdmin , String modelId, 
+  {
+    bool isEdit =false,
+    Function(OrderDetailMapper?, bool)? onData
+  }
+)async{
+  ordeEditMapper = ApiResponse.loading('loading');
+notifyListeners();
+try {
+  
+if (!isAdmin) {
+
+  var response = await MaintenanceApis().
+  getOrderDetails("maintain/get_admin_order/$modelId");
+ var adminOrder= AdminOrderDetails.fromJson(response);
+
+ ordeEditMapper = ApiResponse.completed(
+  
+  
+  
+   OrderDetailMapper(
+reject_resion:adminOrder.data!.maintainOrder!.reject_resion ,
+     maintainStats: adminOrder.data!.maintainOrder!.status.toString(),
+    
+     orderStatus: adminOrder.data!.maintainOrder!.status.toString(),
+     submittedOrder: adminOrder.data!.maintainId.toString() ,
+     
+modelType: adminOrder.data!.maintainOrder!.modelType,
+
+
+orderUserId: adminOrder.data!.adminId!.toString(),
+     orderId: adminOrder.data!.maintainId.toString(),
+    confirmed: adminOrder.data!.confirmed,
+    task: adminOrder.data!.maintainOrder!.task,
+     from: adminOrder.data!.maintainOrder!.admin!.name ,
+    status: adminOrder.data!.maintainOrder!.status.toString(),
+     to: adminOrder.data!.admin!.name!,
+
+     date: adminOrder.data!.createdAt, file: 
+     adminOrder.data!.maintainOrder!.files ,  
+     
+     maintainanceAsset: MaintainanceAsset.makeAsset(adminOrder.data!.maintainOrder!.model!.toJson(), 
+     adminOrder.data!.maintainOrder!.modelType!)
+     
+     )
+ );
+
+}else {
+  
+  var response = await MaintenanceApis().
+  getOrderDetails("maintain/show_submitted_order/$modelId");
+// log(response['data'].runtimeType.toString());
+// log("NO PROBLEM");
+  var userOrder =
+   MaintainOrderDetails.fromJson(response);
+
+
+log({
+      "maintainStats": userOrder.data!.status.toString(),
+     "orderStatus": userOrder.data!.status.toString().toString(),
+     "submittedOrder": userOrder.data!.forwardTo!.maintainId.toString() ,
+"modelType": userOrder.data!.modelType,
+
+"orderUserId": userOrder.data!.forwardTo!.adminId.toString(),
+     
+     "immedatly": userOrder.data!.immedatly??0,
+     
+     
+     
+     "orderId": userOrder.data!.id.toString(),
+    "confirmed": userOrder.data!.forwardTo!.confirmed,
+    "task": userOrder.data!.task, "from": userOrder.data!.forwardTo!.admin!.name ,
+      status: userOrder.data!.status.toString(),
+     "to":userOrder.data!.forwardTo!.admin!.name,
+     "date": userOrder.data!.createdAt, 
+     "file": 
+     userOrder.data!.files, 
+     
+     
+       "maintainanceAsset": MaintainanceAsset.makeAsset(userOrder.data!.model!.toJson(), 
+     userOrder.data!.modelType.toString())
+}.toString());
+ ordeEditMapper = ApiResponse.completed(
+   
+   OrderDetailMapper(
+     reject_resion: userOrder.data!.forwardTo!.reject_resion,
+      maintainStats: userOrder.data!.status.toString(),
+     orderStatus: userOrder.data!.status.toString().toString(),
+     submittedOrder: userOrder.data!.forwardTo!.maintainId.toString() ,
+modelType: userOrder.data!.modelType,
+
+orderUserId: userOrder.data!.forwardTo!.adminId.toString(),
+     
+     immedatly: userOrder.data!.immedatly??0,
+     
+     
+     
+     orderId: userOrder.data!.id.toString(),
+    confirmed: userOrder.data!.forwardTo!.confirmed,
+    task: userOrder.data!.task, from: userOrder.data!.forwardTo!.admin!.name ,
+      status: userOrder.data!.status.toString(),
+     to:userOrder.data!.forwardTo!.admin!.name,
+     date: userOrder.data!.createdAt, 
+     file: 
+     userOrder.data!.files, 
+     
+     
+       maintainanceAsset: MaintainanceAsset.makeAsset(userOrder.data!.model!.toJson(), 
+     userOrder.data!.modelType.toString())
+     )
+ );
+
+
+
+
+}
+notifyListeners();
+
+if (isEdit && ordeEditMapper!.data!=null ) {
+  onData!(ordeEditMapper!.data!, true);
+}
+
+
+
+
+
+} catch (e) {
+    onData!(null, false);
+
+  ordeEditMapper = ApiResponse.error(e.toString());
+}finally{
+
+  notifyListeners();
+}
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+Future<void> refreshOrderDetails(
+  bool isAdmin , String modelId
+)async{
+  // orderDetailsMapper = ApiResponse.loading('loading');
 
 try {
   
@@ -1493,5 +1890,6 @@ notifyListeners();
 
 
 }
+
 
 }

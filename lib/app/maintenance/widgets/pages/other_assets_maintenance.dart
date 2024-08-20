@@ -77,7 +77,7 @@ return Center(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-Text(controller.departmeentAssets!.message!),
+Center(child: Text(controller.departmeentAssets!.message!)),
 const SizedBox(height: 10,) ,
 IconButton(onPressed: (){
   controller.getDepartementAssets(context,widget.deptId!);

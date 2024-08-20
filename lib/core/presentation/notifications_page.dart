@@ -4,6 +4,7 @@ import 'package:goodfoods/app/admin/pages/chat_page.dart';
 import 'package:goodfoods/app/managment_orders/views/pages/order_reply.dart';
 import 'package:goodfoods/app/notifications/controllers/notification_controller.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
+import 'package:goodfoods/core/presentation/notification_filter_bottomsheet.dart';
 import 'package:goodfoods/core/presentation/order_details.dart';
 import 'package:goodfoods/core/presentation/widgets/no_items.dart';
 import 'package:goodfoods/core/presentation/widgets/notification_widget.dart';
@@ -16,6 +17,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class NotificationPage extends StatefulWidget {
+  static const String routeName ="/notifcations";
   final bool? fromDashboard;
   const NotificationPage({ Key? key, this.fromDashboard = false }) : super(key: key);
 
@@ -61,32 +63,56 @@ var locale = AppLocalizations.of(context);
 
           actions: [
 
+
+            
+IconButton(onPressed: (){
+showModalBottomSheet(context: context,
+
+shape: const RoundedRectangleBorder(
+  borderRadius: BorderRadius.vertical(
+    top: Radius.circular(20)
+  )
+),
+ builder: (_){
+return const NotificationFilterBottomsheet(
+  
+);
+ });
+}, icon: ImageIcon(const AssetImage('assets/icons/filter2.png') ,size: 20 , 
+                   
+                   color: Theme.of(context).primaryColor
+                   ,),) ,
+
+
+
             Builder(
               builder: (context) {
                 return 
-                 provider.notifications!.status == Status.LOADING?
+                //  provider.notifications!.status == Status.LOADING?
 
 
- const SizedBox.shrink():
+ const SizedBox.shrink();
+ 
+//  :
 
-                Visibility(
-                  visible: 
+//                 Visibility(
+//                   visible: 
                   
-                  provider.notifications!.data!.isNotEmpty
-                  ,
-                  child: TextButton(onPressed: ()async{
-               await  provider.makeAllNotificationsRead();
-                  }, child:  Text(
-                    locale!.locale.languageCode=="ar"?
-"تحديد الكل كمقروء":
+//                   provider.notifications!.data!.isNotEmpty
+//                   ,
+//                   child: TextButton(onPressed: ()async{
+//                await  provider.makeAllNotificationsRead();
+//                   }, child:  Text(
+//                     locale!.locale.languageCode=="ar"?
+// "تحديد الكل كمقروء":
                     
-                    "Mark all as read"))
+//                     "Mark all as read"))
                   
                   
-                  ,
-                )
+//                   ,
+//                 )
                
-                ;
+//                 ;
               }
             )
 

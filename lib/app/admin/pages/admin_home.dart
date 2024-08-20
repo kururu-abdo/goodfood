@@ -24,8 +24,9 @@ class _AdminHomeState extends State<AdminHome> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+  WidgetsBinding.instance.addPostFrameCallback((_) {
     context.read<AdminHomeController>().getBranches(context);
+  });
   }
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,13 @@
 
+import 'package:nb_utils/nb_utils.dart';
+
 class MaintainanceAsset {
   
 MaintainanceAsset();
-factory MaintainanceAsset.makeAsset(Map<String, dynamic> data , String modelType){
+factory MaintainanceAsset.makeAsset(Map<String, dynamic> data , String modelType){ 
+
+    log("NO_CARE_ASSET$data");
+
 switch (modelType.toLowerCase()) {
   case 'car':
     return CarMaintenanceAsset.fromJson(data, modelType.toLowerCase());
@@ -44,7 +49,7 @@ String? modelName;
       this.files});
 
   CarMaintenanceAsset.fromJson(Map<String, dynamic> json , model) {
-    this.modelName= model;;
+    modelName= model;
         id = json['id'];
     bordNumber = json['bord_number'];
     model = json['model'];
@@ -102,6 +107,7 @@ String? modelType;
   DefaultMaintenanceAsset({this.nameAr, this.nameEn , this.modelType});
 
   DefaultMaintenanceAsset.fromJson(Map<String, dynamic> json , model) {
+    log("NO_CARE_ASSET$json");
     nameAr = json['name_ar'];
     nameEn = json['name_en'];
     modelType =model;

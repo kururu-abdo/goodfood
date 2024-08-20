@@ -4,6 +4,7 @@ import 'package:goodfoods/core/controllers/maintenance_controller.dart';
 import 'package:goodfoods/core/presentation/order_details.dart';
 import 'package:goodfoods/core/presentation/widgets/accept_reject_btn.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
+import 'package:goodfoods/core/utils/global.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:goodfoods/core/utils/utils.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -57,14 +58,15 @@ class OrderWidget extends StatelessWidget {
           top: 10
         ),
         padding: const EdgeInsets.symmetric(
-          vertical: 8 ,horizontal: 15
+          vertical: 6 ,horizontal: 15
         ),
         width: MediaQuery.of(context).size.width,
         height: 
         // to.length<5?
         sharedPrefs.isMaintain&&
        orderMapper!.forwardToId==sharedPrefs.user_id
-&& orderMapper!.confirmd.toString()=="0"?
+&& orderMapper!.confirmd.toString()=="0"
+?
          MediaQuery.of(context).size.height/5:
         MediaQuery.of(context).size.height/6 
         // :
@@ -187,7 +189,9 @@ class OrderWidget extends StatelessWidget {
     ) ,
     
     Text(
-    getStatusName(context, orderMapper!.status!)!,
+      // ''
+    getStatusName(context, orderMapper!.status!)!
+    ,
     maxLines: 2, 
     style:  TextStyle(
       fontWeight: FontWeight.w300,
@@ -256,7 +260,8 @@ if(
       ) ,
       ),
     ).onTap((){
-      if ( orderMapper!.confirmd.toString()=="1") {
+      log(orderMapper!.confirmd.toString());
+      // if ( orderMapper!.confirmd.toString()=="1") {
           
  OrderDetails(
    isMaintain: sharedPrefs.isMaintain,
@@ -278,7 +283,7 @@ if(
   //  file: ,
  ).launch(context);
 
-      }
+      // }
 
     
     });

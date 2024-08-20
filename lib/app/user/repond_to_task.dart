@@ -157,9 +157,11 @@ child: Form(
   ImagePickerContainer(
     showFiles: true,
     onSelect: (file , isImage){
-      if (isImage!) {
+      // if (isImage!) {
           controller.setImage(file!.path);
-      }
+      // }else {
+      //   controller.setImage(data)
+      // }
 
     },
   ): 
@@ -178,12 +180,24 @@ child: Form(
                SizedBox(
                   width: 200,
                     height: 200,
-                 child: Image.file(
+                 child:
+                 isImage(controller.imageFile!.path)?
+               
+                 
+                  Image.file(
                  controller.imageFile!,
                     width: 200,
                     height: 200,
                     
-                  ),
+                  ): 
+                  Image.asset(
+                  getFileIocn(controller.imageFile!.path),
+                    width: 200,
+                    height: 200,
+                    
+                  )
+                
+                  ,
                ),
                 Positioned(
                   right: 10,

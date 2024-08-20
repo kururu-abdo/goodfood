@@ -28,7 +28,10 @@ class _AdminReporsState extends State<AdminRepors> {
   @override
   void initState() { 
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
     context.read<ReportController>().getReports(context);
+    });
+    
   }
   @override
   Widget build(BuildContext context) {
@@ -41,11 +44,11 @@ class _AdminReporsState extends State<AdminRepors> {
         elevation: 0,
         actions: [
           IconButton(onPressed: (){
-HelpPage().launch(context);
+const HelpPage().launch(context);
           }, icon: const ImageIcon(AssetImage('assets/icons/headset.png')))
         ,
           IconButton(onPressed: (){
-NotificationPage().launch(context);
+const NotificationPage().launch(context);
           }, icon: const ImageIcon(AssetImage('assets/icons/bell.png')))
         
         

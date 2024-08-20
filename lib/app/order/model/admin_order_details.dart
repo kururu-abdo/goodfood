@@ -131,6 +131,7 @@ class MaintainOrder {
    List<dynamic>? files;
   Admin? admin;
   int? status;
+  dynamic reject_resion;
   int? immedatly;
   String? createdAt;
   String? updatedAt;
@@ -148,6 +149,7 @@ class MaintainOrder {
       this.immedatly,
       this.createdAt,
       this.updatedAt,
+      this.reject_resion,
       this.model , this.admin});
 
   MaintainOrder.fromJson(Map<String, dynamic> json) {
@@ -157,6 +159,7 @@ class MaintainOrder {
     modelId = json['model_id'];
     machines = json['machines'];
     task = json['task'];
+    reject_resion= json['reject_resion'];
     admin =
     
     json['admin'] != null?

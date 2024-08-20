@@ -26,13 +26,17 @@ class _SkinsListMeintanceState extends State<SkinsListMeintance> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<MaintenanceController>().
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+  context.read<MaintenanceController>().
     getSkins(context, 
     // widget.branchId.toString()
     
     2.toString()
     
     );
+
+   });
+    
   }
 
   @override

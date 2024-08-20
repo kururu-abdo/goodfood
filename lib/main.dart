@@ -1,6 +1,7 @@
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -11,8 +12,10 @@ import 'package:goodfoods/core/presentation/app_theme.dart';
 import 'package:goodfoods/core/presentation/splash_screen.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
 import 'package:goodfoods/core/services/document_service.dart';
+import 'package:goodfoods/core/services/notification.dart';
 import 'package:goodfoods/core/services/notification_plugin.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
+import 'package:open_document/my_files/init.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -22,6 +25,11 @@ bool falseValue= false;
 FToast? fToast;
 typedef   YES=bool;
 typedef   NO=bool;
+
+typedef OnClickEvent<T> = Function(T);
+
+
+
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 
@@ -37,7 +45,7 @@ void notificationTapBackground(NotificationResponse notificationResponse) {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   //  Firebase.initializeApp();
   //  NotificationApi.init();
-
+print('Receivd ');
   
     NotificationApi.pushNotification(message);
     sharedPrefs.isOpen= false;
@@ -46,13 +54,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('Handling a background message ${message.messageId}');
 }
 
-
+//  bool? isLaucnByNotifion=false;
 
 
 
 var  _notification = FlutterLocalNotificationsPlugin();
 
-
+String? selectedNotificationPayload;
  main() async{
    WidgetsFlutterBinding.ensureInitialized();
 
@@ -73,7 +81,18 @@ DocumentService().initCheckPermission();
   
  
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-   
+
+  // final NotificationAppLaunchDetails? notificationAppLaunchDetails = !kIsWeb && Platform.isLinux
+  //     ? null
+  //     : await notification.getNotificationAppLaunchDetails();
+
+//  String initialRoute = Nor.routeName;
+  // if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+  //   selectedNotificationPayload = notificationAppLaunchDetails!.notificationResponse?.payload;
+  //   isLaucnByNotifion = true;
+  // }
+
+
  } catch (e) {
  }
 
@@ -96,15 +115,18 @@ DocumentService().initCheckPermission();
   runApp( RootRestorationScope(
       restorationId: 'root', // <-- and give the resorationId
     
-    child: AppInitializer(child: MyApp(  appLanguage: appLanguage,))));
+    child: AppInitializer(child: MyApp(  appLanguage: appLanguage,
+    // isLauchByNotificaiton: isLaucnByNotifion,
+    ))));
 }
 Future backgroundHandler(RemoteMessage msg) async {
   NotificationApi.pushNotification(msg);
 }
 class MyApp extends StatelessWidget { 
   final LanguageProvier? appLanguage;
+  // final bool? isLauchByNotificaiton;
 
-  const MyApp({super.key, this.appLanguage});
+  const MyApp({super.key, this.appLanguage ,});
 
   // This widget is the root of your application.
   @override
@@ -148,7 +170,9 @@ class MyApp extends StatelessWidget {
            
            
            
-            home: const SplashScreen()
+            home:  SplashScreen(
+            // isLauchByNotificationPlugin:   isLauchByNotificaiton,
+            )
           );
         }
       ),

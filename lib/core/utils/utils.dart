@@ -29,30 +29,6 @@ String getFileName(String filePath){
   return name;
 }
 
-  String? getStatusName(
-    BuildContext context ,
-    int status){
-          var locale= AppLocalizations.of(context);
-
-    switch (status){
-
-case 0:
-return locale!.locale.languageCode=="ar"?
-"تم الانشاء":"Created";
-case 1:
-return locale!.locale.languageCode=="ar"?
-"قيد الاغلاق":"Closing";
-
-case 2:
-return locale!.locale.languageCode=="ar"?
-"تم الاغلاق":"Closed";
-
-
-
-    }
-    return null;
-  }
-  
 String getMaintenanceFormattedDate(String date, [String locale="en_US"]){
   DateTime now = DateTime.parse(date);
 var formattedDate = DateFormat('EEEE, MMM d, yyyy HH:mm:ss',
@@ -114,18 +90,29 @@ return "assets/icons/pdf.png";
 
 }
   }
-  Color getOrderColor(status){
-    switch (status) {
-      case 0:
-        return Colors.orange;
-        
-        case 1:
-        return Colors.red;
-       
-      default:
-       return Colors.green;
-    }
-  }
+bool isImage(String path){
+    var ext = getFileExtenstion(path);
+
+return ext.toString().contains("png")||
+    ext.toString().contains("jpeg")|| 
+    ext.toString().contains("jpg") ;
+    
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
 
 
 

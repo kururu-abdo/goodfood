@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:goodfoods/app/admin/pages/edit_maintanance_order.dart';
 import 'package:goodfoods/app/maintenance/model/asset_info.dart';
 import 'package:goodfoods/app/maintenance/model/details_mapper.dart';
 import 'package:goodfoods/app/order/view/widgets/order_records.dart';
@@ -12,6 +14,7 @@ import 'package:goodfoods/core/presentation/widgets/no_items.dart';
 import 'package:goodfoods/core/presentation/widgets/progress.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
 import 'package:goodfoods/core/services/document_service.dart';
+import 'package:goodfoods/core/utils/global.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:goodfoods/core/utils/utils.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -67,12 +70,14 @@ int selectedTab=0;
 void initState() { 
   super.initState();
 
-
+  WidgetsBinding.instance.addPostFrameCallback((_) {
 
   // if (widget.isFromNotificaiton!) {
     context.read<MaintenanceController>().getOrderDetails(
 
       !widget.isMaintain!, widget.orderId!);
+
+  });
   // }else {
   // //     _confirmed =widget.confirmed!;
   // // _status = int.parse(widget.status!);
@@ -90,6 +95,9 @@ void initState() {
 
 return Scaffold(
          resizeToAvoidBottomInset: false,
+
+
+        
      appBar:   AppBar(
           elevation: 0,
           actions:  [
@@ -99,11 +107,14 @@ return Scaffold(
    builder: (context) {
 
 if (controller.orderDetailsMapper!.status==Status.LOADING) {
+    return const SizedBox.shrink();
+
    return Center(
         child: mProgress(context ,fromPage: true),
   );
 }
 else if(controller.orderDetailsMapper!.status==Status.ERROR) {
+  return const SizedBox.shrink();
   return Center(
   child:   IconButton(onPressed: (){
     context.read<MaintenanceController>().getOrderDetails(!widget.isMaintain!, widget.orderId!);
@@ -119,6 +130,13 @@ else if(controller.orderDetailsMapper!.status==Status.ERROR) {
      sharedPrefs.isMaintain&&
   sharedPrefs.user_id == 
   controller.orderDetailsMapper!.data!.orderUserId.toString()?
+
+ controller.changeStatusState!.status==Status.LOADING?
+
+ Center(
+        child: mProgress(context ,fromPage: true),
+  )
+:
   TextButton(onPressed: (){
 
     CloseOrderPage(
@@ -140,7 +158,13 @@ style: const TextStyle(color: Colors.red , fontWeight: FontWeight.bold),
 
 
 :  
+
 controller.orderDetailsMapper!.data!.orderStatus.toString()=="1"?
+controller.changeStatusState!.status==Status.LOADING?
+ Center(
+        child: mProgress(context ,fromPage: true),
+  ):
+
 TextButton(onPressed: (){
 controller.changeOrderStatus(context,
 
@@ -161,7 +185,10 @@ style: const TextStyle(color: Colors.red , fontWeight: FontWeight.bold),
 )
 
 ).visible(controller.orderDetailsMapper!.data!.orderStatus.toString()==1.toString())
-: const SizedBox.shrink();
+: 
+
+
+const SizedBox.shrink();
 
    }
   
@@ -271,11 +298,15 @@ decoration:  BoxDecoration(
    builder: (context) {
 
 if (controller.orderDetailsMapper!.status==Status.LOADING) {
+    return const SizedBox.shrink();
+
    return Center(
         child: mProgress(context ,fromPage: true),
   );
 }
 else if(controller.orderDetailsMapper!.status==Status.ERROR) {
+    return const SizedBox.shrink();
+
   return Center(
   child:   IconButton(onPressed: (){
     context.read<MaintenanceController>().getOrderDetails(!widget.isMaintain!, widget.orderId!);
@@ -337,7 +368,7 @@ context.read<MaintenanceController>().getOrderDetails(
           ),
         );
         }
-              
+              else
             return        Column(
                     
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -581,95 +612,147 @@ bottom:
 MediaQuery.of(context).viewInsets.bottom
 
                               ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+
                                 children: [
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width - 60,
-                                    child: Card(
-                                      margin: const EdgeInsets.only(
-                                          left: 5, right: 5, bottom: 8),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(25),
-                                      ),
-                                      child
-                                      : 
-                                      
-                                      TextFormField(
-                                        controller: _controller,
-                                        focusNode: focusNode,
-                                        textAlignVertical: TextAlignVertical.center,
-                                        keyboardType: TextInputType.multiline,
-                                        maxLines: 5,
-                                        minLines: 1,
-
-
-
-
-                                        onChanged: (value) {
-                                          if (value.isNotEmpty) {
-                                            setState(() {
-                                              // sendButton = true; 
-                                            });
-                                          } else {
-                                            setState(() {
-                                              // sendButton = false;
-                                            });
-                                          }
-                                        },
-                                        decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                        
-                                          hintText:  translation!.translate("type_a_comment")!,
-                                          hintStyle: const TextStyle(color: Colors.grey),
-                                         
-                                        
-                                          contentPadding: const EdgeInsets.symmetric(
-                                            horizontal: 10 ,vertical: 5
-                                          ),
-
-
-                                          suffixIcon: IconButton(onPressed: (){
-Navigator.of(context)  
-.push(
+                                          !sharedPrefs.isMaintain?
+                           controller.orderDetailsMapper!.data!.status.toString()=="0"?
+Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 10),
+  child: FloatingActionButton(
+    
+    backgroundColor: Theme.of(context).primaryColor,
+    onPressed: 
   
-  MaterialPageRoute(builder: (_)=> RecordWithMediaPage(
-    orderId: widget.orderId,
-  ))
-);
+  (){
+    //open edit page
+    EditMaintenanceOrder(
+      orderId:controller.orderDetailsMapper!.data!.orderId ,
 
-                                          }, icon: const Icon(Icons.image))
+images: controller.orderDetailsMapper!.data!.file!,
+// category: controller.orderDetailsMapper!.data.,
+// maintain_type: controller.orderDetailsMapper!.data.maintainanceAsset.,
+// modelId: controller.orderDetailsMapper!.data!.maintainanceAsset!,
+task: controller.orderDetailsMapper!.data!.task,
+// urgent: controller.orderDetailsMapper!.data!.,
+
+    ).launch(context).then((value){
+
+//refresh details
+
+ context.read<MaintenanceController>().getOrderDetails(
+
+      !widget.isMaintain!, widget.orderId!);
+
+    
+
+
+    });
+  },
+  child: const Icon(Icons.edit ,),
+  ),
+)
+
+                       :
+                           const SizedBox.shrink()     
+:
+                           const SizedBox.shrink() 
+                           ,
+const SizedBox(height: 8,),
+
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width - 60,
+                                        child: Card(
+                                          margin: const EdgeInsets.only(
+                                              left: 5, right: 5, bottom: 8),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(25),
+                                          ),
+                                          child
+                                          : 
+                                          
+                                          TextFormField(
+                                            controller: _controller,
+                                            focusNode: focusNode,
+                                            textAlignVertical: TextAlignVertical.center,
+                                            keyboardType: TextInputType.multiline,
+                                            maxLines: 5,
+                                            minLines: 1,
+                                  
+                                  
+                                  
+                                  
+                                            onChanged: (value) {
+                                              if (value.isNotEmpty) {
+                                                setState(() {
+                                                  // sendButton = true; 
+                                                });
+                                              } else {
+                                                setState(() {
+                                                  // sendButton = false;
+                                                });
+                                              }
+                                            },
+                                            decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                            
+                                              hintText:  translation!.translate("type_a_comment")!,
+                                              hintStyle: const TextStyle(color: Colors.grey),
+                                             
+                                            
+                                              contentPadding: const EdgeInsets.symmetric(
+                                                horizontal: 10 ,vertical: 5
+                                              ),
+                                  
+                                  
+                                              suffixIcon: IconButton(onPressed: (){
+                                  Navigator.of(context)  
+                                  .push(
+                                    
+                                    MaterialPageRoute(builder: (_)=> RecordWithMediaPage(
+                                      orderId: widget.orderId,
+                                    ))
+                                  );
+                                  
+                                              }, icon: const Icon(Icons.image))
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      bottom: 8,
-                                      right: 2,
-                                      left: 2,
-                                    ),
-                                    child: CircleAvatar(
-                                      radius: 25,
-                                      backgroundColor: kcPrimaryColor,
-                                      child: IconButton(
-                                        icon: const Icon(
-                                          Icons.send ,
-                                          color: Colors.white,
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 8,
+                                          right: 2,
+                                          left: 2,
                                         ),
-                                        onPressed: ()async {
-                                   
-controller.addRecord(context, widget.orderId!,
-
- _controller.text,null, null).then((value) {
-
-   _controller.clear();
- });
-
-                                          }
-                                        
+                                        child: CircleAvatar(
+                                          radius: 25,
+                                          backgroundColor: kcPrimaryColor,
+                                          child: IconButton(
+                                            icon: const Icon(
+                                              Icons.send ,
+                                              color: Colors.white,
+                                            ),
+                                            onPressed: ()async {
+                                       
+                                  controller.addRecord(context, widget.orderId!,
+                                  
+                                   _controller.text,null, null).then((value) {
+                                  
+                                     _controller.clear();
+                                   });
+                                  
+                                              }
+                                            
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -688,96 +771,47 @@ controller.addRecord(context, widget.orderId!,
                            
                            
                            :
+
+                            controller.orderDetailsMapper!.data==null?
+                            const SizedBox.shrink():
+                            !sharedPrefs.isMaintain?
+                           controller.orderDetailsMapper!.data!.status.toString()=="0"?
+FloatingActionButton(
+  
+  backgroundColor: Theme.of(context).primaryColor,
+  onPressed: 
+
+(){
+  //open edit page
+  EditMaintenanceOrder(
+images: controller.orderDetailsMapper!.data!.file!,
+// modelId: controller.orderDetailsMapper!.data!.maintainanceAsset!,
+task: controller.orderDetailsMapper!.data!.task,
+// urgent: controller.orderDetailsMapper!.data!.,
+orderId:controller.orderDetailsMapper!.data!.orderId ,
+    )
+    
+    .launch(context).then((value){
+
+//refresh details
+
+
+ context.read<MaintenanceController>().getOrderDetails(
+
+      !widget.isMaintain!, widget.orderId!);
+
+
+    });
+},
+child: const Icon(Icons.edit ,),
+)
+
+                       :
+                           const SizedBox.shrink()     
+
+                           :
                            const SizedBox.shrink()
-//         widget.isAdmin!?
-//           Container(
-//         width: 120 ,height: 30,
-//         margin: const EdgeInsets.symmetric(horizontal: 6),
-//         decoration: BoxDecoration(
-//           color: Colors.green, borderRadius: BorderRadius.circular(50)
-//         ),
-//         child: Center(
-//           child: Text(translation!.translate("closing")! ,
-//           style: const TextStyle(
-//             color: Colors.white
-//           ),
-          
-          
-//           ),
-//         ),
-//         ).visible(widget.status==1.toString())
-//         .onTap((){
-// ///TODO: change order status
-//           //make it closed
-// controller.changeOrderStatus(context, widget.orderId!, 2.toString());
-//         })
-        
-//         :
 
-        
-//             Row(
-//               mainAxisSize: MainAxisSize.min,
-//               children: [
-
-
-
-//                 Container(
-//         width: 120 ,height: 30,
-//         margin: const EdgeInsets.symmetric(horizontal: 6),
-//         decoration: BoxDecoration(
-//           color: Colors.green, borderRadius: BorderRadius.circular(50)
-//         ),
-//         child: Center(
-//           child: Text(translation!.translate("accept")! ,
-//           style: const TextStyle(
-//                 color: Colors.white
-//           ),
-          
-          
-//           ),
-//         ),
-//         )
-//         .onTap((){
-//           ///TODO: change order status
-
-// //make it clsoing   = 1
-
-// // controller.changeOrderStatus(context, widget.orderId!, 1.toString());
-//   controller.updateOrderStatus(context, widget.orderId!, null, 1.toString());
-//         }),
-
-
-
-                
-//                 Container(
-//         width: 120 ,height: 30,
-//         margin: const EdgeInsets.symmetric(horizontal: 6),
-//         decoration: BoxDecoration(
-//           color: Colors.red, borderRadius: BorderRadius.circular(50)
-//         ),
-//         child: Center(
-//           child: Text(translation.translate("reject")! ,
-//           style: const TextStyle(
-//                 color: Colors.white
-//           ),
-          
-          
-//           ),
-//         ),
-//         )
-//         .onTap((){
-//           ///TODO: change order status
-
-// //make it clsoing   = 1
-
-// // controller.changeOrderStatus(context, widget.orderId!, 1.toString());
-
-// RejectPage(orderId: widget.orderId,).launch(context);
-//         }),
-
-
-//               ],
-//             ).visible(widget.status==0.toString())
         
         
         ,
@@ -787,530 +821,6 @@ controller.addRecord(context, widget.orderId!,
     );
 
 
-  // }
-
-// else {
-//     return Scaffold(
-//          resizeToAvoidBottomInset: false,
-//      appBar:   AppBar(
-//           elevation: 0,
-//           actions:  [
-            
-//             sharedPrefs.user_id != widget.orderUserId.toString()?
-//   TextButton(onPressed: (){
-
-//     CloseOrderPage(
-//       orderId: widget.subnittedOrder.toString(),
-//     ).launch(context);
-// // controller.confirmOrder(context, widget.orderId!).then((value) {
-
-
-// //   _confirmed=1;
-// //   setState(() {
-    
-// //   });
-// // });
-// }, child: Text( currentLang(context)=="ar"?"اغلاق":"Close" ,
-// style: const TextStyle(color: Colors.red , fontWeight: FontWeight.bold),
-// )
-
-// ).visible(widget.maintainStatus.toString()=="0")
-
-
-// :  
-// widget.maintainStatus.toString()!="2"?
-// TextButton(onPressed: (){
-// controller.changeOrderStatus(context, widget.subnittedOrder.toString(), 2.toString(), null ,null).then((value) {
-
- 
-// });
-// }, child: Text( currentLang(context)=="ar"?"تأكيد الاغلاق":"Confirm Close"
-
-//  ,
-// style: const TextStyle(color: Colors.red , fontWeight: FontWeight.bold),
-// )
-
-// ).visible(widget.maintainStatus==1)
-// : const SizedBox.shrink()
-
-
-// ,
-//           Row(
-//             mainAxisSize: MainAxisSize.min,
-//             crossAxisAlignment: CrossAxisAlignment.center,
-//             children: [
-//  Text(
-//    getStatusName(
-//      context,
-//      int.parse(widget.status!))!
-   
-   
-//   //  "${translation!.translate("new_order")}" 
-   
-//    ,
-
-
-// style: const TextStyle(
-//   color: Colors.black
-// ),
-// ) ,
-// 10.width,
-// Container(height: 10,width: 10,
-
-// decoration:  BoxDecoration(
-//   shape: BoxShape.circle,
-//   color: getOrderColor(widget.status!)
-// ),
-// )
-
-// ,
-
-//             ],
-//           ).paddingAll(5)
-//           ],
-//           backgroundColor: Colors.white,
-//           titleSpacing: 0,
-          
-//           // leading:  const SizedBox()
-          
-//           //  widget.fromDashboard!?const SizedBox()
-//           //  : 
-
-//           //  ,
-    
-    
-//     //       IconButton(onPressed: (){
-//     // Navigator.pop(context);
-//     //       }, icon: const Icon(Icons.arrow_back))
-          
-          
-//           title:    BoxText.subheading(
-//             '${translation!.translate("order")} #${widget.orderId}'
-//           )
-            
-
-//           ,
-
-        
-          
-//         ),
-
-
-//         body:  SizedBox.expand(
-//           child: Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: Column(
-                  
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-
-
-
-
-
-//  SingleChildScrollView(
-//    scrollDirection: Axis.horizontal,
-//    child: Row(
-//     mainAxisAlignment:MainAxisAlignment.spaceBetween,
-//     children: [
-//  // widget.isAdmin!?
-//  Text.rich(
-//     TextSpan(
-//       text: currentLang(context)=="ar"?"صيانة على: ":"Maintenance On: "  ,
-//       children: [
-//         TextSpan(
-//           text: 
-//           getModelName(context ,        widget.modelType)
-          
- 
-//         )
-//       ]
-//     )
-//  )
- 
-//  // :
-//  // Text.rich(
-//  //   TextSpan(
-//  //     text: widget.modelType  ,
-//  //     children: [
-//  //       TextSpan(
-//  //         text: widget.from
-//  //       )
-//  //     ]
-//  //   )
-//  // )
- 
-//     ,
- 
-//  5.width,
- 
-//    Text.rich(
-//     TextSpan(
-//       text: '${translation.translate("date")}: '  ,
-//       children: [
-//         TextSpan(
-//           text: getMaintenanceFormattedDate(widget.date!,
-//           translation.locale.languageCode=="ar"?
-//           "ar":"en_US"
-          
-//           )
-//         )
-//       ]
-//     )
-//  )
-//     ,
-    
- 
-//     ],
-//  ),
-//  )  ,
-// 20.height ,
-
-
-//    // Figma Flutter Generator Rectangle2Widget - RECTANGLE
-     
-//      Row(
-//        mainAxisAlignment: MainAxisAlignment.center,
-//        children: [
-
-//            // Figma Flutter Generator TabbtnWidget - GROUP
-//      AnimatedContainer(
-//        duration: const Duration(milliseconds: 300),
-//         width: 119,
-//         height: 29,
-//         decoration: 
-        
-       
-//          BoxDecoration(
-//           borderRadius : selectedTab==0? const BorderRadius.only(
-//             topLeft: Radius.circular(50),
-//             topRight: Radius.circular(50),
-//             bottomLeft: Radius.circular(50),
-//             bottomRight: Radius.circular(50),
-//           ): BorderRadius.circular(0)
-          
-//           ,
-//     color:  selectedTab==0?
-//       Theme.of(context).primaryColor.withOpacity(.40):
-//       Colors.transparent
-//          ),
-//       child: 
-      
-//       Center(
-//        child: 
-//        Text('${translation.translate("details")}', textAlign: TextAlign.left, style: const TextStyle(
-//         color: Color.fromRGBO(0, 0, 0, 1),
-//         fontSize: 16,
-//         fontWeight: FontWeight.normal,
-//       ),)
-//        ,
-//      )
-//     )
-
-// .onTap((){
-//   selectedTab=0;
-//   setState(() {
-    
-//   });
-// })
-// ,
-
-//           const SizedBox(width: 10,),
-//      AnimatedContainer(
-//         width: 119,
-//         height: 29,
-
-//         duration: const Duration(
-//           milliseconds: 300
-//         ),
-//         decoration: 
-        
-        
-//          BoxDecoration(
-//           borderRadius :  selectedTab==1?const BorderRadius.only(
-//             topLeft: Radius.circular(50),
-//             topRight: Radius.circular(50),
-//             bottomLeft: Radius.circular(50),
-//             bottomRight: Radius.circular(50),
-//           ):BorderRadius.circular(0),
-//       color :
-//       selectedTab==1?
-//       Theme.of(context).primaryColor.withOpacity(.40):
-      
-//       Colors.transparent
-//       ,
-//         ),
-//       child: 
-      
-//       Center(
-//        child: 
-//        Text('${translation.translate("comments")}', textAlign: TextAlign.left, style: const TextStyle(
-//         color: Color.fromRGBO(0, 0, 0, 1),
-//         fontSize: 16,
-//         fontWeight: FontWeight.normal,
-//       ),)
-//        ,
-//      )
-//     )
-
-// .onTap((){
-//   selectedTab=1;
-//   setState(() {
-    
-//   });
-// })
-
-
-
-//        ],
-//      )
-
-// ,
-// 10.height,
-
-
-
-// Expanded(
-//   child:   Builder(builder: 
-  
-//   (_){
-//   if (selectedTab==1) {
-//     return OrderRecords(orderId: widget.orderId,);
-//   }
-  
-//     return _details(context);
-//   }
-//   ),
-// )
-
-
-
-
-
-
-//               ],
-//             ),
-//           ),
-//         ),
-
-// floatingActionButtonLocation:
-//   selectedTab==1?
-//  FloatingActionButtonLocation.centerDocked
- 
-//  :  
-//  FloatingActionButtonLocation.endFloat
-
-//  ,
-//         floatingActionButton:       
-        
-        
-//         selectedTab==1?
-        
-//                             Padding(
-//                               padding:   EdgeInsets.only(
-                              
-
-// bottom: 
-
-
-// MediaQuery.of(context).viewInsets.bottom
-
-//                               ),
-//                               child: Row(
-//                                 crossAxisAlignment: CrossAxisAlignment.center,
-//                                 children: [
-//                                   SizedBox(
-//                                     width: MediaQuery.of(context).size.width - 60,
-//                                     child: Card(
-//                                       margin: const EdgeInsets.only(
-//                                           left: 5, right: 5, bottom: 8),
-//                                       shape: RoundedRectangleBorder(
-//                                         borderRadius: BorderRadius.circular(25),
-//                                       ),
-//                                       child
-//                                       : 
-                                      
-//                                       TextFormField(
-//                                         controller: _controller,
-//                                         focusNode: focusNode,
-//                                         textAlignVertical: TextAlignVertical.center,
-//                                         keyboardType: TextInputType.multiline,
-//                                         maxLines: 5,
-//                                         minLines: 1,
-//                                         onChanged: (value) {
-//                                           if (value.isNotEmpty) {
-//                                             setState(() {
-//                                               // sendButton = true; 
-//                                             });
-//                                           } else {
-//                                             setState(() {
-//                                               // sendButton = false;
-//                                             });
-//                                           }
-//                                         },
-//                                         decoration: InputDecoration(
-//                                           border: InputBorder.none,
-                                        
-//                                           hintText:  translation.translate("type_a_comment")!,
-//                                           hintStyle: const TextStyle(color: Colors.grey),
-                                         
-                                        
-//                                           contentPadding: const EdgeInsets.symmetric(
-//                                             horizontal: 10 ,vertical: 5
-//                                           ),
-//                                         ),
-//                                       ),
-//                                     ),
-//                                   ),
-//                                   Padding(
-//                                     padding: const EdgeInsets.only(
-//                                       bottom: 8,
-//                                       right: 2,
-//                                       left: 2,
-//                                     ),
-//                                     child: CircleAvatar(
-//                                       radius: 25,
-//                                       backgroundColor: kcPrimaryColor,
-//                                       child: IconButton(
-//                                         icon: const Icon(
-//                                           Icons.send ,
-//                                           color: Colors.white,
-//                                         ),
-//                                         onPressed: ()async {
-                                   
-// controller.addRecord(context, widget.orderId!,
-
-//  _controller.text).then((value) {
-
-//    _controller.clear();
-//  });
-
-//                                           }
-                                        
-//                                       ),
-//                                     ),
-//                                   ),
-//                                 ],
-//                               ),
-//                             )
-                           
-                           
-                           
-                           
-                           
-                           
-                           
-                           
-                           
-                           
-                           
-                           
-                           
-//                            :
-//                            const SizedBox.shrink()
-// //         widget.isAdmin!?
-// //           Container(
-// //         width: 120 ,height: 30,
-// //         margin: const EdgeInsets.symmetric(horizontal: 6),
-// //         decoration: BoxDecoration(
-// //           color: Colors.green, borderRadius: BorderRadius.circular(50)
-// //         ),
-// //         child: Center(
-// //           child: Text(translation.translate("closing")! ,
-// //           style: const TextStyle(
-// //             color: Colors.white
-// //           ),
-          
-          
-// //           ),
-// //         ),
-// //         ).visible(widget.status==1.toString())
-// //         .onTap((){
-// // ///TODO: change order status
-// //           //make it closed
-// // controller.changeOrderStatus(context, widget.orderId!, 2.toString());
-// //         })
-        
-// //         :
-
-
-
-// //             Row(
-// //               mainAxisSize: MainAxisSize.min,
-// //               children: [
-
-
-
-// //                 Container(
-// //         width: 120 ,height: 30,
-// //         margin: const EdgeInsets.symmetric(horizontal: 6),
-// //         decoration: BoxDecoration(
-// //           color: Colors.green, borderRadius: BorderRadius.circular(50)
-// //         ),
-// //         child: Center(
-// //           child: Text(translation.translate("accept")! ,
-// //           style: const TextStyle(
-// //                 color: Colors.white
-// //           ),
-          
-          
-// //           ),
-// //         ),
-// //         )
-// //         .onTap((){
-// //           ///TODO: change order status
-
-// // //make it clsoing   = 1
-
-// //   controller.updateOrderStatus(context, widget.orderId!, null, 2.toString());
-// //         //  controller.updateOrderStatus(context, widget.orderId!, null, 2.toString());
-
-// //         }),
-
-
-
-                
-// //                 Container(
-// //         width: 120 ,height: 30,
-// //         margin: const EdgeInsets.symmetric(horizontal: 6),
-// //         decoration: BoxDecoration(
-// //           color: Colors.red, borderRadius: BorderRadius.circular(50)
-// //         ),
-// //         child: Center(
-// //           child: Text(translation.translate("reject")! ,
-// //           style: const TextStyle(
-// //                 color: Colors.white
-// //           ),
-          
-          
-// //           ),
-// //         ),
-// //         )
-// //         .onTap((){
-// //           ///TODO: change order status
-
-// // //make it clsoing   = 1
-
-// // // controller.changeOrderStatus(context, widget.orderId!, 1.toString());
-
-// // RejectPage(orderId: widget.orderId,).launch(context);
-// //         }),
-
-
-// //               ],
-// //             ).visible(widget.status==0.toString())
-        
-        
-        
-//         ,
-   
-   
-   
-//     );
-  
-  
-  
-//   }
 
 
 
@@ -1382,7 +892,7 @@ getAssetInfo( detailMapper.maintainanceAsset,),
         child: Text(
           detailMapper.task!,
          
-          //  maxLines: 10, 
+           maxLines: 10, 
            
           
           textAlign: TextAlign.justify,
@@ -1391,6 +901,62 @@ getAssetInfo( detailMapper.maintainanceAsset,),
       ),
      )
     ,
+    10.height,
+  BoxText.body(
+    currentLang(context)=="ar"?
+    "سبب الرفض":"Reject reason: " , 
+    // color: Colors.red,
+  ).visible(detailMapper.reject_resion!=null) ,
+    10.height ,
+       
+    
+    
+    
+    
+    
+    Container( 
+    // height: MediaQuery.of(context).size.height/3,
+    width:MediaQuery.of(context).size.width ,
+    padding: const EdgeInsets.all(15),
+      decoration: const BoxDecoration(
+          color: Colors.white,
+        
+          //      gradient: const LinearGradient(
+          //   stops:  [0.05, 0.02],
+          //   colors: [Colors.red, Colors.white]
+          // ),
+               borderRadius: BorderRadius.all(
+          Radius.circular(10),
+          ),
+          boxShadow: [
+          BoxShadow(
+          color: Color(0xffDDDDDD),
+          blurRadius: 6.0,
+          spreadRadius: 2.0,
+          offset: Offset(0.0, 0.0),
+          )
+          ],
+        
+      ),
+      child:  SingleChildScrollView(
+        child: Text(
+          detailMapper.reject_resion.toString(),
+         
+           maxLines: 10, 
+           style: const TextStyle(
+            color: Colors.red
+           ),
+          
+          textAlign: TextAlign.justify,
+          overflow: TextOverflow.fade,
+          ),
+      ),
+     ).visible(detailMapper.reject_resion!=null)
+    ,
+
+
+
+
     20.height ,
     
      BoxText.body('${translation.translate("attachments")}: ')
@@ -1422,21 +988,29 @@ getAssetInfo( detailMapper.maintainanceAsset,),
     
     e.toString().contains("jpeg")|| 
     e.toString().contains("jpg") ) {
-      return Container(
-        child: 
-        
-        Image.network(
-            "https://goodfoodsa.co$e",
-                  width: 300,
-                  height: 300,
-                ),
-        
-      ).onTap((){
-        // OpenDocumentPage(needLoadfromUrl: false,url: e,);
+      return 
 
-        DocumentService().initPlatformState(e);
+
+      Padding(
+        padding: const EdgeInsets.all(3.0),
+        child: CachedNetworkImage(
+         imageUrl: "https://goodfoodsa.co$e",
+         fit: BoxFit.cover,
+        
+           width: 300,
+                    height: 300,
+         progressIndicatorBuilder: (context, url, downloadProgress) => 
+                 Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+         errorWidget: (context, url, error) => const Icon(Icons.error),
+            ),
+      ).onTap((){
+
+
+   DocumentService().initPlatformState(e);
 
       });
+      
+      
     }else {
         return Container(
         child: Image.asset(
@@ -1799,7 +1373,8 @@ const SizedBox(height: 8,),
   
   Container();
 }else {
-    DefaultMaintenanceAsset defaultMaintenanceAsset =(maintainanceAsset as DefaultMaintenanceAsset);
+    DefaultMaintenanceAsset defaultMaintenanceAsset =
+    (maintainanceAsset as DefaultMaintenanceAsset);
 
   return Container(
 
@@ -1850,7 +1425,7 @@ child:
 const SizedBox(height: 8,),
               Text(
                 currentLang(context)=="ar"?   
-                    "الاسم :  ${defaultMaintenanceAsset.nameAr!}"  :
+                    "الاسم :  ${defaultMaintenanceAsset.nameAr}"  :
             "Name :  ${defaultMaintenanceAsset.nameEn}"  ,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

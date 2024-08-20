@@ -90,7 +90,15 @@ var locale = AppLocalizations.of(context);
     
       else  {
     
-       return ListView(
+       return
+       controller.orderRecorders!.data!.isEmpty?
+       Center(child: Text(
+        
+        currentLang(context)=="ar"?"لا توجد تعليقات":"No comments"
+       ),)
+       
+       :
+        ListView(
                 children: 
                 
                 controller.orderRecorders!

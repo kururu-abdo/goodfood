@@ -37,6 +37,9 @@ class BoxInputField extends StatelessWidget {
        keyboardType:isInputAea!? TextInputType.multiline:   textInputType,
                       maxLines: isInputAea!?10:1,
       obscureText: password,
+    onTapOutside: (event){
+      FocusManager.instance.primaryFocus?.unfocus();
+    },
       decoration: InputDecoration(
         hintText: placeholder,
         contentPadding:

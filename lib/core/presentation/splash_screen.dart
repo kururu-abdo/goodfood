@@ -4,10 +4,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/admin_dashboard.dart';
 import 'package:goodfoods/core/presentation/login.dart';
+import 'package:goodfoods/core/services/notification_plugin.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 class SplashScreen extends StatefulWidget {
 final RemoteMessage? remoteMessage;
-  const SplashScreen({Key? key, this.remoteMessage}) : super(key: key);
+
+  const SplashScreen({Key? key, this.remoteMessage,}) : super(key: key);
 
   @override
 
@@ -34,6 +36,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
      
      
       if (sharedPrefs.isLoggedIn  ) {
+           NotificationApi.initMessage();
+
          Navigator.pushAndRemoveUntil(
 
            context, MaterialPageRoute(builder: (_)=>const Dashboard()) ,
@@ -136,7 +140,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 //       await NotificationApi.pushNotification(event);
 //     });
 //   }
-
 
 
 

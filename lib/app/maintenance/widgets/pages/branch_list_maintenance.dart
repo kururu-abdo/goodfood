@@ -99,7 +99,7 @@ Center(child: NoContent(translate(context, "no_branches")),)
         var branchData = controller.branches!.data![index];
         var files = 
         branchData.files!=null?
-        jsonDecode(branchData.files!) as List:[];
+        jsonDecode(branchData.files.toString()) as List:[];
         return  
         
         

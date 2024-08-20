@@ -53,7 +53,6 @@ requestHeaders = {
     try {
 
       requestHeaders!.addAll({'Content-type': 'application/json'});
-      log(requestHeaders.toString());
       final response = await http.post
       (Uri.parse(_baseUrl + url),
        body: body
@@ -67,6 +66,7 @@ requestHeaders = {
       );
       
       responseJson = _returnResponse(response);
+      return responseJson;
     } on SocketException {
       print('No net');
       throw FetchDataException('No Internet connection');
@@ -74,15 +74,37 @@ requestHeaders = {
       log("POST $e");
       throw Exception(e.toString());
     }
-    print('api post.');
-    return responseJson;
+    // print('api post.');
+    // return responseJson;
   }
+
+
 
   Future<dynamic> put(String url, dynamic body) async {
     print('Api Put, url $url');
     var responseJson;
     try {
       final response = await http.put(Uri.parse(_baseUrl + url), body: body);
+      responseJson = _returnResponse(response);
+    } on SocketException {
+      print('No net');
+      throw FetchDataException('No Internet connection');
+    }
+    print('api put.');
+    print(responseJson.toString());
+    return responseJson;
+  }
+  Future<dynamic> patch(String url, dynamic body) async {
+    print('update my order, url ${_baseUrl+url}');
+    var responseJson;
+    try {
+requestHeaders!.addAll({'Content-type': 'application/json'}); 
+     final response = await http.patch(Uri.parse(_baseUrl + url), 
+      body: body, 
+      
+                  headers: (requestHeaders ?? {})
+
+      );
       responseJson = _returnResponse(response);
     } on SocketException {
       print('No net');
@@ -127,7 +149,9 @@ dynamic _returnResponse(http.Response response) {
     case 403:
       throw UnauthorisedException('Session Expired');
     case 500:
+  // log(response.body.toString());
     default:
+    log(response.body.toString());
       throw FetchDataException(
           'Error occured while Communication with Server with StatusCode : ${response.statusCode}');
   }

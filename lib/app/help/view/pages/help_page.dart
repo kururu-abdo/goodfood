@@ -24,6 +24,7 @@ var formKey =GlobalKey<FormState>();
         var controller = Provider.of<HelpController>(context);
 
     return  Scaffold(
+      resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
        appBar: 
         
@@ -37,7 +38,7 @@ var formKey =GlobalKey<FormState>();
     
           IconButton(onPressed: (){
     Navigator.pop(context);
-          }, icon: const Icon(Icons.arrow_back)),
+          }, icon: const Icon(Icons.arrow_back , color: Colors.black,)),
           title:
            Text(
 
@@ -68,7 +69,10 @@ Padding(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     // mainAxisSize: MainAxisSize.min,
                                     children: [
-Text(currentLang(context)=="ar"?"نوع المشكلة: ":"Issue Type: "),
+Text(currentLang(context)=="ar"?"نوع المشكلة: ":"Issue Type: ",  
+
+style: const TextStyle(fontWeight: FontWeight.bold),
+),
 5.height,
 
 PopupMenuButton(
@@ -87,6 +91,7 @@ PopupMenuButton(
      height: 30,
      padding: const EdgeInsets.symmetric(horizontal: 5),
     decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
       border: Border.all(
         color: Colors.grey ,width: .5
       )
@@ -305,14 +310,18 @@ Navigator.pop(context);
                               
                               controller.helpRequest.status==Status.LOADING?
                               const Center(child: CircularProgressIndicator(
-                                
+                                color: Colors.white,
                               ),)
                               :
                               Text(
                                   currentLang(context)=="ar"?
                                   "ارسال":
                                 
-                                'SEND'))
+                                'SEND' , 
+
+                                style: const TextStyle(                                color: Colors.white,
+),
+                          ))
                        
                                   ],
                                   

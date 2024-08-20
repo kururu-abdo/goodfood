@@ -100,7 +100,7 @@ ListView.builder(
         var assetData = controller.otherAssets!.data![index];
         var files = 
         assetData.files!=null?
-        jsonDecode(assetData.files!) as List:[];
+        jsonDecode(assetData.files.toString()) as List:[];
         return   
         
         

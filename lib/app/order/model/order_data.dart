@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:nb_utils/nb_utils.dart';
+
 class OrderData {
   int? currentPage;
   List<UserOrder>? data;
@@ -153,6 +155,7 @@ class MaintainOrder {
       this.admin});
 
   MaintainOrder.fromJson(Map<String, dynamic> json) {
+    log(json.toString());
     id = json['id'];
     adminId = json['admin_id'];
     modelType = json['model_type'];
@@ -167,7 +170,7 @@ class MaintainOrder {
     }else {
        files = <String>[];
     }
-    status = json['status'];
+    status = json['status']??0;
     immedatly = json['immedatly'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];

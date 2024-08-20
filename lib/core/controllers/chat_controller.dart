@@ -315,7 +315,7 @@ isSending=true;
   var response = await  ChatApis().sendMessage(emp.id.toString(), msg, base64 ,ext);
 
 
-  log(response.data!.nextPageUrl!.toString());
+  log(response.data!.nextPageUrl.toString());
   // messageModel = null;
   
 
@@ -387,7 +387,8 @@ notifyListeners();
 
 
 scrollToBottom(){
-  log('SCROLL TO BOTTOM');
+ 
+ if (messages!.isNotEmpty) {
     itemScrollController!.scrollTo(
   index: messages!.length,
 
@@ -395,6 +396,8 @@ scrollToBottom(){
   curve: Curves.easeInOutCubic
   
   );
+ }
+   
 }
 
 

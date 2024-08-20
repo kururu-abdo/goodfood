@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import 'package:nb_utils/nb_utils.dart';
+import 'dart:developer';
 
 class MaintainOrderDetails {
   int? code;
@@ -55,7 +54,6 @@ class MaintainOrderData {
 
   MaintainOrderData.fromJson(Map<String, dynamic> json) {
    
-   log("NO PROBLEMA");
     id = json['id'];
     adminId = json['admin_id'];
     modelType = json['model_type'];
@@ -63,17 +61,34 @@ class MaintainOrderData {
     machines = json['machines'];
     task = json['task'];
      files=[];
-    if (json['files']!=null) {
-   
+     
+if (!json.containsKey("files")) {
+        log("FILSE NO PROBLEMA KEY");
+  
+     files=[];
 
- for (var v in (jsonDecode( json['files'].toString()) as List)) { 
+
+}
+else if( (json['files'].toString()==null.toString()) ){
+          log("FILSE NO PROBLEMA NULL");
+
+     files=[];
+
+}
+else if((jsonDecode( json['files'].toString()) as List).isEmpty){
+          log("FILSE NO PROBLEMA DECODE");
+
+     files=[];
+
+}
+else {
+          log("FILSE NO PROBLEMA ELSE ");
+
+  for (var v in (jsonDecode( json['files'].toString()) as List)) { 
 
    files!.add(v);
  }
-}else {
-  files=[];
 }
-
     status = json['status'];
     immedatly = json['immedatly'];
     createdAt = json['created_at'];
@@ -82,6 +97,7 @@ class MaintainOrderData {
     forwardTo = json['forward_to'] != null
         ? ForwardTo.fromJson(json['forward_to'])
         : null;
+
   }
 
   Map<String, dynamic> toJson() {
@@ -117,12 +133,15 @@ class Model {
    List<dynamic>? files;
   String? createdAt;
   String? updatedAt;
-
+String? nameAr;
+String? nameEn;
   Model(
       {this.id,
       this.bordNumber,
       this.carType,
       this.bodyNum,
+      this.nameAr,
+      this.nameEn,
       this.carMark,
       this.adminId,
       this.files,
@@ -131,6 +150,8 @@ class Model {
 
   Model.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    nameAr=json['name_ar'];
+    nameEn= json['name_en'];
     bordNumber = json['bord_number'];
     carType = json['car_type'];
     bodyNum = json['body_num'];
@@ -161,6 +182,8 @@ class Model {
     data['files'] = files;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
+  data['name_ar']=   nameAr;
+   data['name_en']= nameEn;
     return data;
   }
 }
@@ -173,9 +196,11 @@ class ForwardTo {
   String? createdAt;
   String? updatedAt;
   Admin? admin;
+  dynamic reject_resion;
 
   ForwardTo(
       {this.id,
+      this.reject_resion,
       this.maintainId,
       this.adminId,
       this.confirmed,
@@ -190,6 +215,7 @@ class ForwardTo {
     confirmed = json['confirmed'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    reject_resion=json['reject_resion'];
     admin = json['admin'] != null ? Admin.fromJson(json['admin']) : null;
   }
 

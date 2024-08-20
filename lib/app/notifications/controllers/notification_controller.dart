@@ -13,6 +13,106 @@ ApiResponse<void>?  readNotifications = ApiResponse.completed({});
 
 
 
+List<Map>  statusList =[
+  {
+"en":"All",
+"ar":"الكل" ,
+"value":'0'
+  },
+
+ {
+"en":"Read",
+"ar":"المقروءة" ,
+"value":'1'
+  },
+
+ {
+"en":"Not Read",
+"ar":"غير المقروءة" ,
+"value":'2'
+  },
+ 
+
+
+];
+
+
+String? selectedStatus;
+
+
+String filterLink='';
+
+Map? getSelectedStatusObject(){
+  if (selectedStatus==null) {
+    return null;
+  }else {
+   Map? value= statusList.firstWhere((e)=>  e['value']==selectedStatus);
+    
+
+    return value;
+
+  }
+}
+
+setselectedStatus(status){
+  selectedStatus=status;
+  notifyListeners();
+}
+
+clearFilter(){
+  filterLink='';
+  // startDate=null;
+  // endDate=null;
+  // selectedModel=null;
+  selectedStatus=null;
+  notifyListeners();
+}
+
+
+
+setFilterLink(
+  
+  BuildContext context,
+  String type){
+ 
+  // filterLink = 'status=$selectedStatus&start_date=$startDate&end_date=$endDate&model_type=$selectedModel';
+filterLink='';
+
+
+if (selectedStatus!=null) {
+  filterLink='${filterLink}status=$selectedStatus&';
+}
+// if (startDate!=null) {
+//     filterLink='${filterLink}start_date=${     getUsaualDate(startDate!.toString())}&';
+
+// }
+
+// if (endDate!=null) {
+//     filterLink='${filterLink}end_date=${     getUsaualDate(endDate!.toString())}&';
+
+// }
+// if (selectedModel!=null) {
+//     filterLink='${filterLink}model_type=$selectedModel';
+
+// }
+
+
+
+
+
+
+
+
+  // log(filterLink);
+  // if (type=="maintain") {
+  // getFiliterUserOrders(context);
+  // }else {
+  //   geFiltertMaintainOrders(context);
+
+  // }
+  notifyListeners();
+}
+
 
   Future<void> getNotifications()async{
 

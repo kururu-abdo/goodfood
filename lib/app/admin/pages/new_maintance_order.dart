@@ -72,7 +72,11 @@ var  images =[
         titleSpacing: 0,
         
        
-        title: const Text("New Order"),
+        title:  Text(
+          
+          currentLang(context)=="ar"?
+          "طلب صيانة جديد":
+          "New Order"),
       ),
        
        
@@ -111,6 +115,12 @@ var  images =[
         isInputAea: true,
         
         placeholder:currentLang(context) =="ar"?"المهمة":'Task',
+        validator: (str){
+          if (str!.isEmpty) {
+            return currentLang(context) =="ar"?"هذا الحقل مطلوب":"This field is required";
+          }
+          return null;
+        },
         )
         
         ,15.height,
@@ -428,7 +438,18 @@ Text(currentLang(context)=="ar"?
                         // } else {
                           //The form has some validation errors.
                           //Do Something...
-                maintenanceController.setModelId(widget.modelId!);
+if (_formKey.currentState!.validate()) {
+                          if (maintenanceController.newOrderFiles.isEmpty ) {
+
+showToast(currentLang(context)=="ar"? "الرجاء اختيار ملف":"Please select file", true);
+
+
+                            
+                          }else {
+
+
+
+maintenanceController.setModelId(widget.modelId!);
                 maintenanceController.setModelType(widget.modelType!);
                 maintenanceController.setTask(_nameController.text.trim());
                 
@@ -439,7 +460,12 @@ Text(currentLang(context)=="ar"?
 category: widget.category,
 walkway: widget.walkway,
                           ).launch(context);
-                        // }
+                          }
+                
+
+
+
+                        }
                       },
                       child:  Text(
                         

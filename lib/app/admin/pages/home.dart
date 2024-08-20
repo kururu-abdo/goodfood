@@ -20,6 +20,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
+
 class _HomeState extends State<Home> {
 
   @override
@@ -28,6 +29,9 @@ class _HomeState extends State<Home> {
     NotificationApi.notificationHandler();
 
 context.read<AdminHomeController>().updateToken();
+
+
+    NotificationApi.initMessage();
 
   }
   @override

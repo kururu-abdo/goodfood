@@ -16,23 +16,25 @@ import 'package:goodfoods/core/services/document_service.dart';
 import 'package:goodfoods/core/services/navigation_service.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:goodfoods/core/utils/utils.dart';
-import 'package:goodfoods/main.dart';
 import 'package:goodfoods/main.dart' as main;
+import 'package:goodfoods/main.dart';
 // import 'package:goodfoods/main.dart';
 import 'package:nb_utils/nb_utils.dart';
 // import 'package:nb_utils/nb_utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/subjects.dart';
 final NavigationService navService = NavigationService();
+  final notification = FlutterLocalNotificationsPlugin();
+
 class NotificationApi{
     final BehaviorSubject<bool> behaviorSubject = BehaviorSubject();
   //code here
 
- static final _notification = FlutterLocalNotificationsPlugin();
+ static final notification = FlutterLocalNotificationsPlugin();
 
   static void init() async{
      NotificationApi.createNorifiacationChannel();
-    _notification.initialize(
+    notification.initialize(
        const InitializationSettings(
         android: AndroidInitializationSettings('app_icon'),
         iOS: DarwinInitializationSettings(),
@@ -79,7 +81,7 @@ class NotificationApi{
     );
 
 // final NotificationAppLaunchDetails? notificationAppLaunchDetails =
-//     await _notification.getNotificationAppLaunchDetails();
+//     await notification.getNotificationAppLaunchDetails();
 
 // if (notificationAppLaunchDetails!.notificationResponse!= null) {
 //   onSelectNotification(notificationAppLaunchDetails.notificationResponse);
@@ -98,7 +100,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   playSound: true,
 );
 
- _notification
+ notification
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
@@ -109,7 +111,7 @@ static pushNotification(
     RemoteMessage message,
   ) async {
 
-
+log(message.data.toString());
 
 
 
@@ -149,7 +151,7 @@ static pushNotification(
 
 
 
-    await _notification.show(
+    await notification.show(
         message.notification.hashCode,
         message.data['title'],
         message.data['body'],
@@ -333,7 +335,7 @@ NotificationApi.clear();
           (route)=>false
          );
  }
-
+sharedPrefs.isOpen= true;
 
 }
 
@@ -354,8 +356,8 @@ log("CLCIKED");
 
 
 static Future<void> requestPermissions() async {
-    
-    var status = await Permission.notification.status;
+    // await Permission.notification.request();
+    var status = await Permission.notification.request();
     if (status.isPermanentlyDenied) {
   // The user opted to never again see the permission request dialog for this
   // app. The only way to change the permission's status now is to let the
@@ -364,7 +366,7 @@ static Future<void> requestPermissions() async {
 }
 if (status.isDenied || !status.isGranted) {
   if (Platform.isIOS || Platform.isMacOS) {
-      await _notification
+      await notification
           .resolvePlatformSpecificImplementation<
               IOSFlutterLocalNotificationsPlugin>()
           ?.requestPermissions(
@@ -372,7 +374,7 @@ if (status.isDenied || !status.isGranted) {
             badge: true,
             sound: true,
           );
-      await _notification
+      await notification
           .resolvePlatformSpecificImplementation<
               MacOSFlutterLocalNotificationsPlugin>()
           ?.requestPermissions(
@@ -382,11 +384,11 @@ if (status.isDenied || !status.isGranted) {
           );
     } else if (Platform.isAndroid) {
       final AndroidFlutterLocalNotificationsPlugin? androidImplementation =
-          _notification.resolvePlatformSpecificImplementation<
+          notification.resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin>();
 
       final bool? grantedNotificationPermission =
-          await androidImplementation!.requestPermission();
+          await androidImplementation!.requestNotificationsPermission();
      
     }
 }
@@ -399,11 +401,11 @@ static  Future initMessage()async{
    NotificationAppLaunchDetails? notificationAppLaunchDetails = !kIsWeb &&
           Platform.isLinux
       ? null
-      : await _notification.getNotificationAppLaunchDetails();
+      : await notification.getNotificationAppLaunchDetails();
 if (!sharedPrefs.isOpen) {
    if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
     NotificationApi.onSelectNotification(notificationAppLaunchDetails!.notificationResponse);
-    // _notification.cancelAll();
+    // notification.cancelAll();
     notificationAppLaunchDetails =null;
       // Eraser.clearAllAppNotifications();
       
@@ -422,7 +424,7 @@ static Future<void> clear()async{
    } catch (e) {
       FirebaseMessaging.instance.deleteToken();
       // FirebaseMessaging.instance.ca();
-// _notification.cancelAll();
+// notification.cancelAll();
     ClearAllNotifications.clear();
       Eraser.clearAllAppNotifications();
    }

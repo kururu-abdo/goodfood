@@ -2,12 +2,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:goodfoods/core/presentation/dialogs/dynamic_dilog.dart';
-
-class LocalNotificationService {
-   // Instance of Flutternotification plugin
-   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
+ // Instance of Flutternotification plugin
+    final FlutterLocalNotificationsPlugin notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+class LocalNotificationService {
+  
 
       static void initialize() {
     // Initialization  setting for android
@@ -19,16 +19,16 @@ class LocalNotificationService {
             
           ),
             android: AndroidInitializationSettings("@drawable/ic_launcher"));
-    _notificationsPlugin.initialize(
+    notificationsPlugin.initialize(
       initializationSettingsAndroid,
       // to handle event when we receive notification
       onDidReceiveNotificationResponse: (details) {
-           _notificationsPlugin.cancelAll();
+           notificationsPlugin.cancelAll();
         if (details.input != null) {}
       },
       onDidReceiveBackgroundNotificationResponse: (details) {
         
-            _notificationsPlugin.cancelAll();
+            notificationsPlugin.cancelAll();
           if (details.input != null) {
 
           }
@@ -62,7 +62,7 @@ class LocalNotificationService {
             playSound: true,
             priority: Priority.high),
       );
-      await _notificationsPlugin.show(id, message.notification?.title,
+      await notificationsPlugin.show(id, message.notification?.title,
           message.notification?.body, notificationDetails,
           payload: message.data['route']);
     } catch (e) {

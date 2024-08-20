@@ -248,6 +248,99 @@ modelType.toString().toLowerCase()=="car"? carBody:
 
 
 
+Future<void> updateOrder(maintainId,
+task ,immedatly,
+ files  , newFiles 
+   ) async {
+/*
+
+$maintain->update([
+           'task'           => $request['task'],
+           'immedatly'      => $request['immedatly'],
+           'maintain_type'  => $request['maintain_type'],
+           'maintain_cat'   => $request['maintain_cat'],
+           'files'          => json_encode($request['files'])
+'new_files'
+
+
+*/
+
+
+
+
+
+     //
+Map<String,dynamic> body ={
+  'task':task ,
+  'immedatly':immedatly.toString()
+};
+ dynamic body2=   jsonEncode({ 
+'task':task ,
+  'immedatly':immedatly.toString()
+
+});
+
+// body["task"] = task.toString();
+
+// body['immedatly'] = immedatly.toString();
+     if(
+      files!.isNotEmpty && newFiles!.isEmpty){
+// body['files'] = json.encode(files);
+body['files'] = files.toString();
+body.addAll({"files":files});
+body2=
+jsonEncode({ 
+'task':task ,
+  'immedatly':immedatly.toString(), 
+  'files':files
+
+});
+     }
+else   if(
+    newFiles!.isNotEmpty && files.isEmpty){
+// body['new_files'] =  json.encode(newFiles);
+body.addAll({"new_files":newFiles});
+
+body['new_files'] =  newFiles.toString();
+body2=jsonEncode({ 
+'task':task ,
+  'immedatly':immedatly.toString(),
+'new_files': newFiles
+});
+     }
+else if( newFiles.isNotEmpty && files.isNotEmpty){
+  body.addAll({
+    'new_files': newFiles, 
+"files":files
+  });
+  body2=jsonEncode({ 
+'task':task ,
+  'immedatly':immedatly.toString(),
+'new_files': newFiles, 
+"files":files
+});
+}
+
+
+
+
+
+log(body.keys.toString());
+
+    final response = await _helper.patch("maintain/update/$maintainId" ,
+
+
+
+// body
+body2
+  //  jsonEncode(body)
+    
+    );
+    log("NO PROPLEM2");
+    return  response;
+  }
+
+
 
 
 

@@ -187,9 +187,11 @@ return const FilterBottomSheet(isMaintain: true,);
          ),) :
          ListView.builder(
            itemCount:
-           controller.userOrdersData.length>1?
+
+             controller.userOrders!.data!.nextPageUrl==null?
+           controller.userOrdersData.length:
            
-            controller.userOrdersData.length+1:  controller.userOrdersData.length,
+            controller.userOrdersData.length+1,
            itemBuilder: (BuildContext context, int index) {
              // var files = jsonDecode(carData.files!) as List;
 

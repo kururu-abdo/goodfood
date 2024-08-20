@@ -3,7 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 ThemeData getAppTheme(BuildContext context, bool isDarkTheme) {
   return ThemeData(
-    primaryColor: Color(0xFF575b87),
+    useMaterial3: false,
+    primaryColor: const Color(0xFF575b87),
     fontFamily: GoogleFonts.tajawal().fontFamily,
 
 
