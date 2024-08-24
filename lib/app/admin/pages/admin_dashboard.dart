@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:goodfoods/app/admin/pages/home.dart';
+import 'package:goodfoods/app/admin/pages/home_new.dart';
 import 'package:goodfoods/app/admin/pages/settings_page.dart';
 import 'package:goodfoods/core/presentation/notifications_page.dart';
-import 'package:goodfoods/core/services/notification_plugin.dart';
+import 'package:goodfoods/core/utils/shared_prefs.dart';
 
 class Dashboard extends StatefulWidget {
   final bool? isLauchByNotificaion;
@@ -30,7 +30,8 @@ void initState() {
   Widget build(BuildContext context) {
 
     List screens = [
-      const Home(),
+      // const Home(),
+      const HomeNew(),
       // const StatsPage(),
       const NotificationPage(
         fromDashboard: true,
@@ -85,7 +86,8 @@ bottomNavigationBar:
             color: 
             _currentTab ==0? 
             
-            Colors.white
+            // Colors.white
+            Theme.of(context).primaryColor
             :Colors.black
         
             ,),
@@ -127,28 +129,94 @@ bottomNavigationBar:
         
          MaterialButton(onPressed: (){
          _currentTab=1;
-        
+        // sharedPrefs.notificationCount=0;
         setState(() {
         
         });
          
             } ,  
-            child:  ImageIcon(
-        const AssetImage('assets/icons/bell.png')
-        ,
-        size:25 ,  
-            
-            color:  _currentTab ==1? 
-          
-           Colors.white
-            :Colors.black
-          
-          // Theme.of(context).primaryColor
-          //   :Colors.grey
-        
-        
-        
-        
+            child:  Builder(
+              builder: (context) {
+                if (sharedPrefs.notificationCount>0) {
+              return 
+              
+                  SizedBox(
+                    height: 50,
+                    width: 40,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                    
+                    ImageIcon(
+                          const AssetImage('assets/icons/bell.png')
+                          ,
+                          size:25 ,  
+                                    
+                                    color:  _currentTab ==1? 
+                            
+                            //  Colors.white
+
+                                        Theme.of(context).primaryColor
+
+                                    :Colors.black
+                            
+                            // Theme.of(context).primaryColor
+                            //   :Colors.grey
+                          
+                          
+                          
+                          
+                                    ), 
+                    
+                                    Positioned(
+                    
+                    top: 0,
+                    right: 0,
+                    child: 
+                                    Container(
+                    padding: const EdgeInsets.all(7),
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.red 
+                    ),
+                    child: Center(
+                      child: Text(sharedPrefs.notificationCount.toString() ,
+                      
+                      style: const TextStyle(
+                        color: Colors.white, 
+                        fontSize: 12
+                      ),
+                      ),
+                    ),
+                                    )
+                                    
+                                    )
+                    
+                    ],),
+                  );
+               
+               
+                }
+                return ImageIcon(
+                        const AssetImage('assets/icons/bell.png')
+                        ,
+                        size:25 ,  
+                
+                color:  _currentTab ==1? 
+                          
+                          //  Colors.white
+                                      Theme.of(context).primaryColor
+
+                :Colors.black
+                          
+                          // Theme.of(context).primaryColor
+                          //   :Colors.grey
+                        
+                        
+                        
+                        
+                );
+              }
             ),
             
             )

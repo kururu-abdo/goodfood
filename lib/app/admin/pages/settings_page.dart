@@ -151,6 +151,7 @@ body: SingleChildScrollView(
      Divider(height: 4, thickness: 2, color: context.dividerColor)
                       .paddingOnly(top: 16, bottom: 8)
                       .visible(true),
+
                   mSideMenu(
                      appLocale!.translate("notifications")
                      
@@ -323,6 +324,10 @@ const SplashScreen().launch(context);
             ),
           ]);
                   }).visible(true), 
+    
+    
+    
+    
     ],
   ),
 ),

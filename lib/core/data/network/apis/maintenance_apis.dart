@@ -9,6 +9,7 @@ import 'package:goodfoods/core/data/models/department_asset.dart';
 import 'package:goodfoods/core/data/models/deprtment_model.dart';
 import 'package:goodfoods/core/data/models/mainenance_order_model.dart';
 import 'package:goodfoods/core/data/models/maintain_model.dart';
+import 'package:goodfoods/core/data/models/order_status.dart';
 import 'package:goodfoods/core/data/models/other_asset_model.dart';
 import 'package:goodfoods/core/data/models/record_model.dart';
 import 'package:goodfoods/core/data/models/skin_model.dart';
@@ -38,6 +39,23 @@ class MaintenanceApis {
 cars = I.map((e) => CarModel.fromJson(e)).toList();
     return cars;
   }
+
+//api/maintain/maintain_status
+Future<OrderStatus> getOrderStatusData(
+     
+   ) async {
+     //
+    final response = await _helper.get("maintain/maintain_status" ,
+   
+    
+    );
+   
+var statusData = OrderStatus.fromJson(response['data']);
+    return statusData;
+  }
+
+
+
 
   Future<List<Department>> getDepartments(
      
@@ -346,6 +364,8 @@ body2
 
 
   Future<MaintainenanceOrderModel> getMaintainOrder(
+    String? status
+,
    [
     String? nextUrl,
     bool? isPaginate=false
@@ -353,7 +373,7 @@ body2
    ) async {
      log('////////////////$nextUrl $isPaginate');
      //
-    final response = await _helper.get("maintain/get_submitted_orders" ,
+    final response = await _helper.get("maintain/get_submitted_orders?status=${status}" ,
       pageUrl: nextUrl,
    isPaginate:  isPaginate
     
@@ -398,7 +418,7 @@ Future<OrderData> getUserOrders(
      //
     final response = await _helper.get(
      status !=null?
-      "maintain/get_order":"maintain/get_order"   ,
+      "maintain/get_order":"maintain/get_order?status=${status}"   ,
    pageUrl: 
    
    status != null?

@@ -23,6 +23,8 @@ class SharedPrefs {
   String get   token => _sharedPrefs!.getString(TOKEN) ?? "";
   String get   userEmail => _sharedPrefs!.getString(USER_EMAIL) ?? "";
   String get   userPass => _sharedPrefs!.getString(USER_PASS) ?? "";
+    int get   notificationCount => _sharedPrefs!.getInt(NOTIFICATION_COUNT) ?? 0;
+
 
  set userEmail(String email){
  _sharedPrefs!.setString(USER_EMAIL, email);
@@ -33,7 +35,9 @@ class SharedPrefs {
  set userPass(String pass){
  _sharedPrefs!.setString(USER_PASS, pass);
  }
-
+set notificationCount(int count){
+ _sharedPrefs!.setInt(NOTIFICATION_COUNT, count);
+ }
 
  set isAdmin(bool value){
  _sharedPrefs!.setBool(ISADMIN, value);

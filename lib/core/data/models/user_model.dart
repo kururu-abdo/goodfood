@@ -2,12 +2,14 @@ class UserModel {
   String? accessToken;
   String? tokenType;
   User? user;
+  dynamic notifications;
   Permisions? permisions;
 
   UserModel({this.accessToken, this.tokenType, this.user, this.permisions});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     accessToken = json['access_token'];
+    notifications= json['notifications'];
     tokenType = json['token_type'];
     user = json['user'] != null ? User.fromJson(json['user']) : null;
     permisions = json['permisions'] != null

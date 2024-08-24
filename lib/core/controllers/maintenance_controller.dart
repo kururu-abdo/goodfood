@@ -19,6 +19,7 @@ import 'package:goodfoods/core/data/models/deprtment_model.dart';
 import 'package:goodfoods/core/data/models/file_model.dart';
 import 'package:goodfoods/core/data/models/mainenance_order_model.dart';
 import 'package:goodfoods/core/data/models/maintain_model.dart';
+import 'package:goodfoods/core/data/models/order_status.dart';
 import 'package:goodfoods/core/data/models/other_asset_model.dart';
 import 'package:goodfoods/core/data/models/record_model.dart';
 import 'package:goodfoods/core/data/models/region_model.dart';
@@ -53,6 +54,7 @@ String filterLink='';
 ApiResponse<List<RegionModel>>?  regions = ApiResponse.completed([]);
 ApiResponse<List<DepartmentModel>>?  departments2 = ApiResponse.completed([]);
 ApiResponse<List<DepartmentAsset>>?  departmeentAssets = ApiResponse.completed([]);
+ApiResponse<OrderStatus>?  orderStatusData =ApiResponse.loading("loading");
 
 
 ApiResponse<List<CarModel>>?  cars = ApiResponse.completed([]);
@@ -362,7 +364,7 @@ clearFilter(){
 setFilterLink(
   
   BuildContext context,
-  String type){
+  String type , String status){
  
   // filterLink = 'status=$selectedStatus&start_date=$startDate&end_date=$endDate&model_type=$selectedModel';
 filterLink='';
@@ -371,6 +373,11 @@ filterLink='';
 if (selectedStatus!=null) {
   filterLink='${filterLink}status=$selectedStatus&';
 }
+// if (status!=null) {
+  filterLink='${filterLink}status=$status&';
+// }
+
+
 if (startDate!=null) {
     filterLink='${filterLink}start_date=${     getUsaualDate(startDate!.toString())}&';
 
@@ -546,6 +553,26 @@ notifyListeners();
       isBusy= false; 
   }
 }
+Future<void> getStatusData(BuildContext context)async{
+   orderStatusData = ApiResponse.loading('loading');
+
+isBusy= true;
+
+  try {
+    var  response = await MaintenanceApis().getOrderStatusData();
+
+
+
+    orderStatusData=ApiResponse.completed(response);
+  } catch (e) {
+       orderStatusData = ApiResponse.error('$e');
+notifyListeners();
+
+  }finally{
+      isBusy= false; 
+  }
+}
+
 
 
 
@@ -950,7 +977,7 @@ notifyListeners();
 
 Future<void> getMaintainOrders(BuildContext context ,
 
-
+String? status
 )async{
    maintainOrders = ApiResponse.loading('loading');
 adminOrders=[];
@@ -958,7 +985,7 @@ notifyListeners();
   try {
     log("GET_ORDER3{MAINN}");
 
-    var  response = await MaintenanceApis().getMaintainOrder();
+    var  response = await MaintenanceApis().getMaintainOrder(status);
 
 
 
@@ -1025,6 +1052,7 @@ String nextUrl
 notifyListeners();
   try {
     var  response = await MaintenanceApis().getMaintainOrder(
+      status,
       nextUrl, true
     );
 
@@ -1102,7 +1130,7 @@ notifyListeners();
     var  response = await 
     
     MaintenanceApis().getUserOrders(
-      '' ,false , 3.toString()
+      status ,false , 3.toString()
       
       );
 

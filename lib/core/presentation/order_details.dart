@@ -154,7 +154,7 @@ else if(controller.orderDetailsMapper!.status==Status.ERROR) {
 style: const TextStyle(color: Colors.red , fontWeight: FontWeight.bold),
 )
 
-).visible(controller.orderDetailsMapper!.data!.orderStatus.toString()=='0')
+).visible(controller.orderDetailsMapper!.data!.orderStatus.toString()=='3')
 
 
 :  
@@ -184,7 +184,9 @@ controller.changeOrderStatus(context,
 style: const TextStyle(color: Colors.red , fontWeight: FontWeight.bold),
 )
 
-).visible(controller.orderDetailsMapper!.data!.orderStatus.toString()==1.toString())
+).visible(
+  !sharedPrefs.isMaintain&&
+  controller.orderDetailsMapper!.data!.orderStatus.toString()==1.toString())
 : 
 
 

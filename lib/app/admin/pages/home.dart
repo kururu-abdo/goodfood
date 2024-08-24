@@ -6,6 +6,7 @@ import 'package:goodfoods/app/maintenance/widgets/pages/user_maintenance_orders.
 import 'package:goodfoods/app/managment_orders/views/pages/mangement_orders.dart';
 import 'package:goodfoods/app/report/view/pages/reports.dart';
 import 'package:goodfoods/core/controllers/admin_home_controller.dart';
+import 'package:goodfoods/core/controllers/auth_controller.dart';
 import 'package:goodfoods/core/presentation/widgets/app_bar.dart';
 import 'package:goodfoods/core/services/notification_plugin.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
@@ -28,10 +29,19 @@ class _HomeState extends State<Home> {
     super.initState();
     NotificationApi.notificationHandler();
 
-context.read<AdminHomeController>().updateToken();
 
 
     NotificationApi.initMessage();
+
+WidgetsBinding.instance.addPostFrameCallback((_){
+  context.read<AuthController>().getUserProfile();
+
+context.read<AdminHomeController>().updateToken();
+
+
+
+});
+
 
   }
   @override

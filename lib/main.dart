@@ -1,7 +1,8 @@
 
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -12,8 +13,9 @@ import 'package:goodfoods/core/presentation/app_theme.dart';
 import 'package:goodfoods/core/presentation/splash_screen.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
 import 'package:goodfoods/core/services/document_service.dart';
-import 'package:goodfoods/core/services/notification.dart';
+import 'package:goodfoods/core/services/goodfoods_remote_config.dart';
 import 'package:goodfoods/core/services/notification_plugin.dart';
+import 'package:goodfoods/core/services/package_info_service.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:open_document/my_files/init.dart';
 import 'package:provider/provider.dart';
@@ -68,18 +70,30 @@ String? selectedNotificationPayload;
      LanguageProvier appLanguage = LanguageProvier();
   await appLanguage.fetchLocale();
  try {
+
     await sharedPrefs.init();
   await di.init();
+  
 DocumentService().initCheckPermission();
-     Firebase.initializeApp();
+     await  Firebase.initializeApp(
+// options: const FirebaseOptions(
+//   apiKey: "AIzaSyAipa8LVCV4FgkcrNUNFAsCxYqPMcMkfpE",
+//    appId: "1:67902231939:android:cc9c9af108559354c952b6",
+//  messagingSenderId: "67902231939",
+//   projectId: "goodfood-23597"
+  
+//   ),
+     
+     );
     
     NotificationApi.init();
       
 
       NotificationApi.requestPermissions();
 
-  
- 
+  GoodfoodsFirebaseRemoteConfig.initialize();
+await 
+ GoodfoodsPackageInfo().initialize();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // final NotificationAppLaunchDetails? notificationAppLaunchDetails = !kIsWeb && Platform.isLinux
@@ -94,6 +108,7 @@ DocumentService().initCheckPermission();
 
 
  } catch (e) {
+  log("PACKAGE INFO$e");
  }
 
 
@@ -170,7 +185,7 @@ class MyApp extends StatelessWidget {
            
            
            
-            home:  SplashScreen(
+            home:  const SplashScreen(
             // isLauchByNotificationPlugin:   isLauchByNotificaiton,
             )
           );

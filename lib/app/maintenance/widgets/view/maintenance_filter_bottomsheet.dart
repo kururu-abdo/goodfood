@@ -7,7 +7,8 @@ import 'package:provider/provider.dart';
 
 class FilterBottomSheet extends StatefulWidget {
   final bool? isMaintain;
-  const FilterBottomSheet({ Key? key, this.isMaintain = false }) : super(key: key);
+  final String? status;
+  const FilterBottomSheet({ Key? key, this.isMaintain = false, this.status }) : super(key: key);
 
   @override
   _FilterBottomSheetState createState() => _FilterBottomSheetState();
@@ -92,75 +93,75 @@ Row(
   ],
 ) ,
 
-const SizedBox(height: 15,) , 
+// const SizedBox(height: 15,) , 
 
-Row(
-  mainAxisSize: MainAxisSize.min,
-  children: [
-        Text(currentLang(context)=="ar"?"الحالة: ":"Status: " ,  style: const TextStyle(
+// Row(
+//   mainAxisSize: MainAxisSize.min,
+//   children: [
+//         Text(currentLang(context)=="ar"?"الحالة: ":"Status: " ,  style: const TextStyle(
     
-      fontSize: 15 , fontWeight: FontWeight.bold
-    ),),
+//       fontSize: 15 , fontWeight: FontWeight.bold
+//     ),),
 
-    const SizedBox(width: 5,),
+//     const SizedBox(width: 5,),
 
-PopupMenuButton(
-          onSelected: (value) {
-            // your logic
-            maintenanceController.setselectedStatus(value);
-          },
-          itemBuilder: (BuildContext bc) {
-            return 
-            maintenanceController.statusList.map((e) =>   PopupMenuItem(
-                value: e['value'],
-                child:Text(currentLang(context)=="ar"?e['ar']:e['en']),
-              )).toList();
+// PopupMenuButton(
+//           onSelected: (value) {
+//             // your logic
+//             maintenanceController.setselectedStatus(value);
+//           },
+//           itemBuilder: (BuildContext bc) {
+//             return 
+//             maintenanceController.statusList.map((e) =>   PopupMenuItem(
+//                 value: e['value'],
+//                 child:Text(currentLang(context)=="ar"?e['ar']:e['en']),
+//               )).toList();
             
             
-            const [
-              PopupMenuItem(
-                value: '/hello',
-                child: Text("Hello"),
-              ),
-              PopupMenuItem(
-                value: '/about',
-                child: Text("About"),
-              ),
-              PopupMenuItem(
-                value: '/contact',
-                child: Text("Contact"),
-              )
-            ];
-          },
-child:        
-Container(
-  width: 120 ,
-  height: 30,
-  decoration: BoxDecoration(
-    border: Border.all(
-      color: Colors.grey ,width: .5
-    )
+//             const [
+//               PopupMenuItem(
+//                 value: '/hello',
+//                 child: Text("Hello"),
+//               ),
+//               PopupMenuItem(
+//                 value: '/about',
+//                 child: Text("About"),
+//               ),
+//               PopupMenuItem(
+//                 value: '/contact',
+//                 child: Text("Contact"),
+//               )
+//             ];
+//           },
+// child:        
+// Container(
+//   width: 120 ,
+//   height: 30,
+//   decoration: BoxDecoration(
+//     border: Border.all(
+//       color: Colors.grey ,width: .5
+//     )
 
-  ),
-  child:  Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
-      Text( maintenanceController.getSelectedStatusObject()!=null?
-        currentLang(context)=="ar"?maintenanceController.getSelectedStatusObject()!['ar']: 
-        maintenanceController.getSelectedStatusObject()!['en']
-        // maintenanceController.selectedModel!
-        :
-         currentLang(context)=="ar"?'اختار':'select'),
-      const Icon(Icons.keyboard_arrow_down_outlined )
-    ],
-  ),
-)
-,
-        ),
+//   ),
+//   child:  Row(
+//     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//     children: [
+//       Text( maintenanceController.getSelectedStatusObject()!=null?
+//         currentLang(context)=="ar"?maintenanceController.getSelectedStatusObject()!['ar']: 
+//         maintenanceController.getSelectedStatusObject()!['en']
+//         // maintenanceController.selectedModel!
+//         :
+//          currentLang(context)=="ar"?'اختار':'select'),
+//       const Icon(Icons.keyboard_arrow_down_outlined )
+//     ],
+//   ),
+// )
+// ,
+//         ),
  
 
-  ],
-),
+//   ],
+// ),
 
 
 const SizedBox(height: 20,) ,
@@ -429,7 +430,7 @@ onTap: (){
 maintenanceController.setFilterLink(
   context,
   widget.isMaintain!?
-  "maintain":"admin");
+  "maintain":"admin",  widget.status.toString());
 Navigator.of(context).pop();
 
 },

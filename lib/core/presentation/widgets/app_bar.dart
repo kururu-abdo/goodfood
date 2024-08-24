@@ -137,7 +137,8 @@ return
 
 
       AppBar(
-        
+        // leadingWidth: 0,
+        centerTitle: true,
          title:
          title!=null?
          Text(title ,
@@ -227,6 +228,54 @@ const ChagePage().launch(context);
         
 
         ]
+
+      );
+
+
+
+}
+
+
+
+
+
+
+
+
+AppBar  mNewAppBar(
+  BuildContext context,
+  
+  String? title, 
+List<Widget> actions
+){
+
+var appLocale = AppLocalizations.of(context);
+
+return 
+
+
+
+      AppBar(
+        leadingWidth: 0,
+         title:
+         title!=null?
+         Text(title ,
+         
+         
+         style: const TextStyle(
+              //  color: Colors.white,
+         ),
+         ):
+         
+          Image.asset('assets/images/logo.png' ,
+        width: 150,
+        // color: Colors.white,
+        ),
+          // backgroundColor: Theme.of(context).primaryColor,
+      // leading:leading,
+        elevation: 0,
+        leading: const SizedBox(),
+        actions: actions
 
       );
 }

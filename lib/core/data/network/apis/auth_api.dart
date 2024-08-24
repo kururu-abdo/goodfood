@@ -24,6 +24,8 @@ class AuthApi {
     );
     return UserModel.fromJson(response);
   }
+
+  
  Future<void> logout(
     
    ) async {

@@ -10,7 +10,9 @@ import 'package:goodfoods/core/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class UserMaintenanceOrders extends StatefulWidget {
-  const UserMaintenanceOrders({ Key? key }) : super(key: key);
+    final dynamic status;
+
+  const UserMaintenanceOrders({ Key? key, this.status }) : super(key: key);
 
   @override
   _UserMaintenanceOrdersState createState() => _UserMaintenanceOrdersState();
@@ -26,7 +28,7 @@ class _UserMaintenanceOrdersState extends State<UserMaintenanceOrders> {
      WidgetsBinding.instance.addPostFrameCallback((_) {
   
   context.read<MaintenanceController>().
-  getUserOrders(context);
+  getUserOrders(context ,status: widget.status);
      } );
 
   
@@ -67,7 +69,7 @@ shape: const RoundedRectangleBorder(
   )
 ),
  builder: (_){
-return const FilterBottomSheet(isMaintain: true,);
+return  FilterBottomSheet(isMaintain: true,status: widget.status,);
  });
 }, icon: ImageIcon(const AssetImage('assets/icons/filter2.png') ,size: 20 , 
                    
@@ -147,7 +149,7 @@ return const FilterBottomSheet(isMaintain: true,);
            onRefresh: ()async{
               
   context.read<MaintenanceController>().
-  getUserOrders(context);
+  getUserOrders(context,status: widget.status);
            },
            child: Builder(builder: (_){
          
@@ -168,7 +170,7 @@ return const FilterBottomSheet(isMaintain: true,);
          const SizedBox(height: 10,) ,
          IconButton(onPressed: (){
            context.read<MaintenanceController>().
-  getUserOrders(context);
+  getUserOrders(context,status: widget.status);
          }, icon:  Icon(
            Icons.refresh ,color: Theme.of(context).primaryColor,
          ))

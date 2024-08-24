@@ -1,11 +1,18 @@
+import 'dart:developer' as dev;
+import 'dart:io';
 import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/admin_dashboard.dart';
+import 'package:goodfoods/app/admin/pages/home_new.dart';
+import 'package:goodfoods/app/dashboard/new_dashboard.dart';
 import 'package:goodfoods/core/presentation/login.dart';
+import 'package:goodfoods/core/services/goodfoods_remote_config.dart';
 import 'package:goodfoods/core/services/notification_plugin.dart';
+import 'package:goodfoods/core/services/package_info_service.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
+import 'package:url_launcher/url_launcher.dart';
 class SplashScreen extends StatefulWidget {
 final RemoteMessage? remoteMessage;
 
@@ -29,23 +36,46 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       vsync: this,
     );
     
-    _controller.forward().then((value) { // Start the animation and when it's finished, pop the current screen
+    _controller.forward().then((value)async { // Start the animation and when it's finished, pop the current screen
       //&& sharedPrefs.user_pos.isNotEmpty
      
      
-     
-     
+     var remoteVersion = GoodfoodsFirebaseRemoteConfig().getString("version");
+   var projectVersion = await GoodfoodsPackageInfo().getCurrentVersion();
+   dev.log("PACKAGE INFO FIREBASE  $remoteVersion  ");
+if (remoteVersion.toString().toLowerCase() != projectVersion.toString().toLowerCase()) {
+
+        _showUpdateVersionDialog(context, false);
+
+
+}
+    else { 
       if (sharedPrefs.isLoggedIn  ) {
+
+   
            NotificationApi.initMessage();
 
-         Navigator.pushAndRemoveUntil(
+        //  Navigator.pushAndRemoveUntil(
 
-           context, MaterialPageRoute(builder: (_)=>const Dashboard()) ,
-          (route)=>false
-         );
-      //    Navigator.of(context).push(
-      //   MaterialPageRoute(builder: (_)=>const Dashboard())
-      // );
+        //    context, MaterialPageRoute(builder: (_)=>const Dashboard()) ,
+        //   (route)=>false
+        //  );
+//  Navigator.pushAndRemoveUntil(
+
+//            context, MaterialPageRoute(builder: (_)=>const NewDashboard()) ,
+//           (route)=>false
+//          );
+         
+         Navigator.of(context).push(
+        MaterialPageRoute(builder: (_)=>const HomeNew())
+      );
+
+
+
+
+
+
+
       }
       // if (sharedPrefs.isLoggedIn) {
       //      Navigator.of(context).push(
@@ -72,12 +102,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       
      
 
-
+    }
 
 
     });
 
-
+  
 
 // //initalize notifications
 // // Initialise  localnotification
@@ -212,5 +242,59 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     );
  
   }
+Future<void> _showUpdateVersionDialog(BuildContext context, bool isSkippable) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("New version available"),
+        content: const SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            Text("Please update to the latest version of the app."),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        // A "skip" button is only shown if it's a recommended upgrade
+        isSkippable
+          ? TextButton(
+            child: const Text('Skip'),
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                  ),
+              );
+            },
+          )
+          : Container(),
+        TextButton(
+          child: const Text('Update'),
+          onPressed: () {
+            _launchAppOrPlayStore();
+          },
+        ),
+      ],
+      );
+    },
+  );
+}
+
+  void _launchAppOrPlayStore() {
+  final appId = Platform.isAndroid ? 
+  'https://play.google.com/store/apps/details?id=com.goodfoods.sa' : 'YOUR_IOS_APP_ID';
+
+  final url = Uri.parse(
+    appId
+       ,
+  );
+  launchUrl(
+    url,
+    mode: LaunchMode.externalApplication,
+  );
+}
+
 
 }

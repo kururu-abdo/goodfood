@@ -52,7 +52,9 @@ class OrderWidget extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(10))
         )
     ),
-      child: Container(
+      child:
+      
+       Container(
      margin: const EdgeInsets.only(
           bottom: 10 , left: 10 ,right: 10,
           top: 10

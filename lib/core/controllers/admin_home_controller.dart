@@ -46,7 +46,6 @@ notifyListeners();
 
 
 
-
 updateToken()async{
  try {
    var token =await NotificationApi.getToken();

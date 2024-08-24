@@ -14,7 +14,8 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class MaintainanceDashboard extends StatefulWidget {
-  const MaintainanceDashboard({ Key? key }) : super(key: key);
+  final dynamic status;
+  const MaintainanceDashboard({ Key? key, this.status }) : super(key: key);
 
   @override
   _MaintainanceDashboardState createState() => _MaintainanceDashboardState();
@@ -28,7 +29,7 @@ class _MaintainanceDashboardState extends State<MaintainanceDashboard> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-    context.read<MaintenanceController>().getMaintainOrders(context);
+    context.read<MaintenanceController>().getMaintainOrders(context , widget.status);
     });
   }
  
@@ -86,8 +87,8 @@ shape: const RoundedRectangleBorder(
   )
 ),
  builder: (_){
-return const FilterBottomSheet(
-  
+return  FilterBottomSheet(
+  status: widget.status,
 );
  });
 }, icon: ImageIcon(const AssetImage('assets/icons/filter2.png') ,size: 20 , 
@@ -99,187 +100,7 @@ return const FilterBottomSheet(
            )
             ,
            
-           
-      //      mLightAppBar(context,
-      //       translate(context, "maintains"),
-      
-      // IconButton(onPressed: (){
-      //   Navigator.pop(context);
-      // }, icon: const Icon(Icons.arrow_back ,
-      // color: Colors.black,))
-      // ),
-// drawer:
 
-// Drawer(
-//     child: ListView(
-//       // Important: Remove any padding from the ListView.
-//       padding: EdgeInsets.zero,
-//       children: [
-//           UserAccountsDrawerHeader( // <-- SEE HERE
-//           decoration: const BoxDecoration(color: 
-          
-//           scaffoldLightColor
-          
-//           ),
-//           accountName: const Text(
-//             "السماني",
-//             style: TextStyle(
-//               fontWeight: FontWeight.bold,
-//               color: Colors.black
-//             ),
-//           ),
-//           accountEmail: const Text(
-//             "فني صيانة",
-
-//             style: TextStyle(
-//                color: Colors.black ,
-//               fontWeight: FontWeight.bold,
-//             ),
-//           ),
-//           currentAccountPictureSize:const Size.square(100.0) ,
-//           currentAccountPicture: SizedBox(
-//             width: 200,
-//             child: Image.asset('assets/images/logo.png' ,
-            
-//             // width: 200,
-//             // height: 150,
-//             ),
-//           ),
-//         ),
-//    Divider(height: 4, thickness: 2, color: context.dividerColor)
-//                       .paddingOnly(top: 16, bottom: 8)
-//                       .visible(true),
-//                   mSideMenu(
-//                       'رسالة',
-//                        'assets/icons/headset.png',
-//                       () async {  Navigator.pop(context);
-//                    const ChagePage().launch(context);
-//                   }).visible(true),  
-//  Divider(height: 4, thickness: 2, color: context.dividerColor)
-//                       .paddingOnly(top: 16, bottom: 8)
-//                       .visible(true),
-//                   mSideMenu(
-//                       'تغيير اللغة',
-//                        'assets/icons/language.png',
-//                       () async {
-//                           Navigator.pop(context);
-//                    showAdaptiveActionSheet(
-//  context: context,
-//  title: const Text('الرجاء اختيار  اللغة: '),
-//  androidBorderRadius: 30,
-//  actions: <BottomSheetAction>[
-//     BottomSheetAction(leading: const Text('عربي'),
-//     title: const SizedBox(),
-//    trailing: const Icon(Icons.fire_truck),
-//      onPressed: (context) {
-
-
-//     }),
-//     BottomSheetAction(
-//          trailing: const Icon(Icons.car_crash),
-
-//       title: const SizedBox(),
-//       leading: const Text('انجليزي'), onPressed: (context) {}),
-//  ],
-//  cancelAction: CancelAction(
-   
-//    textStyle: TextStyle(
-//      color: Theme.of(context).primaryColor
-//    ),
-//    title: const Text('ألغاء')),// onPressed parameter is optional by default will dismiss the ActionSheet
-// );
-
-
-//                   }).visible(true), 
-  
-  
-  
-//                        Divider(height: 4, thickness: 2, color: context.dividerColor)
-//                       .paddingOnly(top: 16, bottom: 8)
-//                       .visible(true),
-//                   mSideMenu(
-//                       'خروج',
-//                        'assets/icons/power-off.png',
-//                       () async {  Navigator.pop(context);
-//                    Dialogs.materialDialog(
-//           msg: 'Are you want to sign out?',
-//           title: "Signout",
-//           color: Colors.white,
-//           context: context,
-//           actions: [
-//             IconsOutlineButton(
-//               onPressed: () {
-                
-//               },
-//               text: 'Cancel',
-//               iconData: Icons.cancel_outlined,
-//               textStyle: const TextStyle(color: Colors.grey),
-//               iconColor: Colors.grey,
-//             ),
-//             IconsButton(
-//               onPressed: () {
-
-// sharedPrefs.clear();
-// const SplashScreen().launch(context);
-
-//               },
-//               text: 'Signout',
-//               iconData: Icons.delete,
-//               color: Colors.red,
-//               textStyle: const TextStyle(color: Colors.white),
-//               iconColor: Colors.white,
-//             ),
-//           ]);
-//                   }).visible(true),
-
-        
-      
-//       ],
-//     ),
-//   ),
-
-
-          
-          
-          
-          
-//           appBar: 
-        
-//         AppBar(
-//           elevation: 0,
-//           actions: [
-//             IconButton(onPressed: (){
-//     const ChagePage().launch(context);
-//             }, icon: const ImageIcon(AssetImage('assets/icons/headset.png')))
-//           ,
-//             IconButton(onPressed: (){
-//     const NotificationPage().launch(context);
-//             }, icon: const ImageIcon(AssetImage('assets/icons/bell.png')))
-          
-          
-          
-//           ],
-//           backgroundColor: Colors.white,
-//           titleSpacing: 0,
-          
-//           // leading:  const SizedBox()
-          
-//           //  widget.fromDashboard!?const SizedBox()
-//           //  : 
-
-//           //  ,
-    
-    
-//     //       IconButton(onPressed: (){
-//     // Navigator.pop(context);
-//     //       }, icon: const Icon(Icons.arrow_back))
-          
-          
-//           title: Image.asset('assets/images/logo.png' ,
-//           width: 150,
-          
-//           ),
-//         ),
        
          body: 
          
@@ -289,7 +110,7 @@ return const FilterBottomSheet(
            onRefresh: ()async{
 
 
-             controller.getMaintainOrders(context);
+             controller.getMaintainOrders(context , widget.status);
            },
            child: Builder(builder: (_){
          
@@ -309,7 +130,7 @@ return const FilterBottomSheet(
          Text(controller.maintainOrders!.message!),
          const SizedBox(height: 10,) ,
          IconButton(onPressed: (){
-           controller.getMaintainOrders(context);
+           controller.getMaintainOrders(context , widget.status);
          }, icon:  Icon(
            Icons.refresh ,color: Theme.of(context).primaryColor,
          ))
@@ -361,33 +182,6 @@ controller.getMaintainOrdersPaginate(context, controller.maintainOrders!.data!.d
                   var orderData = controller.adminOrders[i];  //logical  
               return  OrderWidget(
                 orderMapper: orderData,
-//                 to: const ['Samani' ,'Husam']  , 
-                 
-//                  from:sharedPrefs.user_name,
-//                  to2: orderData.forwardTo!.admin!.name,
-//                  fileLink: 'a.com',
-//                  subnittedOrder: orderData.forwardTo!.maintainId! ,
-//  maintainStatus: orderData.status,
-//                  OrderStatus: orderData.forwardTo!.confirmed,
-//                  orderUserId: orderData.adminId!.toString(),
-//                  modelType: orderData.modelType,
-
-//                  orderId: orderData.id.toString(),
-//                  date: orderData.createdAt,
-//                  orderTitle: 'maintanenace machine x',
-//          files: orderData.files,
-         
-//                  task: orderData.task!,
-//                  orderDate: 
-//                  getMaintenanceFormattedDate(
-//             orderData.createdAt!
-//                  )
-                 
-                 
-//                  // '12-10-2023'
-//                  ,
-//                  status: orderData.status,
-//                  confirmed: orderData.forwardTo!.confirmed,
                  );
              
               }
