@@ -28,6 +28,7 @@ class AdminOrderData {
   int? confirmed;
   String? createdAt;
   String? updatedAt;
+
   Admin? admin;
   MaintainOrder? maintainOrder;
 
@@ -35,6 +36,7 @@ class AdminOrderData {
       {this.id,
       this.maintainId,
       this.adminId,
+ 
       this.confirmed,
       this.createdAt,
       this.updatedAt,
@@ -48,6 +50,8 @@ class AdminOrderData {
     confirmed = json['confirmed'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+
+  
     admin = json['admin'] != null ? Admin.fromJson(json['admin']) : null;
     maintainOrder = json['maintain_order'] != null
         ? MaintainOrder.fromJson(json['maintain_order'])
@@ -136,10 +140,12 @@ class MaintainOrder {
   String? createdAt;
   String? updatedAt;
   Model? model;
+String? model_name_ar;
+String? model_name_en;
 
   MaintainOrder(
       {this.id,
-      this.adminId,
+      this.adminId,     this.model_name_ar ,this.model_name_en,
       this.modelType,
       this.modelId,
       this.machines,
@@ -160,6 +166,8 @@ class MaintainOrder {
     machines = json['machines'];
     task = json['task'];
     reject_resion= json['reject_resion'];
+      model_name_ar= json['model_name_ar'];
+    model_name_en=json['model_name_en'];
     admin =
     
     json['admin'] != null?

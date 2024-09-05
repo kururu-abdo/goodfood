@@ -489,9 +489,12 @@ class Data {
  dynamic prevPageUrl;
   int? to;
   int? total;
-
   Data(
-      {this.currentPage,
+
+      {
+        
+        
+        this.currentPage,
       this.data,
       this.firstPageUrl,
       this.from,
@@ -516,6 +519,7 @@ log("GET_ORDER4$json");
       });
     }
         log("GET_ORDER5{MAINN}");
+
 
     firstPageUrl = json['first_page_url'];
     from = json['from'];
@@ -571,9 +575,11 @@ List<String>? files;
   String? createdAt;
   String? updatedAt;
   ForwardTo? forwardTo;
-
+String? model_name_ar;
+String? model_name_en;
   AdminOrderData2(
       {this.id,
+      this.model_name_ar,this.model_name_en,
       this.adminId,
       this.modelType,
       this.modelId,
@@ -588,6 +594,12 @@ List<String>? files;
 
   AdminOrderData2.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    model_name_ar= json['model_name_ar'];
+    model_name_en= json['model_name_en'];
+log("AR"+ model_name_ar.toString());
+
+log("EN"+ model_name_en.toString());
+    
     adminId = json['admin_id'];
     modelType = json['model_type'];
     modelId = json['model_id'];

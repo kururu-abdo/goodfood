@@ -13,13 +13,17 @@ class OrderDetailMapper{
   final String? orderUserId;
 final int? immedatly;
   final String?  date;
+  String?
+model_name_ar;
+String? model_name_en;
   final String? status;
   final List? file;
   final dynamic reject_resion;
 final MaintainanceAsset? maintainanceAsset;
-  OrderDetailMapper(  {
+  OrderDetailMapper(  {this.model_name_ar,this.model_name_en,
     this.reject_resion,
     this.immedatly,
+    
     this.modelType, this.maintainStats, this.orderStatus, this.submittedOrder,
     this.status,
     this.orderUserId,

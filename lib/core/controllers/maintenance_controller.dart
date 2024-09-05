@@ -557,7 +557,7 @@ Future<void> getStatusData(BuildContext context)async{
    orderStatusData = ApiResponse.loading('loading');
 
 isBusy= true;
-
+notifyListeners();
   try {
     var  response = await MaintenanceApis().getOrderStatusData();
 
@@ -859,7 +859,7 @@ notifyListeners();
 
 
 Future<void> getMaintanenanceEmployee(BuildContext context ,
-
+String? regeionId
 
 )async{
    maintenanceEmployees = ApiResponse.loading('loading');
@@ -867,7 +867,7 @@ Future<void> getMaintanenanceEmployee(BuildContext context ,
 isBusy= true;
 notifyListeners();
   try {
-    var  response = await MaintenanceApis().getMaintenanceEmployee();
+    var  response = await MaintenanceApis().getMaintenanceEmployee(regeionId);
 
 
 
@@ -937,6 +937,8 @@ for (var item in maintainOrders!.data!.data!.data!) {
       
   orderId:item.id,
  maintainOrderId:item.forwardTo!.maintainId , 
+model_name_ar: item.model_name_ar,
+model_name_en: item.model_name_en,
 
   createrName:   '',
 
@@ -1005,7 +1007,8 @@ for (var item in maintainOrders!.data!.data!.data!) {
       
   orderId:item.id,
  maintainOrderId:item.forwardTo!.maintainId , 
-
+model_name_ar: item.model_name_ar,
+model_name_en: item.model_name_en,
   createrName:   '',
 
    forwardToId:item.adminId.toString(),
@@ -1069,7 +1072,9 @@ for (var item in maintainOrders!.data!.data!.data!) {
       
   orderId:item.id,
  maintainOrderId:item.forwardTo!.maintainId , 
-
+model_name_ar:  item.model_name_ar 
+,
+model_name_en: item.model_name_en,
   createrName:   '',
 
    forwardToId:item.adminId.toString(),
@@ -1130,7 +1135,7 @@ notifyListeners();
     var  response = await 
     
     MaintenanceApis().getUserOrders(
-      status ,false , 3.toString()
+      '',false , status
       
       );
 
@@ -1144,7 +1149,8 @@ for (var item in userOrders!.data!.data!) {
         orderCreaterId: item.maintainOrder!.admin!.name ,
         fromMe: sharedPrefs.user_id== item.maintainOrder!.adminId.toString(),
           confirmd:item.confirmed,
-      
+      model_name_ar: item.maintainOrder!.model_name_ar,
+      model_name_en: item.maintainOrder!.model_name_en,
   orderId:item.id,
  maintainOrderId:item.maintainOrder!.id , 
 
@@ -1180,6 +1186,68 @@ showToast(e.toString(), true);
 }
 
 
+Future<void> refreshUserOrders(BuildContext context ,
+
+   {
+String?  status=''
+  }
+)async{
+  //  userOrders = ApiResponse.loading('loading');
+userOrdersData=[];
+notifyListeners();
+  try {
+    var  response = await 
+    
+    MaintenanceApis().getUserOrders(
+      '',false , status
+      
+      );
+
+
+    userOrders=ApiResponse.completed(response , );
+List<OrderMapper> data=[]; 
+for (var item in userOrders!.data!.data!) {
+  data.add(
+
+    OrderMapper(
+        orderCreaterId: item.maintainOrder!.admin!.name ,
+        fromMe: sharedPrefs.user_id== item.maintainOrder!.adminId.toString(),
+          confirmd:item.confirmed,
+      
+  orderId:item.id,
+ maintainOrderId:item.maintainOrder!.id , 
+model_name_ar: item.maintainOrder!.model_name_ar,
+      model_name_en: item.maintainOrder!.model_name_en,
+  createrName:   item.maintainOrder!.admin!.name,
+
+   forwardToId:item.adminId.toString(),
+  forwardToName:'',
+  status:item.maintainOrder!.status,
+ 
+   immediately:item.maintainOrder!.immedatly,
+  files:  item.maintainOrder!.files,
+  modelType:item.maintainOrder!.modelType.toString(),
+  modelId: item.maintainOrder!.modelId.toString(),
+ task:item.maintainOrder!.task.toString(),
+ orderDate:item.createdAt,
+   records: [],
+    )
+  
+  );
+}
+
+    userOrdersData.addAll(data);
+    // notifyListeners();
+  } catch (e) {
+       userOrders = ApiResponse.error('$e');
+notifyListeners();
+showToast(e.toString(), true);
+  }finally{
+      isBusy= false; 
+
+      notifyListeners();
+  }
+}
 
 
 
@@ -1212,7 +1280,8 @@ for (var item in userOrders!.data!.data!) {
       
   orderId:item.id,
  maintainOrderId:item.maintainOrder!.id , 
-
+model_name_ar: item.maintainOrder!.model_name_ar,
+      model_name_en: item.maintainOrder!.model_name_en,
   createrName:   item.maintainOrder!.admin!.name,
 
    forwardToId:item.adminId.toString(),
@@ -1281,7 +1350,8 @@ for (var item in userOrders!.data!.data!) {
       
   orderId:item.id,
  maintainOrderId:item.maintainOrder!.id , 
-
+model_name_ar: item.maintainOrder!.model_name_ar,
+      model_name_en: item.maintainOrder!.model_name_en,
   createrName:   item.maintainOrder!.admin!.name,
 
    forwardToId:item.adminId.toString(),
@@ -1476,7 +1546,7 @@ showToast(
   "تم تحديث الطلب":
   
   'Order Updated', false);
-
+// getUserOrders(context, status: status);
     // notifyListeners();
   } catch (e) {
 notifyListeners();
@@ -1555,7 +1625,7 @@ if (!isAdmin) {
   getOrderDetails("maintain/get_admin_order/$modelId");
 // log(response['data'].toString());
  var adminOrder= AdminOrderDetails.fromJson(response);
- log("NO_CARE_ASSET${adminOrder.data!.maintainOrder!.model!.toJson()}");
+ log("NO_CARE_ASSET${adminOrder.data!.maintainOrder!.toJson()}");
 
  orderDetailsMapper = ApiResponse.completed(
   
@@ -1570,7 +1640,7 @@ if (!isAdmin) {
      
 modelType: adminOrder.data!.maintainOrder!.modelType,
 reject_resion: adminOrder.data!.maintainOrder!.reject_resion ,
-
+// model_name_ar: adminOrder.data.maintainOrder.m,
 orderUserId: adminOrder.data!.adminId!.toString(),
      orderId: adminOrder.data!.maintainId.toString(),
     confirmed: adminOrder.data!.confirmed,
@@ -1578,7 +1648,8 @@ orderUserId: adminOrder.data!.adminId!.toString(),
      from: adminOrder.data!.maintainOrder!.admin!.name ,
     status: adminOrder.data!.maintainOrder!.status.toString(),
      to: adminOrder.data!.admin!.name!,
-
+model_name_ar: adminOrder.data!.maintainOrder!.model_name_ar,
+model_name_en:adminOrder.data!.maintainOrder!.model_name_en,
      date: adminOrder.data!.createdAt, file: 
      adminOrder.data!.maintainOrder!.files ,  
      
@@ -1614,7 +1685,8 @@ orderUserId: userOrder.data!.forwardTo!.adminId!.toString(),
      immedatly: userOrder.data!.immedatly,
      
      
-     
+model_name_ar: userOrder.data!.model_name_ar,   
+model_name_en:userOrder.data!.model_name_en ,  
      orderId: userOrder.data!.id.toString(),
     confirmed: userOrder.data!.forwardTo!.confirmed,
     task: userOrder.data!.task, from: userOrder.data!.forwardTo!.admin!.name ,
@@ -1694,8 +1766,8 @@ reject_resion:adminOrder.data!.maintainOrder!.reject_resion ,
      submittedOrder: adminOrder.data!.maintainId.toString() ,
      
 modelType: adminOrder.data!.maintainOrder!.modelType,
-
-
+model_name_ar: adminOrder.data!.maintainOrder!.model_name_ar,
+model_name_en:adminOrder.data!.maintainOrder!.model_name_en ,
 orderUserId: adminOrder.data!.adminId!.toString(),
      orderId: adminOrder.data!.maintainId.toString(),
     confirmed: adminOrder.data!.confirmed,
@@ -1760,8 +1832,8 @@ modelType: userOrder.data!.modelType,
 orderUserId: userOrder.data!.forwardTo!.adminId.toString(),
      
      immedatly: userOrder.data!.immedatly??0,
-     
-     
+     model_name_ar: userOrder.data!.model_name_ar,
+     model_name_en: userOrder.data!.model_name_en,
      
      orderId: userOrder.data!.id.toString(),
     confirmed: userOrder.data!.forwardTo!.confirmed,
@@ -1840,8 +1912,8 @@ log(response['data'].toString());
      submittedOrder: adminOrder.data!.maintainId.toString() ,
      
 modelType: adminOrder.data!.maintainOrder!.modelType,
-
-
+model_name_ar: adminOrder.data!.maintainOrder!.model_name_ar,
+model_name_en:adminOrder.data!.maintainOrder!.model_name_en ,
 orderUserId: adminOrder.data!.adminId!.toString(),
      orderId: adminOrder.data!.maintainId.toString(),
     confirmed: adminOrder.data!.confirmed,
@@ -1879,8 +1951,8 @@ modelType: userOrder.data!.modelType,
 orderUserId: userOrder.data!.forwardTo!.adminId!.toString(),
      
      
-     
-     
+     model_name_ar: userOrder.data!.model_name_ar,
+     model_name_en: userOrder.data!.model_name_en,
      
      orderId: userOrder.data!.id.toString(),
     confirmed: userOrder.data!.forwardTo!.confirmed,

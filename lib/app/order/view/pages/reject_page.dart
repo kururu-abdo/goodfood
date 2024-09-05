@@ -82,6 +82,7 @@ child: Form(
           commentInputController.text.trim(), 2.toString())
          
          .then((value) {
+    context.read<MaintenanceController>().getStatusData(context);
 
            Navigator.pop(context);
          })

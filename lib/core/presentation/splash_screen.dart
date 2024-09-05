@@ -4,9 +4,7 @@ import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:goodfoods/app/admin/pages/admin_dashboard.dart';
 import 'package:goodfoods/app/admin/pages/home_new.dart';
-import 'package:goodfoods/app/dashboard/new_dashboard.dart';
 import 'package:goodfoods/core/presentation/login.dart';
 import 'package:goodfoods/core/services/goodfoods_remote_config.dart';
 import 'package:goodfoods/core/services/notification_plugin.dart';
@@ -60,15 +58,15 @@ if (remoteVersion.toString().toLowerCase() != projectVersion.toString().toLowerC
         //    context, MaterialPageRoute(builder: (_)=>const Dashboard()) ,
         //   (route)=>false
         //  );
-//  Navigator.pushAndRemoveUntil(
+ Navigator.pushAndRemoveUntil(
 
-//            context, MaterialPageRoute(builder: (_)=>const NewDashboard()) ,
-//           (route)=>false
-//          );
+           context, MaterialPageRoute(builder: (_)=>const HomeNew()) ,
+          (route)=>false
+         );
          
-         Navigator.of(context).push(
-        MaterialPageRoute(builder: (_)=>const HomeNew())
-      );
+      //    Navigator.of(context).push(
+      //   MaterialPageRoute(builder: (_)=>const HomeNew())
+      // );
 
 
 

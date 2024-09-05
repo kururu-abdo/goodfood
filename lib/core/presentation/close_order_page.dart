@@ -396,25 +396,28 @@ file.extension==".jpeg"
          
         
 
-         controller.changeOrderStatus(context, widget.orderId.toString(), 1.toString(),
+         controller.changeOrderStatus(context, widget.orderId.toString(),
+          1.toString(),
         controller.closeOrderFiles
           
           
           
           
           ).then((value) {
+                context.read<MaintenanceController>().getStatusData(context);
+
 Navigator.pop(context);
 
          });
                 }
      },
      
-     busy: controller.closingOrderResponse!.status==Status.LOADING,
+     busy: controller.changeStatusState!.status==Status.LOADING,
      
      title: 
   
-  currentLang(context)=="ar"?"ارسال":
-  'Submit')
+  currentLang(context)=="ar"?"تأكيد":
+  'Confirm')
   
   
   

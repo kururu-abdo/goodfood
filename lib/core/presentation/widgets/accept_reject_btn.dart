@@ -40,7 +40,9 @@ class AcceptRejectButton extends StatelessWidget {
 //make it clsoing   = 1
 controller.setOrderAccept(orderMapper!.orderId.toString());
 // controller.changeOrderStatus(context, widget.orderId!, 1.toString());
-  controller.updateOrderStatus(context, orderMapper!.orderId!.toString(), null, 1.toString()).then((value) {
+  controller.updateOrderStatus(context, orderMapper!.orderId!.toString(),
+   null, 1.toString()).then((value) {
+    context.read<MaintenanceController>().getStatusData(context);
 
  OrderDetails(
    isMaintain: sharedPrefs.isMaintain,

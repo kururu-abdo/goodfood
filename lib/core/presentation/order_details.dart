@@ -175,6 +175,7 @@ controller.changeOrderStatus(context,
  
  []
  ).then((value) {
+    context.read<MaintenanceController>().getStatusData(context);
 
  
 });
@@ -851,7 +852,11 @@ Builder(
 
 BoxText.body(currentLang(context)=="ar"?"معلومات ${ getModelName(context ,       detailMapper!.modelType) }: ":"${ getModelName(context ,       detailMapper!.modelType) } Info:  ") ,
 
-getAssetInfo( detailMapper.maintainanceAsset,),
+getAssetInfo( detailMapper.maintainanceAsset,
+currentLang(context)=="ar"?
+detailMapper.model_name_ar.toString():detailMapper.model_name_en.toString()
+),
+// Text( detailMapper.model_name_ar.toString(),),
 
 10.height,
 
@@ -1267,7 +1272,78 @@ DocumentService().initPlatformState(e);
   }
 
 
- Widget getAssetInfo(MaintainanceAsset? maintainanceAsset) {
+ Widget getAssetInfo(MaintainanceAsset? maintainanceAsset, String name) {
+ DefaultMaintenanceAsset defaultMaintenanceAsset =
+    (maintainanceAsset as DefaultMaintenanceAsset);
+   return Container(
+
+ width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height/8,
+
+
+          // margin: const EdgeInsets.symmetric(horizontal: 15 , vertical: 10),
+ padding: const EdgeInsets.symmetric(horizontal: 10 , vertical: 10),
+          decoration: BoxDecoration(
+
+borderRadius: BorderRadius.circular(5) ,
+color: Colors.white,
+ boxShadow: const [
+      BoxShadow(
+      color: Color(0xffDDDDDD),
+      blurRadius: 2.0,
+      spreadRadius: 2.0,
+      offset: Offset(0.0, 3.0),
+      )
+      ],
+
+          ),
+
+
+
+
+
+
+child: 
+
+   Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+              Text(
+          currentLang(context)=="ar"?
+              "النوع :  ${getModelName(context, defaultMaintenanceAsset.modelType) }"  :
+              " type:  ${getModelName(context, defaultMaintenanceAsset.modelType)}"  
+            ,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              // color: Colors.white ,
+              fontSize: 15
+            ), 
+             ),
+const SizedBox(height: 8,),
+              Text(
+                currentLang(context)=="ar"?   
+                    "الاسم :  $name"  :
+            "Name :  $name"  ,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+               fontSize: 12
+            ), 
+            
+             ),
+    ],
+  ),
+
+
+
+
+
+
+  );
+/*
+
 if (maintainanceAsset is CarMaintenanceAsset) {
   CarMaintenanceAsset carData =maintainanceAsset;
 
@@ -1448,6 +1524,7 @@ const SizedBox(height: 8,),
 
 
 }
+*/
 }
 
 }

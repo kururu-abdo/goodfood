@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:goodfoods/app/admin/pages/admin_dashboard.dart';
+import 'package:goodfoods/app/admin/pages/home_new.dart';
 import 'package:goodfoods/app/success/view/widgets/empty_section.dart';
 import 'package:goodfoods/app/success/view/widgets/subtitle.dart';
 import 'package:goodfoods/core/utils/utils.dart';
@@ -45,7 +45,7 @@ class _SuccessState extends State<Success> {
                       onPressed: () {
         
       
-        const  Dashboard().launch(context, isNewTask: true);
+        const  HomeNew().launch(context, isNewTask: true);
         
                       },
                       child:  Text(

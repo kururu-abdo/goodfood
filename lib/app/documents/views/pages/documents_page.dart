@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/admin_dashboard.dart';
+import 'package:goodfoods/app/admin/pages/home_new.dart';
 import 'package:goodfoods/app/documents/controllers/document_controller.dart';
 import 'package:goodfoods/app/documents/views/widgets/doucment_widget.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
@@ -125,10 +126,10 @@ DocumentService().initPlatformState(documentData.files!.first):
     }
 
   }).onError((error, stackTrace) {
-const Dashboard().launch(context);
+const HomeNew().launch(context);
 
   }).catchError((e){
-const Dashboard().launch(context);
+const HomeNew().launch(context);
 
 
   })

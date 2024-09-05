@@ -15,7 +15,9 @@ int? confirmd;
 int? immediately;
 List<String>? files;
 String? modelType;
-
+String?
+model_name_ar;
+String? model_name_en;
 String? task;
 String? orderDate;
 List<RecordModel>? records;
@@ -25,6 +27,8 @@ OrderMapper(
 {
 this. orderCreaterId,
 this.orderId , 
+
+this.model_name_ar,this.model_name_en,
 this.maintainOrderId,
  this.createrName,
     this.forwardToId,

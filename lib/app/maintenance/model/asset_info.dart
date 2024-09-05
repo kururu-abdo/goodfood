@@ -6,7 +6,7 @@ class MaintainanceAsset {
 MaintainanceAsset();
 factory MaintainanceAsset.makeAsset(Map<String, dynamic> data , String modelType){ 
 
-    log("NO_CARE_ASSET$data");
+    log("NO_CARE_ASKSET$data");
 
 switch (modelType.toLowerCase()) {
   case 'car':

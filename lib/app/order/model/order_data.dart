@@ -88,6 +88,8 @@ class UserOrder {
   int? confirmed;
   String? createdAt;
   String? updatedAt;
+  String? model_name_ar;
+String? model_name_en;
   MaintainOrder? maintainOrder;
 
   UserOrder(
@@ -97,6 +99,7 @@ class UserOrder {
       this.confirmed,
       this.createdAt,
       this.updatedAt,
+      this.model_name_ar,this.model_name_en,
       this.maintainOrder});
 
   UserOrder.fromJson(Map<String, dynamic> json) {
@@ -106,6 +109,13 @@ class UserOrder {
     confirmed = json['confirmed'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    model_name_ar = json['model_name_ar'];
+    model_name_en=json['model_name_en'];
+
+    log("EN 2$model_name_en");
+
+    log("AR 2$model_name_ar");
+
     maintainOrder = json['maintain_order'] != null
         ? MaintainOrder.fromJson(json['maintain_order'])
         : null;
@@ -139,7 +149,8 @@ class MaintainOrder {
   String? createdAt;
   String? updatedAt;
   Admin? admin;
-
+  String? model_name_ar;
+String? model_name_en;
   MaintainOrder(
       {this.id,
       this.adminId,
@@ -152,11 +163,14 @@ class MaintainOrder {
       this.immedatly,
       this.createdAt,
       this.updatedAt,
+      this.model_name_ar ,this.model_name_en,
       this.admin});
 
   MaintainOrder.fromJson(Map<String, dynamic> json) {
     log(json.toString());
     id = json['id'];
+    model_name_ar = json['model_name_ar'];
+    model_name_en = json['model_name_en'];
     adminId = json['admin_id'];
     modelType = json['model_type'];
     modelId = json['model_id'];

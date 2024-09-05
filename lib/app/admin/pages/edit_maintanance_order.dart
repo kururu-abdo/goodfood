@@ -135,6 +135,21 @@ remooveFromFiles(String file){
     return
     
      Scaffold(
+
+
+
+
+      // floatingActionButton:  FloatingActionButton(
+      //   backgroundColor: Colors.transparent,
+      //   onPressed: (){},
+      //   child: ImagePickerContainer(
+      //     isEdit: false,
+      //                                showFiles: true, 
+      //                                showRounded: true,
+      //                                onSelect: (file, isImage){
+      //                                     maintenanceController.addEdit(file!);
+      //                              },),
+      // ),
         appBar:  AppBar(
         elevation: 1,
 
@@ -330,87 +345,246 @@ remooveFromFiles(String file){
               
                       8.height,
           
-          Visibility(
-            
-            
-            visible:      oldFiles.isNotEmpty,
-            child: 
+          Column(
+           crossAxisAlignment: CrossAxisAlignment.start,
           
-               Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-
-                 children: [
-
-                  Text(currentLang(context)=="ar"?"ملفات الطلب: ":"Order files:"),
-                  const SizedBox(height: 5,),
-                   SizedBox(
-                    height:                
-                         300
-                   ,
-                     child: GridView.builder(
-                           itemCount:  
-                           oldFiles.length
-                           ,
-                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-                           itemBuilder: (BuildContext context, int index) {
-                          
-                          
-                             
-                                   var e =oldFiles[index];
-                               
-                               
-                        return         
-                     
-                         Card(
-                      clipBehavior: Clip.antiAlias,
-                      
-                      child: Stack(
-                        children: <Widget>[
-                          
-                            (e.toString().contains("png")|| 
+            children: [
+          
+             Text(currentLang(context)=="ar"?"ملفات الطلب: ":"Order files:"),
+             const SizedBox(height: 5,),
+              SizedBox(
+               height:                
+                    300 * (oldFiles.length/3)
+              ,
+                child:
+                  oldFiles.isEmpty?
+                
+          
+          Center(
+           child:   ImagePickerContainer(
+                        showFiles: true, 
                        
-                       e.toString().contains("jpeg")|| 
-                       e.toString().contains("jpg") )?
+                        onSelect: (file, isImage){
+                         //  if (isImage!) {
+                             maintenanceController.addEdit(file!);
+                         //  }
+                             // maintenanceController.addFile(file!);
+                      },) ,
+                        )
+                :
+                
+                 GridView.builder(
+                 shrinkWrap: true,
+               physics: const NeverScrollableScrollPhysics(),
+                      itemCount:  
+                      oldFiles.length +1
+                      ,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                      itemBuilder: (BuildContext context, int index) {
+                      if (index ==    oldFiles.length) {
+                          return Center(
+                            child:
+                            
+                            ImagePickerContainer(
+                              showFiles: true, 
+                              showRounded: true,
+                              onSelect: (file, isImage){
+                                   maintenanceController.addEdit(file!);
+                            },)
+                           //   AddUserButton(
+                                    
+                           //          onSelect: (file){
+                           //          maintenanceController.addFile(file!);
+                           //            },
+                                    
+                           //  ),
+                          );
+                        }
+                     
+                        
+                              var e =oldFiles[index];
                           
-                          Padding(
-                           padding: const EdgeInsets.all(3.0),
-                           child: CachedNetworkImage(
-                            imageUrl: "https://goodfoodsa.co$e",
-                            fit: BoxFit.cover,
-                           
-                              width: 300,
-                        height: 300,
-                            progressIndicatorBuilder: (context, url, downloadProgress) => 
-                     Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
-                            errorWidget: (context, url, error) => const Icon(Icons.error),
-                               ),
-                         ).onTap((){
-                   
-                   
-                      DocumentService().initPlatformState(e);
-                   
-                         })
-                         :  
-                           Container(
-                           child: Image.asset(
-                           
-                            getFileIocn(e)
-                             ,
-                      width: 300,
-                      height: 300,
-                           ),
-                           ).onTap((){
-                   
-                           // OpenDocumentPage(needLoadfromUrl: false,url: e,);
-                   //download file 
-                   DocumentService().initPlatformState(e);
-                   //open file
-                   
-                   
-                   
-                         })
-                          ,
-                          Positioned(
+                          
+                   return         
+                
+                    Card(
+                 clipBehavior: Clip.antiAlias,
+                 
+                 child: Stack(
+                   children: <Widget>[
+                     
+                       (e.toString().contains("png")|| 
+                  
+                  e.toString().contains("jpeg")|| 
+                  e.toString().contains("jpg") )?
+                     
+                     Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: CachedNetworkImage(
+                       imageUrl: "https://goodfoodsa.co$e",
+                       fit: BoxFit.cover,
+                      
+                         width: 300,
+                   height: 300,
+                       progressIndicatorBuilder: (context, url, downloadProgress) => 
+                Center(child: CircularProgressIndicator(value: downloadProgress.progress)),
+                       errorWidget: (context, url, error) => const Icon(Icons.error),
+                          ),
+                    ).onTap((){
+              
+              
+                 DocumentService().initPlatformState(e);
+              
+                    })
+                    :  
+                      Container(
+                      child: Image.asset(
+                      
+                       getFileIocn(e)
+                        ,
+                 width: 300,
+                 height: 300,
+                      ),
+                      ).onTap((){
+              
+                      // OpenDocumentPage(needLoadfromUrl: false,url: e,);
+              //download file 
+              DocumentService().initPlatformState(e);
+              //open file
+              
+              
+              
+                    })
+                     ,
+                     Positioned(
+                       right: 5,
+                       top: 5,
+                       child: InkWell(
+                         child: const Icon(
+                           Icons.remove_circle,
+                           size: 30,
+                           color: Colors.red,
+                         ),
+                         onTap: () {
+                           // if (maintenanceController.newOrderFiles.isEmpty) {
+                           //   showToast(currentLang(context)=="ar"?"الرجاء ارف", isError)
+                           // }
+                           remooveFromFiles(e);
+                           // setState(() {
+                           //   images.replaceRange(index, index + 1, ['Add Image']);
+                           // });
+                         },
+                       ),
+                     ),
+                   ],
+                 ));
+                      }),
+              ),
+            ],
+          ),
+          
+          
+          
+          
+          
+          
+          
+          
+              // maintenanceController.newFiles.isEmpty
+           
+              // ?
+              
+              // Center(
+              //   child:   ImagePickerContainer(
+              //                showFiles: true, 
+                            
+              //                onSelect: (file, isImage){
+              //                 //  if (isImage!) {
+              //                     maintenanceController.addEdit(file!);
+              //                 //  }
+              //                     // maintenanceController.addFile(file!);
+              //              },) ,
+              // ):
+                      Visibility(
+                        visible:    maintenanceController.newFiles.isNotEmpty,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                        
+                          children: [
+                                              Text(currentLang(context)=="ar"?"اضافة ملفات جديدة: ":"Add new files:"),
+                        const SizedBox(height: 5,),
+                            SizedBox(
+                                           height: 
+                                        100*  ( maintenanceController.newFiles.length).toDouble(), 
+                                          //  MediaQuery.of(context).size.height/2,
+                                          child:
+                                          
+                                           GridView.builder(
+
+                                                 itemCount:  
+                                                
+                                                 maintenanceController.newFiles.length
+                                                 ,
+                                                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+                                                 itemBuilder: (BuildContext context, int index) {
+                                                
+                                                
+                            //  if (index ==    maintenanceController.newFiles.length) {
+                            //    return Center(
+                            //      child:
+                                 
+                            //      ImagePickerContainer(
+                            //        showFiles: true, 
+                            //        showRounded: true,
+                            //        onSelect: (file, isImage){
+                            //             maintenanceController.addEdit(file!);
+                            //      },)
+                            //     //   AddUserButton(
+                                         
+                            //     //          onSelect: (file){
+                            //     //          maintenanceController.addFile(file!);
+                            //     //            },
+                                         
+                            //     //  ),
+                            //    );
+                            //  }
+                                          var e =maintenanceController.newFiles[index];
+                                      
+                                      
+                                              return          Card(
+                                            clipBehavior: Clip.antiAlias,
+                                            
+                                            child: Stack(
+                                              children: <Widget>[
+                                                (
+                            
+                            getFileExtenstion(e.path!)==".png"
+                                                
+                                          ||                  getFileExtenstion(e.path!)==".jpg"||
+                                            getFileExtenstion(e.path!)==".jpeg"
+                                            ||
+                                            getFileExtenstion(e.path!)==".PNG"
+                                            ||
+                                            getFileExtenstion(e.path!)==".JPEG"
+                                            ||
+                                            getFileExtenstion(e.path!)==".JPG"
+                                                )?
+                                               Image.file(
+                                                 File(e.path!),
+                            // 'assets/images/logo.png',
+                            width: 100,
+                            height: 100,
+                                                )
+                                                :
+                            Image.asset(
+                                                getFileIocn(e.path!),
+                            // 'assets/images/logo.png',
+                            width: 100,
+                            height: 100,
+                                                )
+                                                
+                                                ,
+                                                Positioned(
                             right: 5,
                             top: 5,
                             child: InkWell(
@@ -423,147 +597,23 @@ remooveFromFiles(String file){
                                 // if (maintenanceController.newOrderFiles.isEmpty) {
                                 //   showToast(currentLang(context)=="ar"?"الرجاء ارف", isError)
                                 // }
-                                remooveFromFiles(e);
+                                maintenanceController.removeEditFile(e.path!);
                                 // setState(() {
                                 //   images.replaceRange(index, index + 1, ['Add Image']);
                                 // });
                               },
                             ),
-                          ),
-                        ],
-                      ));
-                           }),
-                   ),
-                 ],
-               ),
-                   
-          ),
-          
-          
-          
-          
-          
-          
-          
-          
-              maintenanceController.newFiles.isEmpty
-           
-              ?
-              
-              Center(
-                child:   ImagePickerContainer(
-                             showFiles: true, 
-                            
-                             onSelect: (file, isImage){
-                              //  if (isImage!) {
-                                  maintenanceController.addEdit(file!);
-                              //  }
-                                  // maintenanceController.addFile(file!);
-                           },) ,
-              ):
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-
-                        children: [
-                                            Text(currentLang(context)=="ar"?"اضافة ملفات جديدة: ":"Add new files:"),
-const SizedBox(height: 5,),
-                          SizedBox(
-                                         height: MediaQuery.of(context).size.height/2,
-                                        child:
-                                        
-                                         GridView.builder(
-                                               itemCount:  
-                                              
-                                               maintenanceController.newFiles.length+1
-                                               ,
-                                               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
-                                               itemBuilder: (BuildContext context, int index) {
-                                              
-                                              
-                           if (index ==    maintenanceController.newFiles.length) {
-                             return Center(
-                               child:
-                               
-                               ImagePickerContainer(
-                                 showFiles: true, 
-                                 showRounded: true,
-                                 onSelect: (file, isImage){
-                                      maintenanceController.addEdit(file!);
-                               },)
-                              //   AddUserButton(
-                                       
-                              //          onSelect: (file){
-                              //          maintenanceController.addFile(file!);
-                              //            },
-                                       
-                              //  ),
-                             );
-                           }
-                                        var e =maintenanceController.newFiles[index];
-                                    
-                                    
-                                            return          Card(
-                                          clipBehavior: Clip.antiAlias,
-                                          
-                                          child: Stack(
-                                            children: <Widget>[
-                                              (
-                          
-                          getFileExtenstion(e.path!)==".png"
-                                              
-                                        ||                  getFileExtenstion(e.path!)==".jpg"||
-                                          getFileExtenstion(e.path!)==".jpeg"
-                                          ||
-                                          getFileExtenstion(e.path!)==".PNG"
-                                          ||
-                                          getFileExtenstion(e.path!)==".JPEG"
-                                          ||
-                                          getFileExtenstion(e.path!)==".JPG"
-                                              )?
-                                             Image.file(
-                                               File(e.path!),
-                          // 'assets/images/logo.png',
-                          width: 100,
-                          height: 100,
-                                              )
-                                              :
-                          Image.asset(
-                                              getFileIocn(e.path!),
-                          // 'assets/images/logo.png',
-                          width: 100,
-                          height: 100,
-                                              )
-                                              
-                                              ,
-                                              Positioned(
-                          right: 5,
-                          top: 5,
-                          child: InkWell(
-                            child: const Icon(
-                              Icons.remove_circle,
-                              size: 30,
-                              color: Colors.red,
+                                                ),
+                                              ],
+                                            ));
+                                                 }),
+                                               
+                                               
+                                               
+                                               
                             ),
-                            onTap: () {
-                              // if (maintenanceController.newOrderFiles.isEmpty) {
-                              //   showToast(currentLang(context)=="ar"?"الرجاء ارف", isError)
-                              // }
-                              maintenanceController.removeEditFile(e.path!);
-                              // setState(() {
-                              //   images.replaceRange(index, index + 1, ['Add Image']);
-                              // });
-                            },
-                          ),
-                                              ),
-                                            ],
-                                          ));
-                                               }),
-                                             
-                                             
-                                             
-                                             
-                          ),
-                        ],
+                          ],
+                        ),
                       )
                       
                 

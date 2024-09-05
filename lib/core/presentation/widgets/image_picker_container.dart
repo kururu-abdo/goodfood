@@ -12,13 +12,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class ImagePickerContainer extends StatelessWidget {
+  final bool? isEdit;
   final bool? showFiles;
   final bool? showRounded;
   final Function(File? , bool?)? onSelect;
   const ImagePickerContainer({ Key? key, 
   
   this.showFiles=true,
-  this.onSelect, this.showRounded=false }) : super(key: key);
+  this.onSelect, this.showRounded=false, this.isEdit=false }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +35,24 @@ class ImagePickerContainer extends StatelessWidget {
 },
     ):  
       
+      isEdit!?
+Container(
+  width: 120,
+  height: 40,
+  decoration: BoxDecoration(
+    color: Theme.of(context).primaryColor,
+
+  ),
+):
       UploadButton(
 onTap: (){
     _settingModalBottomSheet(context);
 },
       ),
+   
+   
+   
+   
     );
     
     Container(

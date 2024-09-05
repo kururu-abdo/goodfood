@@ -23,7 +23,8 @@ class MaintenanceOrder extends StatefulWidget {
    final String? maintain_type;
     final String? category;
       final String? walkway;
-  const MaintenanceOrder({super.key, this.modelType, this.modelId, this.maintain_type, this.category, this.walkway});
+      final String? redionId;
+  const MaintenanceOrder({super.key, this.modelType, this.modelId, this.maintain_type, this.category, this.walkway, this.redionId});
 
   @override
   State<MaintenanceOrder> createState() => _MaintenanceOrderState();
@@ -141,7 +142,7 @@ Row(
   mainAxisSize: MainAxisSize.min,
   children: [
 Checkbox( 
-   side: MaterialStateBorderSide.resolveWith(
+   side: WidgetStateBorderSide.resolveWith(
       (states) => BorderSide(width: 1.0, color: Theme.of(context).primaryColor),
   ),
   activeColor: Theme.of(context).primaryColor,
@@ -177,7 +178,7 @@ Row(
   mainAxisSize: MainAxisSize.min,
   children: [
 Checkbox( 
-   side: MaterialStateBorderSide.resolveWith(
+   side: WidgetStateBorderSide.resolveWith(
       (states) => BorderSide(width: 1.0, color: Theme.of(context).primaryColor),
   ),
   activeColor: Theme.of(context).primaryColor,
@@ -456,6 +457,7 @@ maintenanceController.setModelId(widget.modelId!);
                 
                 
                            SelectMaintainenaceEmpolyee(
+                            regionId: widget.redionId,
                             maintain_type: widget.maintain_type,
 category: widget.category,
 walkway: widget.walkway,

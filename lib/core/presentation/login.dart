@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:goodfoods/app/admin/pages/admin_dashboard.dart';
+import 'package:goodfoods/app/admin/pages/home_new.dart';
 import 'package:goodfoods/common/widgets/box_button.dart';
 import 'package:goodfoods/core/controllers/auth_controller.dart';
 import 'package:goodfoods/core/presentation/widgets/input_field.dart';
@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
  }
 
 else   {
-  const Dashboard().launch(context);
+  const HomeNew().launch(context ,isNewTask: true);
 }
 
 

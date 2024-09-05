@@ -7,6 +7,7 @@ import 'package:goodfoods/core/services/app_localization.dart';
 import 'package:goodfoods/core/utils/global.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:goodfoods/core/utils/utils.dart';
+import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
@@ -55,6 +56,7 @@ class OrderWidget extends StatelessWidget {
       child:
       
        Container(
+        alignment: Alignment.center,
      margin: const EdgeInsets.only(
           bottom: 10 , left: 10 ,right: 10,
           top: 10
@@ -69,8 +71,9 @@ class OrderWidget extends StatelessWidget {
        orderMapper!.forwardToId==sharedPrefs.user_id
 && orderMapper!.confirmd.toString()=="0"
 ?
-         MediaQuery.of(context).size.height/5:
-        MediaQuery.of(context).size.height/6 
+         MediaQuery.of(context).size.height/3
+         :
+        MediaQuery.of(context).size.height/5
         // :
         // MediaQuery.of(context).size.height/3
         
@@ -119,6 +122,7 @@ class OrderWidget extends StatelessWidget {
       
       child:  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
     
      Row(
@@ -167,7 +171,8 @@ class OrderWidget extends StatelessWidget {
     ) ,
     
     Text(
-    orderMapper!.orderDate!
+      getDate(
+    orderMapper!.orderDate!)
     )
     
     
@@ -198,6 +203,41 @@ class OrderWidget extends StatelessWidget {
     style:  TextStyle(
       fontWeight: FontWeight.w300,
       color: getOrderColor(orderMapper!.status!),
+      fontSize: 15
+    ),
+    overflow: TextOverflow.ellipsis,
+    )
+    
+    
+      ],
+    ),
+
+
+
+     Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+     SizedBox(width: 110,
+    child: Text(currentLang(context)=="ar"?
+    "صيانة علي: ":"Maintainance on: "
+    ), 
+    
+    
+    ) ,
+    const SizedBox(
+      width: 10,
+    ) ,
+    
+    Text(
+      // ''
+currentLang(context)=="ar"?
+orderMapper!.model_name_ar.toString():orderMapper!.model_name_ar.toString()
+    // getStatusName(context, orderMapper!.status!)!
+    ,
+    maxLines: 2, 
+    style:  const TextStyle(
+      fontWeight: FontWeight.w300,
+      // color: getOrderColor(orderMapper!.status!),
       fontSize: 15
     ),
     overflow: TextOverflow.ellipsis,
@@ -289,6 +329,14 @@ if(
 
     
     });
+  }
+  
+  String getDate(String s) {
+
+    DateTime now = DateTime.parse(s);
+String formattedDate = DateFormat('yyyy-MM-dd – kk:mm a').format(now);
+
+return formattedDate;
   }
 
 

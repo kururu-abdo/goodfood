@@ -36,7 +36,8 @@ class MaintainOrderData {
   String? updatedAt;
   Model? model;
   ForwardTo? forwardTo;
-
+String? model_name_ar;
+String? model_name_en;
   MaintainOrderData(
       {this.id,
       this.adminId,
@@ -50,6 +51,7 @@ class MaintainOrderData {
       this.createdAt,
       this.updatedAt,
       this.model,
+      this.model_name_ar ,this.model_name_en,
       this.forwardTo});
 
   MaintainOrderData.fromJson(Map<String, dynamic> json) {
@@ -59,6 +61,9 @@ class MaintainOrderData {
     modelType = json['model_type'];
     modelId = json['model_id'];
     machines = json['machines'];
+model_name_ar =json['model_name_ar'];
+model_name_en =json['model_name_en'];
+
     task = json['task'];
      files=[];
      

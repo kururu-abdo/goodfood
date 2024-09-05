@@ -3,6 +3,7 @@ import 'package:goodfoods/app/admin/pages/admin_dashboard.dart';
 import 'package:goodfoods/app/admin/pages/chat_page.dart';
 import 'package:goodfoods/app/managment_orders/views/pages/order_reply.dart';
 import 'package:goodfoods/app/notifications/controllers/notification_controller.dart';
+import 'package:goodfoods/core/controllers/auth_controller.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
 import 'package:goodfoods/core/presentation/notification_filter_bottomsheet.dart';
 import 'package:goodfoods/core/presentation/order_details.dart';
@@ -38,12 +39,21 @@ void initState() {
 
    WidgetsBinding.instance.addPostFrameCallback((_) {
   context.read<NotificationController>().getNotifications();
+  context.read<AuthController>().getUserProfile();
 
    });
 }
 
 
+@override
+void dispose() {
+   WidgetsBinding.instance.addPostFrameCallback((_) {
+  // context.read<NotificationController>().getNotifications();
+  context.read<AuthController>().getUserProfile();
 
+   });
+  super.dispose();
+}
 
 
 

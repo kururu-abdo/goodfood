@@ -94,11 +94,15 @@ sharedPrefs.token = user!.data!.accessToken!.toString();
 //         MaterialPageRoute(builder: (_)=>
 //         const Dashboard())
 //       );
-Navigator.of(context).push(
-        MaterialPageRoute(builder: (_)=>
-        const HomeNew())
-      );
+// Navigator.of(context).push(
+//         MaterialPageRoute(builder: (_)=>
+//         const HomeNew())
+//       );
+ Navigator.pushAndRemoveUntil(
 
+           context, MaterialPageRoute(builder: (_)=>const HomeNew()) ,
+          (route)=>false
+         );
   
 }else {
     result!(false, true  ,'wrong email/password');

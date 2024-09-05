@@ -7,8 +7,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:goodfoods/app/admin/pages/admin_dashboard.dart';
 import 'package:goodfoods/app/admin/pages/chat_page.dart';
+import 'package:goodfoods/app/admin/pages/home_new.dart';
 import 'package:goodfoods/app/managment_orders/views/pages/order_reply.dart';
 import 'package:goodfoods/core/presentation/login.dart';
 import 'package:goodfoods/core/presentation/order_details.dart';
@@ -31,8 +31,13 @@ class NotificationApi{
   //code here
 
  static final notification = FlutterLocalNotificationsPlugin();
+static bool isFlutterLocalNotificationsInitialized = false;
 
   static void init() async{
+
+    if(isFlutterLocalNotificationsInitialized){
+      return;
+    }
      NotificationApi.createNorifiacationChannel();
     notification.initialize(
        const InitializationSettings(
@@ -79,18 +84,27 @@ class NotificationApi{
 
 
     );
-
+    askForNotificationPermission();
+isFlutterLocalNotificationsInitialized=true;
 // final NotificationAppLaunchDetails? notificationAppLaunchDetails =
 //     await notification.getNotificationAppLaunchDetails();
 
 // if (notificationAppLaunchDetails!.notificationResponse!= null) {
 //   onSelectNotification(notificationAppLaunchDetails.notificationResponse);
 // }
+
+
   }
   
-  
+    static void askForNotificationPermission() {
+    Permission.notification.request().then((permissionStatus) {
+      if (permissionStatus != PermissionStatus.granted) {
+        // AppSettings.openAppSettings(type: AppSettingsType.notification);
+      }
+    });
+  }
 
-static createNorifiacationChannel(){
+static createNorifiacationChannel()async{
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   //for notificaiton initialization
   'Notification channel Id', // id
@@ -100,10 +114,19 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   playSound: true,
 );
 
- notification
+
+ await notification
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
+
+ if(Platform.isIOS){
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+ }
 }
 
 
@@ -115,9 +138,11 @@ log(message.data.toString());
 
 
 
+ await         sharedPrefs.init();
 
+          sharedPrefs.notificationCount++;
 
-// sharedPrefs.isOpen= false;
+sharedPrefs.isOpen= false;
 
 
     var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
@@ -147,6 +172,7 @@ log(message.data.toString());
 
 
 
+log("${message.data}2ND LINE");
 
 
 
@@ -179,7 +205,10 @@ static  void notificationHandler() {
 
     // FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
     FirebaseMessaging.onMessage.listen((event) async {
+       await         sharedPrefs.init();
+
      sharedPrefs.isOpen= false;
+     sharedPrefs.notificationCount++;
       await NotificationApi.pushNotification(event);
     });
 
@@ -287,10 +316,10 @@ if (model.contains("doc") ) {
     }
 
   }).onError((error, stackTrace) {
-const Dashboard().launch(main.navigatorKey.currentContext!);
+const HomeNew().launch(main.navigatorKey.currentContext!);
 
   }).catchError((e){
-const Dashboard().launch(main.navigatorKey.currentContext!);
+const HomeNew().launch(main.navigatorKey.currentContext!);
 
 
   })
@@ -389,6 +418,7 @@ if (status.isDenied || !status.isGranted) {
 
       final bool? grantedNotificationPermission =
           await androidImplementation!.requestNotificationsPermission();
+     
      
     }
 }

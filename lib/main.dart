@@ -13,6 +13,7 @@ import 'package:goodfoods/core/presentation/app_theme.dart';
 import 'package:goodfoods/core/presentation/splash_screen.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
 import 'package:goodfoods/core/services/document_service.dart';
+import 'package:goodfoods/core/services/firebase_notifications.dart';
 import 'package:goodfoods/core/services/goodfoods_remote_config.dart';
 import 'package:goodfoods/core/services/notification_plugin.dart';
 import 'package:goodfoods/core/services/package_info_service.dart';
@@ -46,7 +47,11 @@ void notificationTapBackground(NotificationResponse notificationResponse) {
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   //  Firebase.initializeApp();
-  //  NotificationApi.init();
+      await sharedPrefs.init();
+
+FirebaseService.initializeFirebase();
+
+   NotificationApi.init();
 print('Receivd ');
   
     NotificationApi.pushNotification(message);
@@ -69,6 +74,8 @@ String? selectedNotificationPayload;
      // NotificationApi.requestPermissions();
      LanguageProvier appLanguage = LanguageProvier();
   await appLanguage.fetchLocale();
+      await sharedPrefs.init();
+
  try {
 
     await sharedPrefs.init();
@@ -82,10 +89,10 @@ DocumentService().initCheckPermission();
 //  messagingSenderId: "67902231939",
 //   projectId: "goodfood-23597"
   
-//   ),
+  // ),
      
      );
-    
+    // FirebaseService.initializeFirebase();
     NotificationApi.init();
       
 
@@ -135,6 +142,9 @@ await
     ))));
 }
 Future backgroundHandler(RemoteMessage msg) async {
+ 
+
+
   NotificationApi.pushNotification(msg);
 }
 class MyApp extends StatelessWidget { 

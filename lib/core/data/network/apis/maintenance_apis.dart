@@ -128,10 +128,11 @@ skins = I.map((e) => DepartmentAsset.fromJson(e)).toList();
 
 
 
-  Future<List<MaintainModel>> getMaintenanceEmployee(
+  Future<List<MaintainModel>> getMaintenanceEmployee(String? regeionId
+
    ) async {
      //
-    final response = await _helper.get("maintain/get_maintain_emp" ,
+    final response = await _helper.get("maintain/get_maintain_emp?city_id=${regeionId}" ,
    
     
     );
@@ -373,7 +374,7 @@ body2
    ) async {
      log('////////////////$nextUrl $isPaginate');
      //
-    final response = await _helper.get("maintain/get_submitted_orders?status=${status}" ,
+    final response = await _helper.get("maintain/get_submitted_orders?status=$status" ,
       pageUrl: nextUrl,
    isPaginate:  isPaginate
     
@@ -417,12 +418,10 @@ Future<OrderData> getUserOrders(
    ) async {
      //
     final response = await _helper.get(
-     status !=null?
-      "maintain/get_order":"maintain/get_order?status=${status}"   ,
+    "maintain/get_order?status=$status"   ,
    pageUrl: 
    
-   status != null?
-   "${nextUrl!}&status=$status":nextUrl,
+  nextUrl,
    isPaginate:  isPaginate
     
     );
