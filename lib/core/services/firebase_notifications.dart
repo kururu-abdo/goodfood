@@ -78,6 +78,7 @@ Future<String?> getDeviceToken() async => await FirebaseMessaging.instance.getTo
         //   0, message.notification!.title, message.notification!.body, FirebaseService.platformChannelSpecifics,
         //   payload: message.data.toString(),
         // );
+        await SharedPrefs().init();
         sharedPrefs.notificationCount++;
 
 NotificationApi.pushNotification(message);
@@ -87,6 +88,8 @@ NotificationApi.pushNotification(message);
   }
 
   static Future<void> onBackgroundMsg() async {
+            await SharedPrefs().init();
+
     FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   }
 
