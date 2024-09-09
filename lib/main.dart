@@ -102,10 +102,11 @@ DocumentService().initCheckPermission();
      
      );
     // FirebaseService.initializeFirebase();
+          NotificationApi.requestPermissions();
     NotificationApi.init();
       
 
-      NotificationApi.requestPermissions();
+
 
   GoodfoodsFirebaseRemoteConfig.initialize();
 await 

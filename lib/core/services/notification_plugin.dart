@@ -44,6 +44,8 @@ static bool isFlutterLocalNotificationsInitialized = false;
         InitializationSettings(
         android: AndroidInitializationSettings('app_icon'),
         iOS: DarwinInitializationSettings(
+          requestAlertPermission: true, 
+          requestBadgePermission: true,
           onDidReceiveLocalNotification:
            (int id, String? title, String? body, String? payload){
    log("CLIKED FOREGROUND");
@@ -172,7 +174,7 @@ sharedPrefs.isOpen= false;
       // ]
     );
     var iOSPlatformChannelSpecifics = const DarwinNotificationDetails(
-  
+  presentSound: true
     );
     var platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,

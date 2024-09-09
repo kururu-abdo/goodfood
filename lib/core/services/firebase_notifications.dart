@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -16,6 +17,7 @@ class FirebaseService {
   static Future<void> initializeFirebase() async {
 
     try {
+      log("CONFIG FIREBASE");
       await Firebase.initializeApp(
 //       options: const FirebaseOptions(
 //   apiKey: "AIzaSyAipa8LVCV4FgkcrNUNFAsCxYqPMcMkfpE",
@@ -25,6 +27,8 @@ class FirebaseService {
   
 //   ),
     );
+          log("AFTER CONFIG FIREBASE");
+
     FirebaseService._firebaseMessaging = FirebaseMessaging.instance;
     // await FirebaseService.initializeLocalNotifications();
    NotificationApi.init();

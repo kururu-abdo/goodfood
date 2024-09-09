@@ -22,8 +22,12 @@ class _OrderRecordsState extends State<OrderRecords> {
 @override
 void initState() { 
   super.initState();
-  context.read<MaintenanceController>().getOrderRecord(context,
+WidgetsBinding.instance.addPostFrameCallback((_){
+
+
+    context.read<MaintenanceController>().getOrderRecord(context,
    widget.orderId!);
+});
 }
 
 
