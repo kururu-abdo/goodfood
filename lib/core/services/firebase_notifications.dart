@@ -80,6 +80,7 @@ Future<String?> getDeviceToken() async => await FirebaseMessaging.instance.getTo
         // );
         await SharedPrefs().init();
         sharedPrefs.notificationCount++;
+        
 
 NotificationApi.pushNotification(message);
 

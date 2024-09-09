@@ -16,6 +16,7 @@ import 'package:goodfoods/core/presentation/widgets/order_status_widget.dart';
 import 'package:goodfoods/core/presentation/widgets/progress.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
 import 'package:goodfoods/core/services/notification_plugin.dart';
+import 'package:goodfoods/core/utils/global.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:goodfoods/core/utils/utils.dart';
 import 'package:material_dialogs/dialogs.dart';
@@ -43,7 +44,7 @@ final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     WidgetsBinding.instance.addPostFrameCallback((_){
       NotificationApi.notificationHandler();
 
-
+getNotificationCount();
 
     NotificationApi.initMessage();
 //get status data
@@ -294,7 +295,10 @@ setState(() {
                       color: Colors.red 
                     ),
                     child: Center(
-                      child: Text(sharedPrefs.notificationCount.toString() ,
+                      child: Text(
+                        ///TODO:NOTIFICATION COUNT
+                        
+                        sharedPrefs.notificationCount.toString() ,
                       
                       style: const TextStyle(
                         color: Colors.white, 

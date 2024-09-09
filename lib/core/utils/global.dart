@@ -1,6 +1,11 @@
 
-  import 'package:flutter/material.dart';
+  import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:goodfoods/core/data/network/api_base_helper.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
+import 'package:goodfoods/core/utils/shared_prefs.dart';
+      final ApiBaseHelper _helper = ApiBaseHelper();
 
 String? getStatusName(
     BuildContext context ,
@@ -49,4 +54,21 @@ return locale!.locale.languageCode=="ar"?
       default:
        return Colors.green;
     }
+  }
+
+Future<int> getNotificationCount(
+  
+   ) async {
+     //
+    final response = await _helper.get(
+      
+      "notifications/notifications_count" ,
+    
+    
+    );
+   int count  =response['data'];
+await SharedPrefs().init();
+sharedPrefs.notificationCount= count;
+   
+    return count;
   }

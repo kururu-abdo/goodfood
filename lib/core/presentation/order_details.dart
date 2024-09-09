@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/edit_maintanance_order.dart';
 import 'package:goodfoods/app/maintenance/model/asset_info.dart';
 import 'package:goodfoods/app/maintenance/model/details_mapper.dart';
+import 'package:goodfoods/app/order/view/pages/reject_page.dart';
 import 'package:goodfoods/app/order/view/widgets/order_records.dart';
 import 'package:goodfoods/core/box_text.dart';
 import 'package:goodfoods/core/colors.dart';
@@ -961,7 +962,100 @@ detailMapper.model_name_ar.toString():detailMapper.model_name_en.toString()
      ).visible(detailMapper.reject_resion!=null)
     ,
 
+10.height,
 
+
+(
+  
+  sharedPrefs.isMaintain
+  // detailMapper!.orderUserId==sharedPrefs.user_id
+&& detailMapper.confirmed.toString()=="0"
+
+)?
+
+
+     Row(
+mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+
+
+Container(
+            width: 120 ,height: 30,
+            margin: const EdgeInsets.symmetric(horizontal: 6),
+            decoration: BoxDecoration(
+              color: Colors.green, borderRadius: BorderRadius.circular(50)
+            ),
+            child: Center(
+              child: 
+               context.read<MaintenanceController>(). updateOrder!.status==Status.LOADING
+             
+              ?
+             const CircularProgressIndicator(
+               
+               strokeWidth: 1,color: Colors.white,
+
+              
+             ):
+              Text(translation.translate("accept")! ,
+              style: const TextStyle(
+        color: Colors.white
+              ),
+              
+              
+              ),
+            ),
+            ).onTap((){
+
+
+
+  context.read<MaintenanceController>().updateOrderStatus(context,
+   detailMapper.orderId!.toString(),null, 1.toString());
+  
+
+context.read<MaintenanceController>()
+.refreshOrderDetails(!sharedPrefs.isMaintain, detailMapper.orderId.toString());
+
+
+
+            }) , 
+
+
+
+        Container(
+        width: 120 ,height: 30,
+        margin: const EdgeInsets.symmetric(horizontal: 6),
+        decoration: BoxDecoration(
+          color: Colors.red, borderRadius: BorderRadius.circular(50)
+        ),
+        child: Center(
+          child: Text(translation.translate("reject")! ,
+          style: const TextStyle(
+                    color: Colors.white
+          ),
+          
+          
+          ),
+        ),
+        )
+        .onTap((){
+          ///TODO: change order status
+
+//make it clsoing   = 1
+
+// controller.changeOrderStatus(context, widget.orderId!, 1.toString());
+RejectPage(orderId:detailMapper.orderId!.toString() ,).launch(context);
+        })
+
+
+      ],
+     )
+
+
+      
+    
+    
+  :const SizedBox()
+,
 
 
     20.height ,

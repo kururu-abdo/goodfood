@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:goodfoods/app/notifications/models/notificaiton_model.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
 import 'package:goodfoods/core/data/network/apis/notifications_apis.dart';
+import 'package:goodfoods/core/utils/global.dart';
 
 class NotificationController extends ChangeNotifier {
   
@@ -172,7 +173,7 @@ notifyListeners();
  Future<void>  makeAllNotificationsRead()async{
    try {
      NotificationsApis().readAllNotifications().then((value) {
-
+getNotificationCount();
        refresh();
      }
      

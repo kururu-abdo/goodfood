@@ -1,9 +1,11 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart' show FirebaseMessaging, RemoteMessage;
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:goodfoods/core/services/firebase_notifications.dart';
+import 'package:goodfoods/core/utils/global.dart';
 
 
 
@@ -34,6 +36,11 @@ class FCMProvider with ChangeNotifier {
   
   static Future<void> onMessage() async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    log(message.data.toString());
+
+    log(message.toString());
+
+
       // if (FCMProvider._refreshNotifications != null) await FCMProvider._refreshNotifications!(true);
       // if this is available when Platform.isIOS, you'll receive the notification twice 
       if (Platform.isAndroid) {
@@ -43,6 +50,7 @@ class FCMProvider with ChangeNotifier {
           FirebaseService.platformChannelSpecifics,
           payload: message.data.toString(),
         );
+        getNotificationCount();
       }
     });
   }

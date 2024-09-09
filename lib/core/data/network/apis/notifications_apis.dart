@@ -89,7 +89,21 @@ notifications = I.map((e) => NotificationModel.fromJson(e)).toList();
     return notifications;
   }
 
+Future<int> getNotificationCount(
+  
+   ) async {
+     //
+    final response = await _helper.get(
+      
+      "notifications/notifications_count" ,
+    
+    
+    );
+   int count  =response['data'];
 
+   
+    return count;
+  }
 
 
 

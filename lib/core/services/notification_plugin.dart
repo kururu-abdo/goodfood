@@ -14,6 +14,7 @@ import 'package:goodfoods/core/presentation/login.dart';
 import 'package:goodfoods/core/presentation/order_details.dart';
 import 'package:goodfoods/core/services/document_service.dart';
 import 'package:goodfoods/core/services/navigation_service.dart';
+import 'package:goodfoods/core/utils/global.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:goodfoods/core/utils/utils.dart';
 import 'package:goodfoods/main.dart' as main;
@@ -128,6 +129,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   );
  }
 }
+
 
 
 static pushNotification(
@@ -326,6 +328,9 @@ const HomeNew().launch(main.navigatorKey.currentContext!);
 
 
 ;
+
+getNotificationCount();
+
 //  Navigator.of(main.navigatorKey.currentContext!).push(
 //     MaterialPageRoute(builder: (_)=> OpenDocumentPage(
 //       docID: id,
@@ -438,7 +443,8 @@ if (!sharedPrefs.isOpen) {
     // notification.cancelAll();
     notificationAppLaunchDetails =null;
       // Eraser.clearAllAppNotifications();
-      
+      getNotificationCount();
+
         ClearAllNotifications.clear();
       sharedPrefs.isOpen= true;
   }

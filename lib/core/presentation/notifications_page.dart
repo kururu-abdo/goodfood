@@ -12,6 +12,7 @@ import 'package:goodfoods/core/presentation/widgets/notification_widget.dart';
 import 'package:goodfoods/core/presentation/widgets/progress.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
 import 'package:goodfoods/core/services/document_service.dart';
+import 'package:goodfoods/core/utils/global.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:goodfoods/core/utils/utils.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -40,6 +41,7 @@ void initState() {
    WidgetsBinding.instance.addPostFrameCallback((_) {
   context.read<NotificationController>().getNotifications();
   context.read<AuthController>().getUserProfile();
+getNotificationCount();
 
    });
 }
@@ -98,29 +100,33 @@ return const NotificationFilterBottomsheet(
             Builder(
               builder: (context) {
                 return 
-                //  provider.notifications!.status == Status.LOADING?
+                 provider.notifications!.status == Status.LOADING?
 
 
- const SizedBox.shrink();
+ const SizedBox.shrink()
  
-//  :
+ :
 
-//                 Visibility(
-//                   visible: 
+                Visibility(
+                  visible: 
                   
-//                   provider.notifications!.data!.isNotEmpty
-//                   ,
-//                   child: TextButton(onPressed: ()async{
-//                await  provider.makeAllNotificationsRead();
-//                   }, child:  Text(
-//                     locale!.locale.languageCode=="ar"?
-// "تحديد الكل كمقروء":
+                  provider.notifications!.data!.isNotEmpty
+                  ,
+                  child: TextButton(onPressed: ()async{
+               await  provider.makeAllNotificationsRead();
+
+               setState(() {
+                 
+               });
+                  }, child:  Text(
+                    locale!.locale.languageCode=="ar"?
+"تحديد الكل كمقروء":
                     
-//                     "Mark all as read"))
+                    "Mark all as read"))
                   
                   
-//                   ,
-//                 )
+                  ,
+                );
                
 //                 ;
               }
@@ -202,6 +208,7 @@ return const NotificationFilterBottomsheet(
        const SizedBox(height: 10,) ,
        IconButton(onPressed: (){
          provider.getNotifications();
+         
        }, icon:  Icon(
          Icons.refresh ,color: Theme.of(context).primaryColor,
        ))
