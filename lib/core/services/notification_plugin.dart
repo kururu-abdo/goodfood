@@ -40,9 +40,16 @@ static bool isFlutterLocalNotificationsInitialized = false;
     }
      NotificationApi.createNorifiacationChannel();
     notification.initialize(
-       const InitializationSettings(
+        InitializationSettings(
         android: AndroidInitializationSettings('app_icon'),
-        iOS: DarwinInitializationSettings(),
+        iOS: DarwinInitializationSettings(
+          onDidReceiveLocalNotification:
+           (int id, String? title, String? body, String? payload){
+   log("CLIKED FOREGROUND");
+  //  log(response.payload!.toString());
+   selectNotification(payload!);
+ }
+        ),
 
 
 
@@ -163,7 +170,7 @@ sharedPrefs.isOpen= false;
       // ]
     );
     var iOSPlatformChannelSpecifics = const DarwinNotificationDetails(
-    
+  
     );
     var platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,

@@ -35,7 +35,15 @@ typedef OnClickEvent<T> = Function(T);
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+/*
 
+
+  if (targetPlatform == TargetPlatform.ios ||
+      targetPlatform == TargetPlatform.darwin) {
+    // See CFBundleShortVersionString at https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+    final RegExp disallowed = RegExp(r'[^\d\.]');
+
+    */
 @pragma('vm:entry-point')
 void notificationTapBackground(NotificationResponse notificationResponse) {
   sharedPrefs.isOpen= true;

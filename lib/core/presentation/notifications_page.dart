@@ -47,11 +47,11 @@ void initState() {
 
 @override
 void dispose() {
-   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //  WidgetsBinding.instance.addPostFrameCallback((_) {
   // context.read<NotificationController>().getNotifications();
-  context.read<AuthController>().getUserProfile();
+  // context.read<AuthController>().getUserProfile();
 
-   });
+  //  });
   super.dispose();
 }
 
