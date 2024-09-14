@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:goodfoods/core/data/models/area_staus_data.dart';
 import 'package:goodfoods/core/data/models/branch_model.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
 import 'package:goodfoods/core/data/network/apis/common_apis.dart';
@@ -19,6 +20,10 @@ extends ChangeNotifier
   String error = '';
 
 ApiResponse<List<BranchModel>>?  branches = ApiResponse.completed([]);
+
+ApiResponse<List<AreaStatusData>>?  areaStatus = ApiResponse.completed([]);
+
+
 getBranches(BuildContext context)async{
 isLaoding = true;
 isError=false;
@@ -42,7 +47,35 @@ notifyListeners();
   }
 }
 
+int selectedIndex=0; 
 
+changeIndex(int index){
+  selectedIndex=index;
+  notifyListeners();
+}
+
+getAreaStaus(BuildContext context)async{
+isLaoding = true;
+isError=false;
+areaStatus=ApiResponse.loading('Fetching Popular Movies');
+notifyListeners();
+  try {
+    var response =await CommmomApis().getAreaStatusData();
+
+ areaStatus=ApiResponse.completed(response);
+
+
+  } catch (e) {
+            areaStatus=ApiResponse.error(e.toString());
+
+    isError= true;
+
+    error =e.toString();
+  }finally{
+    isLaoding= false;
+    notifyListeners();
+  }
+}
 
 
 

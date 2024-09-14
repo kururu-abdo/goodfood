@@ -1,3 +1,4 @@
+import 'package:goodfoods/core/data/models/area_staus_data.dart';
 import 'package:goodfoods/core/data/models/branch_model.dart';
 import 'package:goodfoods/core/data/models/chat_selection_model.dart';
 import 'package:goodfoods/core/data/models/city_model.dart';
@@ -189,5 +190,21 @@ chatSelectionModel= ChatSelectionModel.fromJson(response);
     return chatSelectionModel;
   }
 
+Future<List<AreaStatusData>> getAreaStatusData(
+   ) async {
 
+     List<AreaStatusData> branches=[];
+    final response = await _helper.get("maintain/get_regions_report" ,
+    
+    
+    );
+Iterable I =response['data'];
+branches = I.map((e) => AreaStatusData.fromJson(e)).toList();
+
+
+
+
+
+    return branches;
+  }
 }

@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/assets_page.dart';
 import 'package:goodfoods/app/admin/pages/chat_page.dart';
 import 'package:goodfoods/app/documents/views/pages/documents_page.dart';
-import 'package:goodfoods/app/maintenance/widgets/pages/maintance_page.dart';
 import 'package:goodfoods/common/controllers/langauage_controller.dart';
 import 'package:goodfoods/common/pages/order_page.dart';
 import 'package:goodfoods/core/controllers/admin_home_controller.dart';
 import 'package:goodfoods/core/controllers/auth_controller.dart';
 import 'package:goodfoods/core/controllers/maintenance_controller.dart';
-import 'package:goodfoods/core/data/network/api_response.dart';
+import 'package:goodfoods/core/data/models/area_staus_data.dart';
 import 'package:goodfoods/core/presentation/notifications_page.dart';
 import 'package:goodfoods/core/presentation/splash_screen.dart';
 import 'package:goodfoods/core/presentation/widgets/change_language_bottomsheet.dart';
 import 'package:goodfoods/core/presentation/widgets/order_status_widget.dart';
-import 'package:goodfoods/core/presentation/widgets/progress.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
 import 'package:goodfoods/core/services/notification_plugin.dart';
 import 'package:goodfoods/core/utils/global.dart';
@@ -25,14 +23,15 @@ import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
-class HomeNew extends StatefulWidget {
-  const HomeNew({super.key});
+class HomeArea extends StatefulWidget {
+  final AreaStatusData? areaStatusData;
+  const HomeArea({super.key, this.areaStatusData});
 
   @override
-  State<HomeNew> createState() => _HomeNewState();
+  State<HomeArea> createState() => _HomeNewState();
 }
 
-class _HomeNewState extends State<HomeNew> {
+class _HomeNewState extends State<HomeArea> {
 
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -48,7 +47,7 @@ getNotificationCount();
 
     NotificationApi.initMessage();
 //get status data
-Provider.of<MaintenanceController>(context ,listen: false).getStatusData(context);
+// Provider.of<MaintenanceController>(context ,listen: false).getStatusData(context);
 context.read<AdminHomeController>().updateToken();
 context.read<AuthController>().getUserProfile();
 
@@ -102,7 +101,7 @@ key: _scaffoldKey,
       body:  RefreshIndicator(
           onRefresh: ()async{
         
-            controller.getStatusData(context);
+            // controller.getStatusData(context);
           },
         child: SizedBox.expand(
         
@@ -110,33 +109,7 @@ key: _scaffoldKey,
           
         Builder(builder: (context){
         
-        
-        if (controller.orderStatusData!.status==Status.LOADING) {
-          return Center(
-               child: mProgress(context, fromPage: true),
-             );
-        }
-          else if( controller.orderStatusData!.status==Status.ERROR){
-           return Center(
-             child: Column(
-               crossAxisAlignment: CrossAxisAlignment.center,
-               mainAxisSize: MainAxisSize.min,
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: [
-           Text(controller.orderStatusData!.message!),
-           const SizedBox(height: 10,) ,
-           IconButton(onPressed: (){
-             controller.getStatusData(context);
-           }, icon:  Icon(
-             Icons.refresh ,color: Theme.of(context).primaryColor,
-           ))
-               ],
-             ),
-           );
-           }
-        else {
-        
-        return   ListView(
+      return   ListView(
           children: [
             Wrap(
               runAlignment: WrapAlignment.center,
@@ -149,43 +122,48 @@ key: _scaffoldKey,
             OrderStatusWidget(
               status: 0,
               icon: 'assets/images/created.png',
-              count: controller.orderStatusData!.data!.created,
+              count: widget.areaStatusData!.created,
             title: currentLang(context)=="ar"?
             "تم الانشاء":"Created",
+            region: widget.areaStatusData!.id
             )
             , 
             OrderStatusWidget(
               status: 3,
                icon: 'assets/images/accepted.png',
-              count: controller.orderStatusData!.data!.accepted, 
+              count: widget.areaStatusData!.accpeted, 
             title:currentLang(context) =="ar"?
-            "تحت المعالجة":"Processing"
+            "تحت المعالجة":"Processing",
+            region: widget.areaStatusData!.id
             ),
             OrderStatusWidget(
               status: 1,
                icon: 'assets/images/pre_closed.png',
-              count: controller.orderStatusData!.data!.pre_closed, 
+              count: widget.areaStatusData!.preClosed, 
             title:currentLang(context) =="ar"?
             "قيد الاغلاق":"Closing",
             
+            region: widget.areaStatusData!.id
             ), 
             
             OrderStatusWidget(
               status: 2,
             
                icon: 'assets/images/closed.png',
-              count: controller.orderStatusData!.data!.closed, 
+              count: widget.areaStatusData!.closed, 
             title:currentLang(context) =="ar"?
-            "تم الاغلاق":"Closed"
+            "تم الاغلاق":"Closed",
+            region: widget.areaStatusData!.id
             ), 
             
             
             OrderStatusWidget(
               status: 4,
             icon: 'assets/images/cancel.png',
-              count: controller.orderStatusData!.data!.rejected, 
+              count: widget.areaStatusData!.rejected, 
             title:currentLang(context) =="ar"?
-            "مرفوض":"Rejected"
+            "مرفوض":"Rejected",
+            region: widget.areaStatusData!.id
             
             ),
             
@@ -207,10 +185,6 @@ key: _scaffoldKey,
         );
         
         
-        
-        
-        
-        }
         
         
         
@@ -627,16 +601,7 @@ const SplashScreen().launch(context);
    )
 ),
 
-floatingActionButton: FloatingActionButton.extended(
-  backgroundColor: Theme.of(context).primaryColor,
-  onPressed: (){
- const MaintenancePage().launch(context);
-}, label: Text(currentLang(context)=="ar"?"طلب جديد":"New order"),icon:
- const Icon(Icons.add, color: Colors.white,),
- )
- .visible(
-           !sharedPrefs.isMaintain
-         ),
+
  
  
 

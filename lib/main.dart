@@ -156,7 +156,7 @@ Future backgroundHandler(RemoteMessage msg) async {
 
 
   NotificationApi.pushNotification(msg);
-  getNotificationCount();
+  // getNotificationCount();
 }
 class MyApp extends StatelessWidget { 
   final LanguageProvier? appLanguage;

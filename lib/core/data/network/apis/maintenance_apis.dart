@@ -366,7 +366,7 @@ body2
 
   Future<MaintainenanceOrderModel> getMaintainOrder(
     String? status
-,
+, int? region,
    [
     String? nextUrl,
     bool? isPaginate=false
@@ -374,7 +374,10 @@ body2
    ) async {
      log('////////////////$nextUrl $isPaginate');
      //
-    final response = await _helper.get("maintain/get_submitted_orders?status=$status" ,
+    final response = await _helper.get(
+      
+      region!=null? "maintain/get_region_orders/${region}?status=${status}":
+      "maintain/get_submitted_orders?status=$status" ,
       pageUrl: nextUrl,
    isPaginate:  isPaginate
     

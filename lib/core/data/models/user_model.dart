@@ -42,7 +42,7 @@ class User {
   String? createdAt;
   String? updatedAt;
   bool? maintain_emp;
-
+ bool?  maintain_supervisor;
   User(
       {this.id,
       this.name,
@@ -52,6 +52,7 @@ class User {
       this.regionId,
       this.fcmToken,
       this.active,
+      this.maintain_supervisor,
       this.createdAt,
       this.updatedAt});
 
@@ -65,6 +66,7 @@ class User {
     fcmToken = json['fcm_token'];
     active = json['active'];
     createdAt = json['created_at'];
+    maintain_supervisor = json['maintain_supervisor']??false;
     updatedAt = json['updated_at'];
   }
 

@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:goodfoods/app/admin/pages/home_dashboard.dart';
 import 'package:goodfoods/app/admin/pages/home_new.dart';
 import 'package:goodfoods/core/presentation/login.dart';
 import 'package:goodfoods/core/services/goodfoods_remote_config.dart';
@@ -60,7 +61,7 @@ if (remoteVersion.toString().toLowerCase() != projectVersion.toString().toLowerC
         //  );
  Navigator.pushAndRemoveUntil(
 
-           context, MaterialPageRoute(builder: (_)=>const HomeNew()) ,
+           context, MaterialPageRoute(builder: (_)=>const HomeDashboard()) ,
           (route)=>false
          );
          

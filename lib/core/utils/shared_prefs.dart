@@ -16,6 +16,8 @@ class SharedPrefs {
   bool get isAdmin => _sharedPrefs!.getBool(ISADMIN) ?? false;
   bool get isOpen => _sharedPrefs!.getBool(ISOPEM) ?? false;
   bool get isMaintain => _sharedPrefs!.getBool(ISMAINTAIN) ?? false;
+    bool get isSuper => _sharedPrefs!.getBool(ISSUPER) ?? false;
+
  bool get isRemember => _sharedPrefs!.getBool(IS_REMEMBER) ?? false;
   String get user_name => _sharedPrefs!.getString(USER_NAME) ?? "";
   String get user_id => _sharedPrefs!.getString(USER_ID) ?? "";
@@ -42,7 +44,9 @@ set notificationCount(int count){
  set isAdmin(bool value){
  _sharedPrefs!.setBool(ISADMIN, value);
  }
-
+ set isSuper(bool sperAdmin){
+ _sharedPrefs!.setBool(ISSUPER, sperAdmin);
+ }
 
 
  set isRemember(bool value){

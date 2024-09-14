@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:goodfoods/app/admin/pages/chat_page.dart';
+import 'package:goodfoods/app/admin/pages/home_dashboard.dart';
 import 'package:goodfoods/app/admin/pages/home_new.dart';
 import 'package:goodfoods/app/managment_orders/views/pages/order_reply.dart';
 import 'package:goodfoods/core/presentation/login.dart';
@@ -186,7 +187,7 @@ sharedPrefs.isOpen= false;
 log("${message.data}2ND LINE");
 
 
-
+getNotificationCount();
 
     await notification.show(
         message.notification.hashCode,
@@ -327,10 +328,10 @@ if (model.contains("doc") ) {
     }
 
   }).onError((error, stackTrace) {
-const HomeNew().launch(main.navigatorKey.currentContext!);
+const HomeDashboard().launch(main.navigatorKey.currentContext!);
 
   }).catchError((e){
-const HomeNew().launch(main.navigatorKey.currentContext!);
+const HomeDashboard().launch(main.navigatorKey.currentContext!);
 
 
   })

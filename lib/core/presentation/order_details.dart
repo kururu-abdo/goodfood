@@ -621,6 +621,10 @@ MediaQuery.of(context).viewInsets.bottom
                                 crossAxisAlignment: CrossAxisAlignment.end,
 
                                 children: [
+
+
+                                  sharedPrefs.isSuper?SizedBox():
+
                                           !sharedPrefs.isMaintain?
                            controller.orderDetailsMapper!.data!.status.toString()=="0"?
 Padding(
@@ -963,7 +967,7 @@ detailMapper.model_name_ar.toString():detailMapper.model_name_en.toString()
     ,
 
 10.height,
-
+sharedPrefs.isSuper?SizedBox():
 
 (
   

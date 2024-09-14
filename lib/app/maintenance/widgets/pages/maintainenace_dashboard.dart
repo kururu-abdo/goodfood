@@ -15,7 +15,9 @@ import 'package:provider/provider.dart';
 
 class MaintainanceDashboard extends StatefulWidget {
   final dynamic status;
-  const MaintainanceDashboard({ Key? key, this.status }) : super(key: key);
+  
+  final int? region;
+  const MaintainanceDashboard({ Key? key, this.status, this.region }) : super(key: key);
 
   @override
   _MaintainanceDashboardState createState() => _MaintainanceDashboardState();
@@ -29,7 +31,8 @@ class _MaintainanceDashboardState extends State<MaintainanceDashboard> {
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-    context.read<MaintenanceController>().getMaintainOrders(context , widget.status);
+    context.read<MaintenanceController>().
+    getMaintainOrders(context , widget.status , widget.region);
     });
   }
  
@@ -110,7 +113,7 @@ return  FilterBottomSheet(
            onRefresh: ()async{
 
 
-             controller.getMaintainOrders(context , widget.status);
+             controller.getMaintainOrders(context , widget.status,  widget.region);
            },
            child: Builder(builder: (_){
          
@@ -130,7 +133,7 @@ return  FilterBottomSheet(
          Text(controller.maintainOrders!.message!),
          const SizedBox(height: 10,) ,
          IconButton(onPressed: (){
-           controller.getMaintainOrders(context , widget.status);
+           controller.getMaintainOrders(context , widget.status,  widget.region);
          }, icon:  Icon(
            Icons.refresh ,color: Theme.of(context).primaryColor,
          ))

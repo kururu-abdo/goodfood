@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/admin_dashboard.dart';
+import 'package:goodfoods/app/admin/pages/home_dashboard.dart';
 import 'package:goodfoods/app/admin/pages/home_new.dart';
 import 'package:goodfoods/core/data/models/user_model.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
@@ -81,7 +82,7 @@ if (user!.data!.permisions!.showBranchs!) {
 if (user!.data!.permisions!.showCars!) {
   auth.add('cars');
 }
-
+sharedPrefs.isSuper = user!.data!.user!.maintain_supervisor??false;
 sharedPrefs.authList = auth;
 sharedPrefs.user_name = user!.data!.user!.name!.toString();
 
@@ -100,7 +101,7 @@ sharedPrefs.token = user!.data!.accessToken!.toString();
 //       );
  Navigator.pushAndRemoveUntil(
 
-           context, MaterialPageRoute(builder: (_)=>const HomeNew()) ,
+           context, MaterialPageRoute(builder: (_)=>const HomeDashboard()) ,
           (route)=>false
          );
   

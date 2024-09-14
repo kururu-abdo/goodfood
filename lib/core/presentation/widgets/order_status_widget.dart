@@ -8,9 +8,10 @@ import 'package:nb_utils/nb_utils.dart';
 class OrderStatusWidget extends StatefulWidget {
   final String? title;
   final int? status;
+  final int? region;
   final String? icon;
   final dynamic count;
-  const OrderStatusWidget({super.key, this.status, this.title, this.icon, this.count});
+  const OrderStatusWidget({super.key, this.status, this.title, this.icon, this.count, this.region});
 
   @override
   State<OrderStatusWidget> createState() => _OrderStatusWidgetState();
@@ -104,8 +105,11 @@ Text(widget.count.toString(), style: const TextStyle(
 
 
     ).onTap((){
-if(!sharedPrefs.isMaintain){
- MaintainanceDashboard(status:widget.status.toString(),).launch(context , );
+if(!sharedPrefs.isMaintain || sharedPrefs.isSuper){
+ MaintainanceDashboard(status:widget.status.toString(),
+ region: widget.region,
+ 
+ ).launch(context , );
  }else {
     UserMaintenanceOrders(status:widget.status.toString()).launch(context);
  }
