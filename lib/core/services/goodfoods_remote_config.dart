@@ -49,4 +49,8 @@ GoodfoodsFirebaseRemoteConfig(): _remoteConfig = FirebaseRemoteConfig.instance;
 
   String getRecommendedMinimumVersion() =>
     remoteConfig.getString('version');
+
+
+      bool getFormVisibilty() =>
+    remoteConfig.getBool('show_form');
 }

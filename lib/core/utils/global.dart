@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:goodfoods/core/data/network/api_base_helper.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
+import 'package:goodfoods/main.dart';
       final ApiBaseHelper _helper = ApiBaseHelper();
 
 String? getStatusName(
@@ -63,12 +64,35 @@ Future<int> getNotificationCount(
     final response = await _helper.get(
       
       "notifications/notifications_count" ,
-    
+    token: sharedPrefs.token
     
     );
    int count  =response['data'];
 await SharedPrefs().init();
 sharedPrefs.notificationCount= count;
-   
+   notificationCounterNotifier.value = count;
     return count;
   }
+
+
+saveBranches(List<Map<String,dynamic>> value){
+  SharedPrefs().init();
+final jsonValue=jsonEncode(value);
+sharedPrefs.branches =jsonValue;
+
+}
+List<Map<String,dynamic>>? getBranches(){
+  SharedPrefs().init();
+var jsonString = sharedPrefs.branches;
+
+if (jsonString!='' ||  jsonString.isNotEmpty) {
+  final List<dynamic> jsonList = jsonDecode(jsonString);
+  return jsonList.cast<Map<String,dynamic>>();
+
+}
+return null;
+
+}
+
+
+

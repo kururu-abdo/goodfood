@@ -42,7 +42,7 @@ controller.setOrderAccept(orderMapper!.orderId.toString());
 // controller.changeOrderStatus(context, widget.orderId!, 1.toString());
   controller.updateOrderStatus(context, orderMapper!.orderId!.toString(),
    null, 1.toString()).then((value) {
-    context.read<MaintenanceController>().getStatusData(context);
+    context.read<MaintenanceController>().getStatusData(context ,null);
 
  OrderDetails(
    isMaintain: sharedPrefs.isMaintain,

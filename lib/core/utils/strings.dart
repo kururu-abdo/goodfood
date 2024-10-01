@@ -17,3 +17,4 @@ const String ISSUPER = 'is_super';
 const String IS_REMEMBER = 'is_remember';
 
 const String ISOPEM = 'is_open';
+const String BRANCHES = 'branches';

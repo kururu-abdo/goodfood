@@ -1,13 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:goodfoods/app/admin/pages/admin_dashboard.dart';
 import 'package:goodfoods/app/admin/pages/home_dashboard.dart';
-import 'package:goodfoods/app/admin/pages/home_new.dart';
 import 'package:goodfoods/core/data/models/user_model.dart';
 import 'package:goodfoods/core/data/network/api_response.dart';
 import 'package:goodfoods/core/data/network/apis/auth_api.dart';
+import 'package:goodfoods/core/utils/global.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
+import 'package:goodfoods/main.dart';
 
 class AuthController extends ChangeNotifier {
   
@@ -38,6 +38,35 @@ try {
 
 
 }
+deleteAccount(  BuildContext context ,
+){
+
+}
+signUser(
+  BuildContext context ,
+  String name,
+  String? email , String? password , 
+
+  Function? result
+)async{
+
+try {
+  isLoading=true;
+  notifyListeners();
+ var data= await AuthApi().signup(name,email, password);
+
+result!(true , false ,'');
+} catch (e) {
+
+    isLoading=false;
+  notifyListeners();
+  result!(false , true ,e.toString());
+
+}
+isLoading=false;
+  notifyListeners();
+}
+
 loginUser(
   BuildContext context ,
   String? email , String? password , 
@@ -65,6 +94,7 @@ sharedPrefs.isAdmin= user!.data!.user!.maintain_emp!;
 sharedPrefs.isMaintain = user!.data!.user!.maintain_emp!;
 sharedPrefs.userEmail=user!.data!.user!.email!.trim();
 sharedPrefs.userId= user!.data!.user!.id.toString();
+
 if (sharedPrefs.isRemember) {
   sharedPrefs.userPass= password!.trim();
 }
@@ -73,7 +103,9 @@ if(user!.data!.user!.maintain_emp!){
 }else {
   sharedPrefs.userType ="موظف";
 }
-
+saveBranches(
+  user!.data!.branches!.map((m)=>m.toJson()).toList()
+);
 //getAuth
   List<String> auth = [];
 if (user!.data!.permisions!.showBranchs!) {
@@ -144,25 +176,44 @@ setNotification(UserModel model){
   log("NOTIFICATIONS${model.notifications}" );
 if (model.notifications!=null) {
  sharedPrefs.notificationCount= int.parse(model.notifications.toString());
- 
+ notificationCounterNotifier.value= int.parse(model.notifications.toString());
 //  int.parse(model.notifications.toString());
  
 }else {
   sharedPrefs.notificationCount=0;
 }
 }
-getUserProfile()async{
-  try {
-     AuthApi().login(sharedPrefs.userEmail, sharedPrefs.userPass)
-     .then((model){
-setNotification(model);
+List<UserBranch>? myBranches=[];
 
-     });
+List<UserBranch> getMyBranches(){
+  var data = getBranches();
+
+  var bracnehs = data!.map((e)=> UserBranch.fromJson(e) ).toList();
+
+  return bracnehs;
+}
+
+getUserProfile()async{
+  user= ApiResponse.loading("loading");
+      notifyListeners();
+
+  try {
+    var model= await AuthApi().login(sharedPrefs.userEmail, sharedPrefs.userPass);
+
+    //  .then((model){
+setNotification(model);
+// myBranches.addAll(model.branches!);
+user =ApiResponse.completed(model);
 
 notifyListeners();
+    //  });
+
+// notifyListeners();
 
 
   } catch (e) {
+    user = ApiResponse.error(e.toString());
+    notifyListeners();
     print(e); 
   }
 }

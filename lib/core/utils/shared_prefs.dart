@@ -17,6 +17,7 @@ class SharedPrefs {
   bool get isOpen => _sharedPrefs!.getBool(ISOPEM) ?? false;
   bool get isMaintain => _sharedPrefs!.getBool(ISMAINTAIN) ?? false;
     bool get isSuper => _sharedPrefs!.getBool(ISSUPER) ?? false;
+  String get branches => _sharedPrefs!.getString(BRANCHES) ?? "";
 
  bool get isRemember => _sharedPrefs!.getBool(IS_REMEMBER) ?? false;
   String get user_name => _sharedPrefs!.getString(USER_NAME) ?? "";
@@ -88,12 +89,17 @@ set authList(list){
   set isLoggedIn(bool value) {
     _sharedPrefs!.setBool(ISLOGGEDIN, value);
   }
+
+   set branches(String value) {
+    _sharedPrefs!.setString(BRANCHES, value);
+  }
 // clear(){
 //   _sharedPrefs!.clear();
 // }
 
 logout(){
 isLoggedIn=false;
+branches ='';
 
 }
 }

@@ -21,20 +21,26 @@ requestHeaders = {
      };
    }
    
-  Future<dynamic> get(String url ,{String? pageUrl ,bool? isPaginate=false}) async {
+  Future<dynamic> get(String url ,{String? pageUrl , String? token ,bool? isPaginate=false}) async {
     print('Api Get, url $url');
      log(requestHeaders.toString());
     var responseJson;
     try {
+
+      if (token!=null) {
+        requestHeaders!['Authorization']='Bearer ${token.trim()}';
+      }
       final response = await http.get(
         
         
         Uri.parse(
           
-          isPaginate!?pageUrl!:
+          isPaginate!?pageUrl.toString():
           _baseUrl + url),
       
-      headers: requestHeaders??{}
+      headers: 
+      
+      requestHeaders??{}
       );
       responseJson = _returnResponse(response);
     } on SocketException {

@@ -19,11 +19,13 @@ import 'package:goodfoods/core/services/notification_plugin.dart';
 import 'package:goodfoods/core/utils/global.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:goodfoods/core/utils/utils.dart';
+import 'package:goodfoods/main.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class HomeNew extends StatefulWidget {
   const HomeNew({super.key});
@@ -37,6 +39,7 @@ class _HomeNewState extends State<HomeNew> {
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+   int? dropdownvalue;
 
   @override
   void initState() {
@@ -48,7 +51,10 @@ getNotificationCount();
 
     NotificationApi.initMessage();
 //get status data
-Provider.of<MaintenanceController>(context ,listen: false).getStatusData(context);
+Provider.of<MaintenanceController>(context ,listen: false).getStatusData(context,
+
+dropdownvalue
+);
 context.read<AdminHomeController>().updateToken();
 context.read<AuthController>().getUserProfile();
 
@@ -93,6 +99,8 @@ void dispose() {
     
     
     var controller = Provider.of<MaintenanceController>(context);
+        // var authController = Provider.of<MaintenanceController>(context);
+
     return  
     
      Scaffold(
@@ -101,123 +109,404 @@ key: _scaffoldKey,
     
       body:  RefreshIndicator(
           onRefresh: ()async{
-        
-            controller.getStatusData(context);
+        dropdownvalue=null;
+        setState(() {
+          
+        });
+            controller.getStatusData(context , dropdownvalue
+);
           },
         child: SizedBox.expand(
         
           child: 
           
-        Builder(builder: (context){
-        
-        
-        if (controller.orderStatusData!.status==Status.LOADING) {
-          return Center(
-               child: mProgress(context, fromPage: true),
-             );
-        }
-          else if( controller.orderStatusData!.status==Status.ERROR){
-           return Center(
-             child: Column(
-               crossAxisAlignment: CrossAxisAlignment.center,
-               mainAxisSize: MainAxisSize.min,
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: [
-           Text(controller.orderStatusData!.message!),
-           const SizedBox(height: 10,) ,
-           IconButton(onPressed: (){
-             controller.getStatusData(context);
-           }, icon:  Icon(
-             Icons.refresh ,color: Theme.of(context).primaryColor,
-           ))
-               ],
-             ),
-           );
-           }
-        else {
-        
-        return   ListView(
+        Column(
           children: [
-            Wrap(
-              runAlignment: WrapAlignment.center,
-              alignment: WrapAlignment.center,
-            
-            children: [
-            
-            
-            
-            OrderStatusWidget(
-              status: 0,
-              icon: 'assets/images/created.png',
-              count: controller.orderStatusData!.data!.created,
-            title: currentLang(context)=="ar"?
-            "تم الانشاء":"Created",
-            )
-            , 
-            OrderStatusWidget(
-              status: 3,
-               icon: 'assets/images/accepted.png',
-              count: controller.orderStatusData!.data!.accepted, 
-            title:currentLang(context) =="ar"?
-            "تحت المعالجة":"Processing"
-            ),
-            OrderStatusWidget(
-              status: 1,
-               icon: 'assets/images/pre_closed.png',
-              count: controller.orderStatusData!.data!.pre_closed, 
-            title:currentLang(context) =="ar"?
-            "قيد الاغلاق":"Closing",
-            
-            ), 
-            
-            OrderStatusWidget(
-              status: 2,
-            
-               icon: 'assets/images/closed.png',
-              count: controller.orderStatusData!.data!.closed, 
-            title:currentLang(context) =="ar"?
-            "تم الاغلاق":"Closed"
-            ), 
-            
-            
-            OrderStatusWidget(
-              status: 4,
-            icon: 'assets/images/cancel.png',
-              count: controller.orderStatusData!.data!.rejected, 
-            title:currentLang(context) =="ar"?
-            "مرفوض":"Rejected"
-            
-            ),
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            ],
-            
-            ),
+     const SizedBox(height: 20,),
+  Builder(
+    builder: (context) {
+return  
+getBranches()!.length<=1?const SizedBox.shrink():
+         Align(
+                    alignment: AlignmentDirectional.centerStart,
+      child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: PopupMenuButton(
+                  onSelected: (value) {
+                    // your logic
+                    dropdownvalue =   
+      authController.getMyBranches().indexWhere((branch)=> branch.id==value.id);
+                    
         
+        setState(() {
           
+        });     
+        controller.getStatusData(context, value.id);       
+                  },
+        itemBuilder: (BuildContext bc) {
+         return 
+                  authController.getMyBranches().map((e) =>   PopupMenuItem(
+                        value: e,
+                        child:Text(currentLang(context)=="ar"?e.nameAr.toString():e.nameEn.toString()),
+                      )).toList();
+        
+           }
+        , 
+        
+        child:        
+        Container(
+          width: 150 ,
+          height: 30,
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey ,width: .5
+            )
+        
+          ),
+          child:  Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: Text(dropdownvalue!=null?
+                  currentLang(context)=="ar"?
+               authController.getMyBranches()[dropdownvalue!].nameAr.toString(): 
+                authController.getMyBranches()[dropdownvalue!].nameEn.toString()
+                  // maintenanceController.selectedModel!
+                  :
+                   currentLang(context)=="ar"?'اختار الفرع':'select branch', 
+                   
+                   overflow: TextOverflow.ellipsis,
+                   ),
+              ),
+              const Icon(Icons.keyboard_arrow_down_outlined )
+            ],
+          ),
+        )
+        ,
+                ),
+      ),
+      );
+   
+      if (authController.user!.status==Status.ERROR ||
+      authController.user!.status==Status.LOADING
+      
+      ) {
+        return 
+        
+        // const Text("asdfsdf");
+        const SizedBox.shrink();
+      }
+      else {
+        var userData =  authController.user!.data;
+
+
+        return
+        
+        userData!.branches!.length<=1? 
+        
+        // userData!.branches!.isEmpty? 
+        
+        const SizedBox.shrink():
+        
+         Align(
+                    alignment: AlignmentDirectional.centerStart,
+      child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: PopupMenuButton(
+                  onSelected: (value) {
+                    // your logic
+                    dropdownvalue =   authController.getMyBranches().indexOf(
+      authController.getMyBranches().firstWhere((branch)=> branch.id==value.id)
+                    );
+        
+        setState(() {
+          
+        });     
+        controller.getStatusData(context, value.id);       
+                  },
+        itemBuilder: (BuildContext bc) {
+         return 
+                  authController.getMyBranches().map((e) =>   PopupMenuItem(
+                        value: e,
+                        child:Text(currentLang(context)=="ar"?e.nameAr.toString():e.nameEn.toString()),
+                      )).toList();
+        
+           }
+        , 
+        
+        child:        
+        Container(
+          width: 150 ,
+          height: 30,
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey ,width: .5
+            )
+        
+          ),
+          child:  Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: Text(dropdownvalue!=null?
+                  currentLang(context)=="ar"?
+               authController.getMyBranches()[dropdownvalue!].nameAr.toString(): 
+                authController.getMyBranches()[dropdownvalue!].nameEn.toString()
+                  // maintenanceController.selectedModel!
+                  :
+                   currentLang(context)=="ar"?'اختار الفرع':'select branch', 
+                   
+                   overflow: TextOverflow.ellipsis,
+                   ),
+              ),
+              const Icon(Icons.keyboard_arrow_down_outlined )
+            ],
+          ),
+        )
+        ,
+                ),
+      ),
+      );
+   
+   
+   
+      }
+    }
+  ),
+
+
+
+  const SizedBox(height: 10,),
+
+            Builder(builder: (context){
+            
+            
+            if (controller.orderStatusData!.status==Status.LOADING) {
+
+
+              return 
+                 Wrap(
+            
+                  runAlignment: WrapAlignment.center,
+                  alignment: WrapAlignment.center,
+                
+                children: List.generate(5, (i){
+return
+ Skeletonizer(
+  enabled: true,
+   child: ClipPath(
+         clipper: const ShapeBorderClipper(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))
+          )
+      ),
+      child:
+   Container(
+    
+       margin: const EdgeInsets.only(
+            bottom: 10 , left: 5 ,right: 5,
+            top: 10
+          ),
+          padding: const EdgeInsets.symmetric(
+            vertical: 6 ,horizontal: 15
+          ),
+          width: MediaQuery.of(context).size.width*.45,
+          height: MediaQuery.of(context).size.width*.45,
+   decoration:   const BoxDecoration(
+      
+             color: Colors.white,
+      
+        //      gradient: const LinearGradient(
+        //   stops:  [0.05, 0.02],
+        //   colors: [Colors.red, Colors.white]
+        // ),
+        //      borderRadius: const BorderRadius.all(
+        // Radius.circular(10),
+        // ),
+        boxShadow: [
+        BoxShadow(
+        color: Color(0xffDDDDDD),
+        blurRadius: 2.0,
+        spreadRadius: 1.0,
+        offset: Offset(0.0, 3.0),
+        )
+        ],
+      
+            border: Border(
+              bottom: BorderSide(
+                
+                  width: 7.0,
+                
+                
+                
+             
+               
+               
+               )
+            )
+         
+         
+         
+          ),
+   
+   child:  Column(children: [
+Container(width: 80,height: 80,color: Colors.white,),
+     const Text('The title goes here'),
+      const Text('The title goes here'),
+       const Text('The title goes here'),
+   ],),
+   )
+   ),
+ );
+
+
+                }));
+
+              return Center(
+                   child: mProgress(context, fromPage: true),
+                 );
+            }
+              else if( controller.orderStatusData!.status==Status.ERROR){
+               return Center(
+                 child: Column(
+                   crossAxisAlignment: CrossAxisAlignment.center,
+                   mainAxisSize: MainAxisSize.min,
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   children: [
+               Text(controller.orderStatusData!.message!),
+               const SizedBox(height: 10,) ,
+               IconButton(onPressed: (){
+                 controller.getStatusData(context , dropdownvalue
+);
+               }, icon:  Icon(
+                 Icons.refresh ,color: Theme.of(context).primaryColor,
+               ))
+                   ],
+                 ),
+               );
+               }
+            else {
+            
+            return   Expanded(
+              child: ListView(
+                children: 
+                [
+                Wrap(
+                            
+                  runAlignment: WrapAlignment.center,
+                  alignment: WrapAlignment.center,
+                
+                children: [
+                
+                
+                
+                OrderStatusWidget(
+                  status: 0,
+                  icon: 'assets/images/created.png',
+                  count: controller.orderStatusData!.data!.created,
+                title: currentLang(context)=="ar"?
+                "تم الانشاء":"Created",
+                 branch: dropdownvalue!=null?
+                 authController.getMyBranches()[dropdownvalue!].id
+                  :
+                  (authController.getMyBranches().isNotEmpty?
+                
+                authController.getMyBranches().first.id:null), 
+                // region: ,
+                )
+                , 
+                OrderStatusWidget(
+                  status: 3,
+                   icon: 'assets/images/accepted.png',
+                  count: controller.orderStatusData!.data!.accepted, 
+                title:currentLang(context) =="ar"?
+                "تحت المعالجة":"Processing", 
+                 branch: 
+                 dropdownvalue!=null?
+                 authController.getMyBranches()[dropdownvalue!].id
+                  :
+                 
+                 (authController.getMyBranches().isNotEmpty?
+                
+                authController.getMyBranches().first.id:null)
+                ),
+                OrderStatusWidget(
+                  status: 1,
+                   icon: 'assets/images/pre_closed.png',
+                  count: controller.orderStatusData!.data!.pre_closed, 
+                title:currentLang(context) =="ar"?
+                "قيد الاغلاق":"Closing",
+                 branch:  dropdownvalue!=null?
+                 authController.getMyBranches()[dropdownvalue!].id
+                  :
+                  (authController.getMyBranches().isNotEmpty?
+                
+                authController.getMyBranches().first.id:null)
+                ), 
+                
+                OrderStatusWidget(
+                  status: 2,
+                branch: dropdownvalue!=null?
+                 authController.getMyBranches()[dropdownvalue!].id
+                  :
+                  (authController.getMyBranches().isNotEmpty?
+                
+                authController.getMyBranches().first.id:null)
+                ,
+                   icon: 'assets/images/closed.png',
+                  count: controller.orderStatusData!.data!.closed, 
+                title:currentLang(context) =="ar"?
+                "تم الاغلاق":"Closed" , 
+                
+                ), 
+                
+                
+                OrderStatusWidget(
+                  status: 4,
+                icon: 'assets/images/cancel.png',
+                  count: controller.orderStatusData!.data!.rejected, 
+                title:currentLang(context) =="ar"?
+                "مرفوض":"Rejected"
+                , 
+                 branch: dropdownvalue!=null?
+                 authController.getMyBranches()[dropdownvalue!].id
+                  :
+                  (authController.getMyBranches().isNotEmpty?
+                
+                authController.getMyBranches().first.id:null)
+                ),
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                ],
+                
+                ),
+                          ]),
+            );
+            
+            
+            
+            
+            
+            }
+            
+            
+            
+            
+            
+            
+            }),
           ],
-        );
-        
-        
-        
-        
-        
-        }
-        
-        
-        
-        
-        
-        
-        })
+        )
              
         ),
       ),
@@ -258,10 +547,40 @@ setState(() {
         });
          
             } ,  
-            child:  Builder(
-              builder: (context) {
-                if (sharedPrefs.notificationCount>0) {
-              return 
+            child: 
+            ValueListenableBuilder<int>(valueListenable: notificationCounterNotifier,
+            
+             builder: (context, count ,child){
+if (count<=0) {
+  
+                return const ImageIcon(
+                        AssetImage('assets/icons/bell.png')
+                        ,
+                        size:25 ,  
+                
+                color: 
+                
+                //  _currentTab ==1? 
+                          
+                //           //  Colors.white
+                //                       Theme.of(context).primaryColor
+
+                // :
+                
+                
+                Colors.black
+                          
+                          // Theme.of(context).primaryColor
+                          //   :Colors.grey
+                        
+                        
+                        
+                        
+                );
+            
+}else {
+
+      return 
               
                   SizedBox(
                     height: 50,
@@ -300,7 +619,7 @@ setState(() {
                       child: Text(
                         ///TODO:NOTIFICATION COUNT
                         
-                        sharedPrefs.notificationCount.toString() ,
+                       count.toString() ,
                       
                       style: const TextStyle(
                         color: Colors.white, 
@@ -316,34 +635,14 @@ setState(() {
                   );
                
                
-                }
-                return const ImageIcon(
-                        AssetImage('assets/icons/bell.png')
-                        ,
-                        size:25 ,  
-                
-                color: 
-                
-                //  _currentTab ==1? 
-                          
-                //           //  Colors.white
-                //                       Theme.of(context).primaryColor
+}
 
-                // :
-                
-                
-                Colors.black
-                          
-                          // Theme.of(context).primaryColor
-                          //   :Colors.grey
-                        
-                        
-                        
-                        
-                );
-              }
-            ),
+
+             })
             
+            
+          
+          
             )
 
 

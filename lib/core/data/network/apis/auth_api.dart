@@ -24,7 +24,23 @@ class AuthApi {
     );
     return UserModel.fromJson(response);
   }
+ Future<dynamic> signup(
+  String? name,
+     String? email , String? password
+   ) async {
+    final response = await _helper.post("auth/register" ,
+   jsonEncode(
+      {
+        "name":name,
+      "email":email ,
+      "password":password
 
+    }
+   )
+    
+    );
+    return response;
+  }
   
  Future<void> logout(
     
@@ -43,6 +59,16 @@ class AuthApi {
     return ;
   }
 
+ Future<void> deleteAccount(
+    
+   ) async {
+    final response = await _helper.delete("delete_account" ,
+  
+    
+    );
+    log(response.toString());
+    return ;
+  }
 
 }
 // https://goodfoodsa.co/api/auth/logout

@@ -42,14 +42,19 @@ cars = I.map((e) => CarModel.fromJson(e)).toList();
 
 //api/maintain/maintain_status
 Future<OrderStatus> getOrderStatusData(
-     
+     int? branchId
    ) async {
      //
-    final response = await _helper.get("maintain/maintain_status" ,
+    final response = await _helper.get(
+      branchId!=null?
+      "maintain/maintain_status?branch_id=$branchId"
+      :
+      "maintain/maintain_status"
+       ,
    
     
     );
-   
+   log("MY DATA $response");
 var statusData = OrderStatus.fromJson(response['data']);
     return statusData;
   }
@@ -132,7 +137,7 @@ skins = I.map((e) => DepartmentAsset.fromJson(e)).toList();
 
    ) async {
      //
-    final response = await _helper.get("maintain/get_maintain_emp?city_id=${regeionId}" ,
+    final response = await _helper.get("maintain/get_maintain_emp?city_id=$regeionId" ,
    
     
     );
@@ -365,8 +370,9 @@ body2
 
 
   Future<MaintainenanceOrderModel> getMaintainOrder(
-    String? status
+    int? status
 , int? region,
+int? branch,
    [
     String? nextUrl,
     bool? isPaginate=false
@@ -376,9 +382,25 @@ body2
      //
     final response = await _helper.get(
       
-      region!=null? "maintain/get_region_orders/${region}?status=${status}":
-      "maintain/get_submitted_orders?status=$status" ,
-      pageUrl: nextUrl,
+      region!=null?
+       branch!=null?
+       "maintain/get_region_orders/$region?status=$status&branch_id=$branch":
+       "maintain/get_region_orders/$region?status=$status"
+       
+       
+       
+       :
+      "maintain/get_submitted_orders?branch_id=${branch??''}&status=$status" ,
+      pageUrl:
+    !isPaginate!?  null:
+      region!=null?
+      
+      branch!=null?
+       "${nextUrl!}&status=$status&branch_id=$branch":
+      "${nextUrl!}&status=$status"
+      :
+      branch!=null? "${nextUrl!}&status=$status&branch_id=$branch":
+       "${nextUrl!}&status=$status",
    isPaginate:  isPaginate
     
     );
@@ -415,7 +437,7 @@ Future<OrderData> getUserOrders(
   [
     String? nextUrl,
     bool? isPaginate=false ,
-    String? status
+    int? status
   ]
    
    ) async {
@@ -424,7 +446,7 @@ Future<OrderData> getUserOrders(
     "maintain/get_order?status=$status"   ,
    pageUrl: 
    
-  nextUrl,
+  "${nextUrl!}&status=$status",
    isPaginate:  isPaginate
     
     );

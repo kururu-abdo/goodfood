@@ -401,6 +401,20 @@ log("CLCIKED");
 
 static Future<void> requestPermissions() async {
     // await Permission.notification.request();
+     await Permission.notification.isDenied.then((value) {
+        if (value) {
+          Permission.notification.request();
+        }
+      });
+
+PermissionStatus permissionStatus = await Permission.notification.status; 
+if (!permissionStatus.isGranted) { 
+// The permission is not granted, request it. 
+permissionStatus = await Permission.notification.request();
+ }
+
+
+
     var status = await Permission.notification.request();
     if (status.isPermanentlyDenied) {
   // The user opted to never again see the permission request dialog for this

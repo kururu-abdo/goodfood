@@ -4,6 +4,7 @@ import 'package:goodfoods/core/data/models/chat_selection_model.dart';
 import 'package:goodfoods/core/data/models/city_model.dart';
 import 'package:goodfoods/core/data/models/region_model.dart';
 import 'package:goodfoods/core/data/network/api_base_helper.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class CommmomApis {
     final ApiBaseHelper _helper = ApiBaseHelper();
@@ -194,7 +195,10 @@ Future<List<AreaStatusData>> getAreaStatusData(
    ) async {
 
      List<AreaStatusData> branches=[];
-    final response = await _helper.get("maintain/get_regions_report" ,
+    final response = await _helper.get(
+      
+     
+      "maintain/get_regions_report" ,
     
     
     );
@@ -207,4 +211,33 @@ branches = I.map((e) => AreaStatusData.fromJson(e)).toList();
 
     return branches;
   }
+Future<AreaStatusData> getAreaStatusByBranch(
+    int? region,
+
+  int? branch
+   ) async {
+log("REGION $region  BRANCH $branch");
+  late   AreaStatusData branches;
+    final response = await _helper.get(
+      branch!=null?
+
+     
+      "maintain/get_region_status/$region?branch_id=$branch":
+      
+      "maintain/get_region_status/$region" 
+       ,
+    
+    
+    );
+var e =response['data'];
+branches = AreaStatusData.fromJson(e);
+
+
+
+
+
+    return branches;
+  }
+
+
 }

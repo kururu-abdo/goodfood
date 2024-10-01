@@ -9,6 +9,7 @@ import 'package:goodfoods/app/order/model/order_data.dart';
 import 'package:goodfoods/app/order/model/order_mapper.dart';
 import 'package:goodfoods/app/success/view/pages/success.dart';
 import 'package:goodfoods/core/controllers/app_state.dart';
+import 'package:goodfoods/core/data/models/area_staus_data.dart';
 import 'package:goodfoods/core/data/models/branch_asset.dart';
 import 'package:goodfoods/core/data/models/branch_model.dart';
 import 'package:goodfoods/core/data/models/car_model.dart';
@@ -56,6 +57,7 @@ ApiResponse<List<DepartmentModel>>?  departments2 = ApiResponse.completed([]);
 ApiResponse<List<DepartmentAsset>>?  departmeentAssets = ApiResponse.completed([]);
 ApiResponse<OrderStatus>?  orderStatusData =ApiResponse.loading("loading");
 
+ApiResponse<AreaStatusData>?  areaStatusDataByBranch =ApiResponse.loading("loading");
 
 ApiResponse<List<CarModel>>?  cars = ApiResponse.completed([]);
 
@@ -553,13 +555,13 @@ notifyListeners();
       isBusy= false; 
   }
 }
-Future<void> getStatusData(BuildContext context)async{
+Future<void> getStatusData(BuildContext context,int? branchId)async{
    orderStatusData = ApiResponse.loading('loading');
 
 isBusy= true;
 notifyListeners();
   try {
-    var  response = await MaintenanceApis().getOrderStatusData();
+    var  response = await MaintenanceApis().getOrderStatusData(branchId);
 
 
 
@@ -572,7 +574,25 @@ notifyListeners();
       isBusy= false; 
   }
 }
+Future<void> getAreaDataByBranch(BuildContext context,int? region,int? branchId)async{
+   areaStatusDataByBranch = ApiResponse.loading('loading');
 
+isBusy= true;
+notifyListeners();
+  try {
+    var  response = await CommmomApis().getAreaStatusByBranch(region, branchId);
+
+
+
+    areaStatusDataByBranch=ApiResponse.completed(response);
+  } catch (e) {
+       areaStatusDataByBranch = ApiResponse.error('$e');
+notifyListeners();
+
+  }finally{
+      isBusy= false; 
+  }
+}
 
 
 
@@ -940,7 +960,7 @@ for (var item in maintainOrders!.data!.data!.data!) {
 model_name_ar: item.model_name_ar,
 model_name_en: item.model_name_en,
 
-  createrName:   '',
+  createrName:   item.forwardTo!.admin!.name,
 
    forwardToId:item.adminId.toString(),
   forwardToName:item.forwardTo!.admin!.name,
@@ -979,22 +999,21 @@ notifyListeners();
 
 Future<void> getMaintainOrders(BuildContext context ,
 
-String? status , int? region
+int? status , int? region ,int? branch
 )async{
    maintainOrders = ApiResponse.loading('loading');
 adminOrders=[];
 notifyListeners();
   try {
-    log("GET_ORDER3{MAINN}");
-
     var  response = await MaintenanceApis().getMaintainOrder(status, 
-    region
+    region ,branch
     );
+log("STATUS $status   REFION $region BRANCH $branch"  );
 
 
 
     maintainOrders=ApiResponse.completed(response);
-    log("GET_ORDER4{MAINN}");
+    log("GET_ORDER4{MAINN} status:$status ");
 
 
 List<OrderMapper> data=[];    
@@ -1011,7 +1030,7 @@ for (var item in maintainOrders!.data!.data!.data!) {
  maintainOrderId:item.forwardTo!.maintainId , 
 model_name_ar: item.model_name_ar,
 model_name_en: item.model_name_en,
-  createrName:   '',
+  createrName: item.admin!.name,
 
    forwardToId:item.adminId.toString(),
   forwardToName:item.forwardTo!.admin!.name,
@@ -1050,14 +1069,14 @@ notifyListeners();
 
 Future<void> getMaintainOrdersPaginate(BuildContext context ,
 String nextUrl
-
+ ,int? status ,int? region ,int? branch 
 )async{
    maintainOrdersPaginate = ApiResponse.loading('loading');
 
 notifyListeners();
   try {
     var  response = await MaintenanceApis().getMaintainOrder(
-      status,null,
+      status,region,branch,
       nextUrl, true
     );
 
@@ -1068,16 +1087,15 @@ notifyListeners();
 for (var item in maintainOrders!.data!.data!.data!) {
   data.add(
     OrderMapper(
-        orderCreaterId: item.adminId!.toString() ,
+      orderCreaterId: item.adminId!.toString() ,
         fromMe: sharedPrefs.user_id== item.adminId.toString(),
           confirmd:item.forwardTo!.confirmed,
       
   orderId:item.id,
  maintainOrderId:item.forwardTo!.maintainId , 
-model_name_ar:  item.model_name_ar 
-,
+model_name_ar: item.model_name_ar,
 model_name_en: item.model_name_en,
-  createrName:   '',
+  createrName: item.admin!.name,
 
    forwardToId:item.adminId.toString(),
   forwardToName:item.forwardTo!.admin!.name,
@@ -1127,13 +1145,14 @@ log("/////////////////////////   $e");
 Future<void> getUserOrders(BuildContext context ,
 
    {
-String?  status=''
+int?  status
   }
 )async{
    userOrders = ApiResponse.loading('loading');
 userOrdersData=[];
 notifyListeners();
   try {
+log("STATUS $status  ");
     var  response = await 
     
     MaintenanceApis().getUserOrders(
@@ -1188,10 +1207,10 @@ showToast(e.toString(), true);
 }
 
 
-Future<void> refreshUserOrders(BuildContext context ,
-
+Future<void> refreshUserOrders(BuildContext context ,int?
+branch,
    {
-String?  status=''
+int?  status
   }
 )async{
   //  userOrders = ApiResponse.loading('loading');
@@ -1223,7 +1242,7 @@ model_name_ar: item.maintainOrder!.model_name_ar,
   createrName:   item.maintainOrder!.admin!.name,
 
    forwardToId:item.adminId.toString(),
-  forwardToName:'',
+  forwardToName: '',
   status:item.maintainOrder!.status,
  
    immediately:item.maintainOrder!.immedatly,
@@ -1322,10 +1341,9 @@ showToast(e.toString(), true);
 
 
 Future<void> getUserOrdersPaginate(BuildContext context ,
-
 String nextUrl, 
  {
-String?  status
+int?  status
   }
 )async{
 
@@ -1336,7 +1354,7 @@ notifyListeners();
     
     MaintenanceApis().getUserOrders(
       nextUrl,
-      true ,   null);
+      true ,   status);
 
 
 

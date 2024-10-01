@@ -103,7 +103,8 @@ return Scaffold(
           elevation: 0,
           actions:  [
 
-
+sharedPrefs.isSuper?
+const SizedBox.shrink():
  Builder(
    builder: (context) {
 
@@ -176,7 +177,7 @@ controller.changeOrderStatus(context,
  
  []
  ).then((value) {
-    context.read<MaintenanceController>().getStatusData(context);
+    context.read<MaintenanceController>().getStatusData(context,null);
 
  
 });
@@ -623,7 +624,7 @@ MediaQuery.of(context).viewInsets.bottom
                                 children: [
 
 
-                                  sharedPrefs.isSuper?SizedBox():
+                                  sharedPrefs.isSuper?const SizedBox():
 
                                           !sharedPrefs.isMaintain?
                            controller.orderDetailsMapper!.data!.status.toString()=="0"?
@@ -967,7 +968,7 @@ detailMapper.model_name_ar.toString():detailMapper.model_name_en.toString()
     ,
 
 10.height,
-sharedPrefs.isSuper?SizedBox():
+sharedPrefs.isSuper?const SizedBox():
 
 (
   

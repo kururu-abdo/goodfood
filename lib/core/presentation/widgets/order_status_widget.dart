@@ -11,7 +11,8 @@ class OrderStatusWidget extends StatefulWidget {
   final int? region;
   final String? icon;
   final dynamic count;
-  const OrderStatusWidget({super.key, this.status, this.title, this.icon, this.count, this.region});
+  final int? branch;
+  const OrderStatusWidget({super.key, this.status, this.title, this.icon, this.count, this.region, this.branch});
 
   @override
   State<OrderStatusWidget> createState() => _OrderStatusWidgetState();
@@ -106,12 +107,15 @@ Text(widget.count.toString(), style: const TextStyle(
 
     ).onTap((){
 if(!sharedPrefs.isMaintain || sharedPrefs.isSuper){
- MaintainanceDashboard(status:widget.status.toString(),
+ MaintainanceDashboard(status:widget.status,
  region: widget.region,
- 
+ branch: widget.branch,
  ).launch(context , );
  }else {
-    UserMaintenanceOrders(status:widget.status.toString()).launch(context);
+    UserMaintenanceOrders(
+      // branch: widget.branch,
+      
+      status:widget.status).launch(context);
  }
       
     });

@@ -17,7 +17,6 @@ import 'package:goodfoods/core/services/firebase_notifications.dart';
 import 'package:goodfoods/core/services/goodfoods_remote_config.dart';
 import 'package:goodfoods/core/services/notification_plugin.dart';
 import 'package:goodfoods/core/services/package_info_service.dart';
-import 'package:goodfoods/core/utils/global.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:open_document/my_files/init.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +30,7 @@ typedef   YES=bool;
 typedef   NO=bool;
 
 typedef OnClickEvent<T> = Function(T);
-
+ValueNotifier<int> notificationCounterNotifier = ValueNotifier<int>(0);
 
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -303,3 +302,4 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+

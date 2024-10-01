@@ -73,7 +73,7 @@ class OrderWidget extends StatelessWidget {
 ?
          MediaQuery.of(context).size.height/3
          :
-        MediaQuery.of(context).size.height/5
+        MediaQuery.of(context).size.height/4
         // :
         // MediaQuery.of(context).size.height/3
         
@@ -182,12 +182,15 @@ class OrderWidget extends StatelessWidget {
      ,
 5.height ,
     
-    
+  
      Row(
       mainAxisSize: MainAxisSize.min,
       children: [
      SizedBox(width: 100,
-    child: Text("${locale.translate("status")}: "), 
+    child: Text("${currentLang(context)=="ar"?
+    
+    "المشرف":"Supervisor"
+    }: "), 
     
     
     ) ,
@@ -197,12 +200,12 @@ class OrderWidget extends StatelessWidget {
     
     Text(
       // ''
-    getStatusName(context, orderMapper!.status!)!
+    orderMapper!.createrName.toString()
     ,
     maxLines: 2, 
-    style:  TextStyle(
+    style:  const TextStyle(
       fontWeight: FontWeight.w300,
-      color: getOrderColor(orderMapper!.status!),
+      // color: getOrderColor(orderMapper!.status!),
       fontSize: 15
     ),
     overflow: TextOverflow.ellipsis,
@@ -213,7 +216,42 @@ class OrderWidget extends StatelessWidget {
     ),
 
 
-
+5.height ,
+    
+    sharedPrefs.isMaintain?
+    const SizedBox.shrink():  
+     Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+     SizedBox(width: 100,
+    child: Text("${currentLang(context)=="ar"?
+    
+    "فني الصيانة":"Maintainance Employee"
+    }: "), 
+    
+    
+    ) ,
+    const SizedBox(
+      width: 10,
+    ) ,
+    
+    Text(
+      // ''
+    orderMapper!.forwardToName.toString()
+    ,
+    maxLines: 2, 
+    style:  const TextStyle(
+      fontWeight: FontWeight.w300,
+      // color: getOrderColor(orderMapper!.status!),
+      fontSize: 15
+    ),
+    overflow: TextOverflow.ellipsis,
+    )
+    
+    
+      ],
+    ),
+5.height,
      Row(
       mainAxisSize: MainAxisSize.min,
       children: [

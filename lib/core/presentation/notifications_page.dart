@@ -257,13 +257,17 @@ var locale = AppLocalizations.of(context);
                      ).onTap(()async{
 
 
-
+getNotificationCount();
 await
 provider.readNotificaiton(notification.id!.toString());
 log(notification.model!.toString());
 log(notification.modelId!.toString());
-routeToScreen(notification.model!.toString(), notification.modelId!.toString());
+
+routeToScreen(notification.model!.toString(),
+ notification.modelId!.toString());
                      });
+
+                    
        
              });
            }

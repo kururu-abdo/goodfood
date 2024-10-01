@@ -12,7 +12,8 @@ import 'package:goodfoods/core/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class UserMaintenanceOrders extends StatefulWidget {
-    final dynamic status;
+    final int? status;
+    // final int? branch;
 
   const UserMaintenanceOrders({ Key? key, this.status }) : super(key: key);
 
@@ -151,7 +152,7 @@ return  FilterBottomSheet(isMaintain: true,status: widget.status,);
            onRefresh: ()async{
               
   context.read<MaintenanceController>().
-  getUserOrders(context,status: widget.status);
+  getUserOrders(context ,status: widget.status);
            },
            child: Builder(builder: (_){
          
@@ -208,7 +209,9 @@ return  FilterBottomSheet(isMaintain: true,status: widget.status,);
                  isLaoding: controller.userOrderPaginate!.status==Status.LOADING,
                  onTap: (){
 
-controller.getUserOrdersPaginate(context, controller.userOrders!.data!.nextPageUrl);
+controller.getUserOrdersPaginate(context, 
+
+controller.userOrders!.data!.nextPageUrl ,status: widget.status);
 
 
                  },

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 class FilterBottomSheet extends StatefulWidget {
   final bool? isMaintain;
-  final String? status;
+  final int? status;
   const FilterBottomSheet({ Key? key, this.isMaintain = false, this.status }) : super(key: key);
 
   @override

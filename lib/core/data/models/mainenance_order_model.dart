@@ -510,15 +510,13 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
-        log("GET_ORDER4{MAINN}");
-log("GET_ORDER4$json");
+    
     if (json['data'] != null) {
       data = <AdminOrderData2>[];
       json['data'].forEach((v) {
         data!.add(AdminOrderData2.fromJson(v));
       });
     }
-        log("GET_ORDER5{MAINN}");
 
 
     firstPageUrl = json['first_page_url'];
@@ -577,6 +575,7 @@ List<String>? files;
   ForwardTo? forwardTo;
 String? model_name_ar;
 String? model_name_en;
+Admin? admin;
   AdminOrderData2(
       {this.id,
       this.model_name_ar,this.model_name_en,
@@ -585,6 +584,7 @@ String? model_name_en;
       this.modelId,
       this.machines,
       this.task,
+      this.admin,
       this.files,
       this.status,
       this.immedatly,
@@ -596,10 +596,12 @@ String? model_name_en;
     id = json['id'];
     model_name_ar= json['model_name_ar'];
     model_name_en= json['model_name_en'];
-log("AR"+ model_name_ar.toString());
+log("AR$model_name_ar");
 
-log("EN"+ model_name_en.toString());
-    
+log("EN$model_name_en");
+    admin =  json['admin'] != null
+        ? Admin.fromJson(json['admin'])
+        : null;
     adminId = json['admin_id'];
     modelType = json['model_type'];
     modelId = json['model_id'];

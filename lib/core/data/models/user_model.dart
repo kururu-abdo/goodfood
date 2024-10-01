@@ -1,13 +1,17 @@
+import 'dart:convert';
+import 'dart:developer';
+
 class UserModel {
   String? accessToken;
   String? tokenType;
   User? user;
   dynamic notifications;
   Permisions? permisions;
-
-  UserModel({this.accessToken, this.tokenType, this.user, this.permisions});
+List<UserBranch>? branches;
+  UserModel({this.accessToken, this.branches,this.tokenType, this.user, this.permisions});
 
   UserModel.fromJson(Map<String, dynamic> json) {
+    log("BRANCHESESSS ${json['branchs']}");
     accessToken = json['access_token'];
     notifications= json['notifications'];
     tokenType = json['token_type'];
@@ -15,6 +19,16 @@ class UserModel {
     permisions = json['permisions'] != null
         ? Permisions.fromJson(json['permisions'])
         : null;
+
+        json['branchs'] != null?
+        ( json['branchs'] as List).isNotEmpty?
+        branches =
+        (json['branchs'] as List).map((b)=> UserBranch.fromJson(b)  ).toList()
+       : branches=[]
+        : branches=[];
+
+
+
   }
 
   Map<String, dynamic> toJson() {
@@ -100,6 +114,35 @@ class Permisions {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['show_branchs'] = showBranchs;
     data['show_cars'] = showCars;
+    return data;
+  }
+}
+
+
+
+
+
+class UserBranch {
+  int? id;
+  String? nameAr;
+  String? nameEn;
+
+
+  UserBranch({this.id ,this.nameAr ,this.nameEn});
+
+  UserBranch.fromJson(Map<String, dynamic> json) {
+    log("BRANCH DATA$json");
+    id = json['id'];
+    nameAr = json['name_ar'];
+    nameEn = json['name_en'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['name_ar'] = nameAr;
+        data['name_en'] = nameEn;
+
     return data;
   }
 }

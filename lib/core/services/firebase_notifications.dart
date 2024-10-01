@@ -46,8 +46,33 @@ class FirebaseService {
     }
     
   }
+static Future<void> requrestFirebaseNotificaton()async{
+   var settings = await  FirebaseMessaging.instance.requestPermission(
+     alert: true,
+  announcement: false,
+  badge: true,
+  carPlay: false,
+  criticalAlert: false,
+  provisional: false,
+  sound: true,
+  );
 
-Future<String?> getDeviceToken() async => await FirebaseMessaging.instance.getToken();
+  if (settings.authorizationStatus!=AuthorizationStatus.authorized) {
+    requrestFirebaseNotificaton();
+  }
+}
+Future<String?> getDeviceToken() async {
+  // FirebaseMessaging.instance.requestPermission(
+  //    alert: true,
+  // announcement: false,
+  // badge: true,
+  // carPlay: false,
+  // criticalAlert: false,
+  // provisional: false,
+  // sound: true,
+  // );
+  return await FirebaseMessaging.instance.getToken();
+}
 
   static final FlutterLocalNotificationsPlugin _localNotificationsPlugin = FlutterLocalNotificationsPlugin();
   

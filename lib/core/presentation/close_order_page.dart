@@ -404,7 +404,7 @@ file.extension==".jpeg"
           
           
           ).then((value) {
-                context.read<MaintenanceController>().getStatusData(context);
+                context.read<MaintenanceController>().getStatusData(context, null);
 
 Navigator.pop(context);
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class OrderStatus {
   
 
@@ -13,7 +15,7 @@ class OrderStatus {
 
 
 OrderStatus.fromJson(Map<String,dynamic> data){
-
+log("STATUS DATA$data");
   created = data['created'];
     closed = data['closed'];
     accepted = data['accpeted'];

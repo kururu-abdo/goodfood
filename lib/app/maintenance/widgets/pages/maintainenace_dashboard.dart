@@ -14,10 +14,12 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 
 class MaintainanceDashboard extends StatefulWidget {
-  final dynamic status;
+  final int? status;
   
   final int? region;
-  const MaintainanceDashboard({ Key? key, this.status, this.region }) : super(key: key);
+    final int? branch;
+
+  const MaintainanceDashboard({ Key? key, this.status ,this.branch, this.region }) : super(key: key);
 
   @override
   _MaintainanceDashboardState createState() => _MaintainanceDashboardState();
@@ -32,7 +34,10 @@ class _MaintainanceDashboardState extends State<MaintainanceDashboard> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
     context.read<MaintenanceController>().
-    getMaintainOrders(context , widget.status , widget.region);
+    getMaintainOrders(context , widget.status , widget.region ,
+    widget.branch
+    
+    );
     });
   }
  
@@ -113,7 +118,8 @@ return  FilterBottomSheet(
            onRefresh: ()async{
 
 
-             controller.getMaintainOrders(context , widget.status,  widget.region);
+             controller.getMaintainOrders(context , widget.status,  widget.region , 
+    widget.branch);
            },
            child: Builder(builder: (_){
          
@@ -133,7 +139,7 @@ return  FilterBottomSheet(
          Text(controller.maintainOrders!.message!),
          const SizedBox(height: 10,) ,
          IconButton(onPressed: (){
-           controller.getMaintainOrders(context , widget.status,  widget.region);
+           controller.getMaintainOrders(context , widget.status,  widget.region,widget.region , );
          }, icon:  Icon(
            Icons.refresh ,color: Theme.of(context).primaryColor,
          ))
@@ -163,15 +169,27 @@ return  FilterBottomSheet(
              // var files = jsonDecode(carData.files!) as List;
              
             //  return const ListTile();
-              if (index==controller.adminOrders.length+1
+              if (
+                
+                index==controller.adminOrders.length
              
-             && controller.maintainOrders!.data!.data!.nextPageUrl !=null
+             && 
+             
+             
+             controller.maintainOrders!.data!.data!.nextPageUrl !=null
              ) {
                return NextPageButton(
                  isLaoding: controller.maintainOrdersPaginate!.status==Status.LOADING,
                  onTap: (){
 // log(controller.maintainOrders!.data!.data!.nextPageUrl!);
-controller.getMaintainOrdersPaginate(context, controller.maintainOrders!.data!.data!.nextPageUrl!);
+controller.getMaintainOrdersPaginate(context,
+ controller.maintainOrders!.data!.data!.nextPageUrl!, 
+ widget.status,
+ widget.region , 
+ widget.branch
+ 
+ 
+ );
 
 
                  },

@@ -1,11 +1,13 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/home_dashboard.dart';
-import 'package:goodfoods/app/admin/pages/home_new.dart';
 import 'package:goodfoods/common/widgets/box_button.dart';
 import 'package:goodfoods/core/controllers/auth_controller.dart';
+import 'package:goodfoods/core/presentation/sign_up.dart';
 import 'package:goodfoods/core/presentation/widgets/input_field.dart';
 import 'package:goodfoods/core/presentation/widgets/password_field.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
+import 'package:goodfoods/core/services/goodfoods_remote_config.dart';
 import 'package:goodfoods/core/sizes.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:goodfoods/core/utils/utils.dart';
@@ -86,6 +88,8 @@ if(  sharedPrefs.isRemember){
                   
                   ),
                 SizedBox(height: defaultSpace,),
+
+
                   BoxInputField(
                   controller: userCodeController,
                   placeholder: 
@@ -111,6 +115,9 @@ if(  sharedPrefs.isRemember){
                   },
                 ) ,
                
+
+
+
                    SizedBox(height: defaultSpace,),
                   PasswordField(
                   controller: passwordController,
@@ -166,7 +173,25 @@ remberMeCheckBox(),
               login(context);
             },
                   )
-                
+                , 
+
+const SizedBox(height: 10,),
+                RichText(  
+    text:  TextSpan(  
+        text: locale.translate('dont_have_account'),  
+        style: const TextStyle(color: Colors.black, fontSize: 15),  
+        children: <TextSpan>[  
+            TextSpan(text: ' ${locale.translate('sign_up')}',  
+                style: const TextStyle(color: Colors.blueAccent, fontSize: 15) ,
+                recognizer:TapGestureRecognizer()..onTap=(){
+const SignUp().launch(context);
+                }
+            )  
+        ]  
+    ),  
+).visible(
+  GoodfoodsFirebaseRemoteConfig().getFormVisibilty()
+),
               ],
             ),
           ),

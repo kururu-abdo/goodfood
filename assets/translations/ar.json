@@ -9,9 +9,12 @@
 "password_short":"كلمة المرور قصيرة",
 "email_required":"البريد الالكتروني مطلوب" ,
 "email_invalid":"ادخل بريد إلكتروني صالح",
-
-
-    
+"confirm_password":"تأكيد كلمة المرور",
+"passwords_not_mathced":"كلمة المرور غير متطابقة" ,
+"name_required":"الاسم مطلوب",
+"sign_up":"تسجيل حساب" ,
+    "dont_have_account":"?ليس لديك حساب",
+    "already_have_account":"لديك حساب بالفعل؟",
     "orders":"الطلبات" ,
     "employees":"الموظفين" ,
     "machines":"الماكينات" ,

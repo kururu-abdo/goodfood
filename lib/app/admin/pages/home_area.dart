@@ -8,20 +8,24 @@ import 'package:goodfoods/core/controllers/admin_home_controller.dart';
 import 'package:goodfoods/core/controllers/auth_controller.dart';
 import 'package:goodfoods/core/controllers/maintenance_controller.dart';
 import 'package:goodfoods/core/data/models/area_staus_data.dart';
+import 'package:goodfoods/core/data/network/api_response.dart';
 import 'package:goodfoods/core/presentation/notifications_page.dart';
 import 'package:goodfoods/core/presentation/splash_screen.dart';
 import 'package:goodfoods/core/presentation/widgets/change_language_bottomsheet.dart';
 import 'package:goodfoods/core/presentation/widgets/order_status_widget.dart';
+import 'package:goodfoods/core/presentation/widgets/progress.dart';
 import 'package:goodfoods/core/services/app_localization.dart';
 import 'package:goodfoods/core/services/notification_plugin.dart';
 import 'package:goodfoods/core/utils/global.dart';
 import 'package:goodfoods/core/utils/shared_prefs.dart';
 import 'package:goodfoods/core/utils/utils.dart';
+import 'package:goodfoods/main.dart';
 import 'package:material_dialogs/dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 import 'package:material_dialogs/widgets/buttons/icon_outline_button.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class HomeArea extends StatefulWidget {
   final AreaStatusData? areaStatusData;
@@ -36,7 +40,7 @@ class _HomeNewState extends State<HomeArea> {
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-
+   int? dropdownvalue;
   @override
   void initState() {
     super.initState();
@@ -50,7 +54,10 @@ getNotificationCount();
 // Provider.of<MaintenanceController>(context ,listen: false).getStatusData(context);
 context.read<AdminHomeController>().updateToken();
 context.read<AuthController>().getUserProfile();
-
+Provider.of<MaintenanceController>(context ,listen: false).getAreaDataByBranch(context,
+widget.areaStatusData!.id,
+dropdownvalue
+);
     });
   }
   @override
@@ -100,7 +107,11 @@ key: _scaffoldKey,
     
       body:  RefreshIndicator(
           onRefresh: ()async{
-        
+        dropdownvalue=null;
+        Provider.of<MaintenanceController>(context ,listen: false).getAreaDataByBranch(context,
+widget.areaStatusData!.id,
+dropdownvalue
+);
             // controller.getStatusData(context);
           },
         child: SizedBox.expand(
@@ -109,80 +120,320 @@ key: _scaffoldKey,
           
         Builder(builder: (context){
         
-      return   ListView(
-          children: [
-            Wrap(
-              runAlignment: WrapAlignment.center,
-              alignment: WrapAlignment.center,
-            
+      return   SizedBox.expand(
+        child: Column(
+          // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-            
-            
-            
-            OrderStatusWidget(
-              status: 0,
-              icon: 'assets/images/created.png',
-              count: widget.areaStatusData!.created,
-            title: currentLang(context)=="ar"?
-            "تم الانشاء":"Created",
-            region: widget.areaStatusData!.id
+const SizedBox(height: 20,),
+  Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: PopupMenuButton(
+                  onSelected: (value) {
+                    // your logic
+                   dropdownvalue =
+                       widget.areaStatusData!.branchs!.indexOf(
+        widget.areaStatusData!.branchs!.firstWhere((branch)=> branch.id==value.id)
+                    );
+        // dropdownvalue =   value.id;
+        setState(() {
+          
+        });         
+                controller.getAreaDataByBranch(context,
+      widget.areaStatusData!.id,
+      widget.areaStatusData!.branchs![dropdownvalue!].id
+      );   
+                  },
+        itemBuilder: (BuildContext bc) {
+         return 
+                   widget.areaStatusData!.branchs!.map((e) =>   PopupMenuItem(
+                        value: e,
+                        child:Text(currentLang(context)=="ar"?e.nameAr.toString():e.nameEn.toString()),
+                      )).toList();
+        
+           }
+        , 
+        
+        child:        
+        Container(
+          width: 150 ,
+          height: 30,
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey ,width: .5
             )
-            , 
-            OrderStatusWidget(
-              status: 3,
-               icon: 'assets/images/accepted.png',
-              count: widget.areaStatusData!.accpeted, 
-            title:currentLang(context) =="ar"?
-            "تحت المعالجة":"Processing",
-            region: widget.areaStatusData!.id
-            ),
-            OrderStatusWidget(
-              status: 1,
-               icon: 'assets/images/pre_closed.png',
-              count: widget.areaStatusData!.preClosed, 
-            title:currentLang(context) =="ar"?
-            "قيد الاغلاق":"Closing",
+        
+          ),
+          child:  Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: Text(dropdownvalue!=null?
+                  currentLang(context)=="ar"?
+                widget.areaStatusData!.branchs![dropdownvalue!].nameAr.toString(): 
+                 widget.areaStatusData!.branchs![dropdownvalue!].nameEn.toString()
+                  // maintenanceController.selectedModel!
+                  :
+                   currentLang(context)=="ar"?'اختار الفرع':'select branch', 
+                   
+                   overflow: TextOverflow.ellipsis,
+                   ),
+              ),
+              const Icon(Icons.keyboard_arrow_down_outlined )
+            ],
+          ),
+        )
+        ,
+                ),
+      ),
+   
+   
+    Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: TextButton(onPressed: (){
+                Navigator.pop(context);
+              }, child: Text(currentLang(context)=="ar"?
+              "عرض المناطق":"Back to regions"
+              ,style: const TextStyle(
+                fontSize: 15 , fontWeight: FontWeight.bold
+              ),
+              )),
+    )
+    ],
+  ),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        const SizedBox(height: 15,),
+
+
+              Builder(
+                builder: (context) {
+                   if (controller.areaStatusDataByBranch!.status==Status.LOADING) {
+
+
+              return 
+                 Wrap(
             
-            region: widget.areaStatusData!.id
-            ), 
-            
-            OrderStatusWidget(
-              status: 2,
-            
-               icon: 'assets/images/closed.png',
-              count: widget.areaStatusData!.closed, 
-            title:currentLang(context) =="ar"?
-            "تم الاغلاق":"Closed",
-            region: widget.areaStatusData!.id
-            ), 
-            
-            
-            OrderStatusWidget(
-              status: 4,
-            icon: 'assets/images/cancel.png',
-              count: widget.areaStatusData!.rejected, 
-            title:currentLang(context) =="ar"?
-            "مرفوض":"Rejected",
-            region: widget.areaStatusData!.id
-            
-            ),
-            
-            
-            
-            
-            
-            
-            
-            
-            
+                  runAlignment: WrapAlignment.center,
+                  alignment: WrapAlignment.center,
+                
+                children: List.generate(5, (i){
+return
+ Skeletonizer(
+  enabled: true,
+   child: ClipPath(
+         clipper: const ShapeBorderClipper(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))
+          )
+      ),
+      child:
+   Container(
+    
+       margin: const EdgeInsets.only(
+            bottom: 10 , left: 5 ,right: 5,
+            top: 10
+          ),
+          padding: const EdgeInsets.symmetric(
+            vertical: 6 ,horizontal: 15
+          ),
+          width: MediaQuery.of(context).size.width*.45,
+          height: MediaQuery.of(context).size.width*.45,
+   decoration:   const BoxDecoration(
+      
+             color: Colors.white,
+      
+        //      gradient: const LinearGradient(
+        //   stops:  [0.05, 0.02],
+        //   colors: [Colors.red, Colors.white]
+        // ),
+        //      borderRadius: const BorderRadius.all(
+        // Radius.circular(10),
+        // ),
+        boxShadow: [
+        BoxShadow(
+        color: Color(0xffDDDDDD),
+        blurRadius: 2.0,
+        spreadRadius: 1.0,
+        offset: Offset(0.0, 3.0),
+        )
+        ],
+      
+            border: Border(
+              bottom: BorderSide(
+                
+                  width: 7.0,
+                
+                
+                
+             
+               
+               
+               )
+            )
+         
+         
+         
+          ),
+   
+   child:  Column(children: [
+Container(width: 80,height: 80,color: Colors.white,),
+     const Text('The title goes here'),
+      const Text('The title goes here'),
+       const Text('The title goes here'),
+   ],),
+   )
+   ),
+ );
+
+
+                }));
+
+              return Center(
+                   child: mProgress(context, fromPage: true),
+                 );
+            }
+              else if( controller.orderStatusData!.status==Status.ERROR){
+               return Center(
+                 child: Column(
+                   crossAxisAlignment: CrossAxisAlignment.center,
+                   mainAxisSize: MainAxisSize.min,
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   children: [
+               Text(controller.areaStatusDataByBranch!.message!),
+               const SizedBox(height: 10,) ,
+               IconButton(onPressed: (){
+                 controller.getAreaDataByBranch(context,
+widget.areaStatusData!.id,
+dropdownvalue
+);
+               }, icon:  Icon(
+                 Icons.refresh ,color: Theme.of(context).primaryColor,
+               ))
+                   ],
+                 ),
+               );
+               }
+                // ignore: curly_braces_in_flow_control_structures
+                else   return Expanded(
+                  child: ListView(
+                    children:[
+                     Wrap(
+                        runAlignment: WrapAlignment.center,
+                        alignment: WrapAlignment.center,
+                      
+                      children: [
+                      
+                      
+                      
+                      OrderStatusWidget(
+                        status: 0,
+                        icon: 'assets/images/created.png',
+                        count: controller.areaStatusDataByBranch!.data!.created,
+                      title: currentLang(context)=="ar"?
+                      "تم الانشاء":"Created",
+                      region: widget.areaStatusData!.id, 
+                      branch:
+                      
+                      dropdownvalue==null?null:
+                       widget.areaStatusData!.branchs![dropdownvalue!].id
+,
+                      )
+                      , 
+                      OrderStatusWidget(
+                        status: 3,
+                         icon: 'assets/images/accepted.png',
+                        count: controller.areaStatusDataByBranch!.data!.accpeted, 
+                      title:currentLang(context) =="ar"?
+                      "تحت المعالجة":"Processing",
+                      region: widget.areaStatusData!.id , 
+                    
+                                        branch:                       dropdownvalue==null?null:
+widget.areaStatusData!.branchs![dropdownvalue!].id
+,
+                    
+                      ),
+                      OrderStatusWidget(
+                        status: 1,
+                         icon: 'assets/images/pre_closed.png',
+                        count: controller.areaStatusDataByBranch!.data!.preClosed, 
+                      title:currentLang(context) =="ar"?
+                      "قيد الاغلاق":"Closing",
+                      
+                      region: widget.areaStatusData!.id , 
+                                        branch:                      dropdownvalue==null?null:
+ widget.areaStatusData!.branchs![dropdownvalue!].id
+,
+                    
+                      ), 
+                      
+                      OrderStatusWidget(
+                        status: 2,
+                      
+                         icon: 'assets/images/closed.png',
+                        count:controller.areaStatusDataByBranch!.data!.closed, 
+                      title:currentLang(context) =="ar"?
+                      "تم الاغلاق":"Closed",
+                      region: widget.areaStatusData!.id , 
+                                        branch:                      dropdownvalue==null?null:
+ widget.areaStatusData!.branchs![dropdownvalue!].id
+,
+                    
+                      ), 
+                      
+                      
+                      OrderStatusWidget(
+                        status: 4,
+                      icon: 'assets/images/cancel.png',
+                        count: controller.areaStatusDataByBranch!.data!.rejected, 
+                      title:currentLang(context) =="ar"?
+                      "مرفوض":"Rejected",
+                      region: widget.areaStatusData!.id , 
+                                        branch:                      dropdownvalue==null?null:
+ widget.areaStatusData!.branchs![dropdownvalue!].id
+,
+                    
+                      
+                      ),
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                      ],
+                      
+                      ),
+                
+                    ]
+                  ),
+                );
+                }
+              ),
+          
             
             ],
-            
-            ),
-        
-          
-          ],
-        );
+          ),
+      );
         
         
         
@@ -219,8 +470,6 @@ _scaffoldKey.currentState?.openDrawer();
         elevation: 0,
         actions: [
 
-
-
   
          MaterialButton(onPressed: (){
         const NotificationPage().launch(context).then((value){
@@ -232,10 +481,43 @@ setState(() {
         });
          
             } ,  
-            child:  Builder(
-              builder: (context) {
-                if (sharedPrefs.notificationCount>0) {
-              return 
+            child: 
+            
+            
+            
+            ValueListenableBuilder<int>(valueListenable: notificationCounterNotifier,
+            
+             builder: (context, count ,child){
+if (count<=0) {
+  
+                return const ImageIcon(
+                        AssetImage('assets/icons/bell.png')
+                        ,
+                        size:25 ,  
+                
+                color: 
+                
+                //  _currentTab ==1? 
+                          
+                //           //  Colors.white
+                //                       Theme.of(context).primaryColor
+
+                // :
+                
+                
+                Colors.black
+                          
+                          // Theme.of(context).primaryColor
+                          //   :Colors.grey
+                        
+                        
+                        
+                        
+                );
+            
+}else {
+
+      return 
               
                   SizedBox(
                     height: 50,
@@ -274,7 +556,7 @@ setState(() {
                       child: Text(
                         ///TODO:NOTIFICATION COUNT
                         
-                        sharedPrefs.notificationCount.toString() ,
+                       count.toString() ,
                       
                       style: const TextStyle(
                         color: Colors.white, 
@@ -290,33 +572,10 @@ setState(() {
                   );
                
                
-                }
-                return const ImageIcon(
-                        AssetImage('assets/icons/bell.png')
-                        ,
-                        size:25 ,  
-                
-                color: 
-                
-                //  _currentTab ==1? 
-                          
-                //           //  Colors.white
-                //                       Theme.of(context).primaryColor
+}
 
-                // :
-                
-                
-                Colors.black
-                          
-                          // Theme.of(context).primaryColor
-                          //   :Colors.grey
-                        
-                        
-                        
-                        
-                );
-              }
-            ),
+
+             })
             
             )
 
@@ -361,7 +620,11 @@ const ChagePage().launch(context);
             ) ,  
             
             // color: Colors.white,
-            )
+            ), 
+
+
+
+          
       ]
  
 
