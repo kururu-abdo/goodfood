@@ -1,0 +1,11 @@
+{
+    "aps" : {
+       "alert" : {
+          "title" : "Test Notification",
+          "subtitle" : "Send notification from console",
+          "body" : "This is test notification"
+       }
+     
+    }
+ 
+ }
