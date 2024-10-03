@@ -122,10 +122,16 @@ requestHeaders!.addAll({'Content-type': 'application/json'});
   }
 
   Future<dynamic> delete(String url) async {
-    print('Api delete, url $url');
+    print('Api delete, url ${_baseUrl + url}');
     var apiResponse;
     try {
-      final response = await http.delete(Uri.parse(_baseUrl + url));
+      final response = await http.delete(Uri.parse(_baseUrl + url), 
+      
+          headers: (requestHeaders ?? {})
+      
+      );
+
+      log(response.body.toString());
       apiResponse = _returnResponse(response);
     } on SocketException {
       print('No net');

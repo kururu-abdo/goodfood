@@ -4,6 +4,10 @@
     "login_failed":"خطأ في كلمة المرور او رقم الهاتف" , 
     "password":"كلمة المرور" ,
     "phone":"رقم الهاتف"  , 
+    "profile":"Profile Page" ,
+    "delete_account":"Delete account" ,
+    "want_delete_account":"Do you want do delete this account?",
+
 "email":"البريد الالكتروني",
 "password_required":"كلمة المرور مطلوبة",
 "password_short":"كلمة المرور قصيرة",

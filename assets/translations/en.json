@@ -6,7 +6,10 @@
     "phone":"Phone Number" ,
     "email":"Email",
     "name_required":"Name required",
-
+"profile":"" ,
+    "delete_account":"حذف الحساب" ,
+    "want_delete_account":"هل تريد حذف الحساب؟",
+    
 "password_required":"Password is required",
 "password_short":"Too short password",
 "email_required":"Email required" ,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:goodfoods/app/admin/pages/assets_page.dart';
 import 'package:goodfoods/app/admin/pages/chat_page.dart';
+import 'package:goodfoods/app/admin/pages/profile_page.dart';
 import 'package:goodfoods/app/documents/views/pages/documents_page.dart';
 import 'package:goodfoods/app/maintenance/widgets/pages/maintance_page.dart';
 import 'package:goodfoods/common/controllers/langauage_controller.dart';
@@ -743,6 +744,13 @@ drawer:  Drawer(
                                 ],
                               ).paddingOnly(left: 4, right: 4, bottom: 8),
               ),
+           
+                   
+           IconButton(onPressed: (){
+ProfilePage().launch(context);
+           }, icon: const Icon(Icons.arrow_forward_ios, color: Colors.white,))
+           
+           
             ],
           ),
       

@@ -39,8 +39,16 @@ try {
 
 }
 deleteAccount(  BuildContext context ,
-){
+)async{
+try {
+  
+ await AuthApi().deleteAccount();
 
+ 
+
+
+} catch (e) {
+}
 }
 signUser(
   BuildContext context ,
