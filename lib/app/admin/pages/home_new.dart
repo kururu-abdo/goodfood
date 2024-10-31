@@ -411,10 +411,11 @@ Container(width: 80,height: 80,color: Colors.white,),
                 "تم الانشاء":"Created",
                  branch: dropdownvalue!=null?
                  authController.getMyBranches()[dropdownvalue!].id
-                  :
-                  (authController.getMyBranches().isNotEmpty?
+                  :                 null
+
+                //   (authController.getMyBranches().isNotEmpty?
                 
-                authController.getMyBranches().first.id:null), 
+                // authController.getMyBranches().first.id:null), 
                 // region: ,
                 )
                 , 
@@ -428,11 +429,12 @@ Container(width: 80,height: 80,color: Colors.white,),
                  dropdownvalue!=null?
                  authController.getMyBranches()[dropdownvalue!].id
                   :
-                 
-                 (authController.getMyBranches().isNotEmpty?
+                 null
+                //  (authController.getMyBranches().isNotEmpty?
                 
-                authController.getMyBranches().first.id:null)
-                ),
+                // authController.getMyBranches().first.id:null)
+                )
+                ,
                 OrderStatusWidget(
                   status: 1,
                    icon: 'assets/images/pre_closed.png',
@@ -442,19 +444,22 @@ Container(width: 80,height: 80,color: Colors.white,),
                  branch:  dropdownvalue!=null?
                  authController.getMyBranches()[dropdownvalue!].id
                   :
-                  (authController.getMyBranches().isNotEmpty?
+                                   null
+
+                //   (authController.getMyBranches().isNotEmpty?
                 
-                authController.getMyBranches().first.id:null)
+                // authController.getMyBranches().first.id:null)
                 ), 
                 
                 OrderStatusWidget(
                   status: 2,
                 branch: dropdownvalue!=null?
                  authController.getMyBranches()[dropdownvalue!].id
-                  :
-                  (authController.getMyBranches().isNotEmpty?
+                  :                 null
+
+                //   (authController.getMyBranches().isNotEmpty?
                 
-                authController.getMyBranches().first.id:null)
+                // authController.getMyBranches().first.id:null)
                 ,
                    icon: 'assets/images/closed.png',
                   count: controller.orderStatusData!.data!.closed, 
@@ -473,10 +478,11 @@ Container(width: 80,height: 80,color: Colors.white,),
                 , 
                  branch: dropdownvalue!=null?
                  authController.getMyBranches()[dropdownvalue!].id
-                  :
-                  (authController.getMyBranches().isNotEmpty?
+                  :                 null
+
+                //   (authController.getMyBranches().isNotEmpty?
                 
-                authController.getMyBranches().first.id:null)
+                // authController.getMyBranches().first.id:null)
                 ),
                 
                 

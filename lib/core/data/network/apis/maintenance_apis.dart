@@ -390,7 +390,13 @@ int? branch,
        
        
        :
-      "maintain/get_submitted_orders?branch_id=${branch??''}&status=$status" ,
+              branch!=null?
+
+      "maintain/get_submitted_orders?branch_id=${branch??''}&status=$status" 
+      :      "maintain/get_submitted_orders?status=$status" 
+
+      
+      ,
       pageUrl:
     !isPaginate!?  null:
       region!=null?
